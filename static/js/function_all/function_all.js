@@ -651,6 +651,7 @@ function changStatus(type, id, dataType,status=null,typeUrl=null,userauth=null) 
               } else {
                 $("#status-inactive-" + id).css("background-color", color);
               }
+              notification("success", "บันทึกสำเร็จ", "success", "ปิด");
             } else {
               notification(
                 "แจ้งเตือน",
