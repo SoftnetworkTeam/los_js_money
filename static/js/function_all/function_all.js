@@ -253,7 +253,6 @@ function loadSelect2Data(url, selector, responseKey = null, idKey = null, textKe
         const selectData = data[responseKey].map((item) => {
           let text = item[textKey]; // Default text
 
-          // If the selector is ".js-data-branch-ajax", concatenate branch_name with itself
           if (selector === ".js-data-branch-ajax") {
             text = item.branch_code + "-" + item.branch_name;
           }
@@ -262,7 +261,7 @@ function loadSelect2Data(url, selector, responseKey = null, idKey = null, textKe
             id: item[idKey] || item.id,
             text: text,
             value: item.score_type || null,
-            name: text  // Ensure the same name format
+            name: text  
           };
         });
 
@@ -287,7 +286,6 @@ function loadSelect2Data(url, selector, responseKey = null, idKey = null, textKe
 
 }
 
-// ฟังก์ชั่น select2 ที่ใช้ในทุก dropdown
 function select2(selector, data) {
 
   let textSelector;
