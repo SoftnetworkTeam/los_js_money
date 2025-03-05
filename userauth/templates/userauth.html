@@ -5,6 +5,9 @@
   .k-window-titlebar .k-window-action {
     color: #ffffff;
   }
+  .k-grid .k-cell-inner>.k-link {
+    width: auto;
+}
 </style>
 {% endblock %} {% block content %}
 
@@ -37,5 +40,5 @@
   });
   var authEdit = "{{ request.session.auth_edit_delete }}";
 </script>
-<script src="{% static 'js/userauth.js' %}?v=13"></script>
+<script src="{% static 'js/userauth.js' %}?v=14"></script>
 {% endblock %}
