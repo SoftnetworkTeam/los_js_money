@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+  console.log('authEdit2',authEdit)
+
+
     function statusFilter(element) {
         element.kendoDropDownList({
             dataTextField: "text",
@@ -56,7 +59,7 @@ $(document).ready(function () {
                     let buttons = '<a href="' + detailUrl + '" ><button class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="รายละเอียด"><i class="fa-solid fa-magnifying-glass"></i></button></a> ';
       
       
-                    if (authEdit == true){
+                    if (authEdit == 'True'){
                         if (dataItem.status_approve !== 2) {
                             buttons += '<a href="' + editUrl + '" ><button class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="แก้ไขข้อมูล"><i class="fa-solid fa-pen-to-square"></i></button></a>';
                         }
