@@ -586,7 +586,6 @@
                 'X-CSRFToken': getCookie('csrftoken')  
             },
             success: function (response) {
-                console.log('Success:', response);
                 if (response.status === 'success') {
                     $('#score_1').text(response.score_1);
                     $('#score_2').text(response.score_2);
