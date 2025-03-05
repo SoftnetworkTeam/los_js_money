@@ -535,6 +535,8 @@
 
 {% block script %}
 <script defer>
+    var authEdit = "{{ auth_edit_delete }}";
+
     var urlMasterscoringinfo = "{% url 'nameList:Masterscoringinfo' %}";
 
     var urlCalScoring = "{% url 'nameList:cal-scoring' %}";
