@@ -69,8 +69,8 @@ def nameList(request):
     customer_loan_detail = CustomerLoanDetail.objects.all()
     return render(request, 'nameList.html', {'customer_loan_detail': customer_loan_detail})
 
-@login_required(login_url='/user_login')
-@check_permission
+# @login_required(login_url='/user_login')
+# @check_permission
 def configurations(request, grade_type=None):
     type_obj = []
 
@@ -361,10 +361,10 @@ def user_login(request):
                 for foo in mid_user_auth:
                     if foo.auth.auth_code == 'A002':  # auth_edit_delete
                         request.session['auth_edit_delete'] = foo.status  # เก็บค่าลงใน session
-                    # if foo.auth.auth_code == 'A007':
-                    #     if not foo.status:
-                    #         return render(request, "login.html",
-                    #                       {'msg': 'คุณไม่มีสิทธิ์ใช้งานระบบนี้', 'show_alert': True})
+                    if foo.auth.auth_code == 'A007':
+                        if not foo.status:
+                            return render(request, "login.html",
+                                          {'msg': 'คุณไม่มีสิทธิ์ใช้งานระบบนี้', 'show_alert': True})
 
             return redirect("/", user=user)
         else:
