@@ -20,7 +20,7 @@
 {% block content %}
     {% if show_alert %}
         <script>
-            alert("คุณไม่มีสิทธิ์ใช้งานระบบนี้");
+            {% comment %} alert("คุณไม่มีสิทธิ์ใช้งานระบบนี้"); {% endcomment %}
         </script>
     {% endif %}
 
@@ -50,5 +50,32 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+<script>
+
+
+    function notification(d_title, d_text, d_icon, d_btn_text) {
+        $(document).ready(function () {
+          Swal.fire({
+            title: d_title,
+            text: d_text,
+            icon: d_icon,
+            confirmButtonText: d_btn_text,
+            allowOutsideClick: false
+          })
+        });
+      }
+
+    var msg = "{{ msg }}"
+
+    if(msg == "คุณไม่มีสิทธิ์ใช้งานระบบนี้"){
+        notification("แจ้งเตือน", 'คุณไม่มีสิทธิ์ใช้งานระบบนี้', "error", "ปิด");
+    }
+
+
+</script>    
 {% endblock %}
 
