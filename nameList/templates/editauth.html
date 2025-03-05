@@ -36,14 +36,13 @@
                 
                     <div class="card-body d-flex flex-row justify-content-center align-items-center gap-4" style="gap: 9.5rem !important;font-size: 18px;">
                         <div>
-                            <strong>ชื่อผู้ใช้งานใช้งาน ::</strong> 
-                           sdsdsd<br>
-                           {{ userauth.id }}
+                            <strong>ชื่อผู้ใช้งานใช้งาน : </strong> 
+                           {{ user.first_name  }}
                         </div>
                 
                         <div>
-                            <strong>username :</strong> 
-                           sdsdsd
+                            <strong>username : </strong> 
+                            {{ user.username  }}
                         </div>
                 
                         
@@ -66,6 +65,7 @@
 {% block script %}
 <script defer>
 var urlupdateStatus = "{% url 'configurations:updateStatus' %}";
+var authEdit = "{{ auth_edit_delete }}";
 </script>
 <script src="{% static 'js/userauth.js' %}?v=24"></script>
 <link rel="stylesheet" href="{% static 'css/detail.css' %}?v=9" >
