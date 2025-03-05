@@ -64,7 +64,7 @@
 
 {% endblock %} {% block script %}
 <script>
-  var authEdit = "{{ request.session.auth_edit_delete }}";
+  var authEdit = "{{ auth_edit_delete }}";
   var typeUrl = null;
   if (window.location.pathname.includes("grade-income")) {
     typeUrl = "statusIncome";
@@ -206,7 +206,7 @@
             </a>
         `;
     
-        if (authEdit == true) {
+        if (authEdit == "True") {
             btnHTML += `
                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" 
                     onclick="submitData(this, '${dataItem.id}', 'save', '${data_type}')">
@@ -262,7 +262,7 @@
     if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
       columns.push( title_new2, title_new3, title_new4);
     }
-    if(authEdit == true){
+    if(authEdit == "true"){
       columns.push({
         title: "<b>สถานะ</b>",
         width: 100,
