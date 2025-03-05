@@ -40,18 +40,18 @@ $(document).ready(function () {
     var columns = [
         { 
             title: title_1, 
-            width: 10,
+            width: 20,
             template: function (dataItem) {
                 return dataItem.index || "";
             }
         },
-        { field: field_2, width: 10, title: title_2 },
-        { field: field_3, width: 50, title: title_3 },
+        { field: field_2, width: 100, title: title_2 },
+        { field: field_3, width: 100, title: title_3 },
     ];
 
     if (url_userauth && !url_editauth) {
         columns.push(
-            { field: field_4, width: "auto", title: title_4 },
+            { field: field_4, width: 100, title: title_4 },
             {
                 title: "<b>Action</b>",
                 width: 117,
