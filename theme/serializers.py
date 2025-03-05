@@ -57,6 +57,7 @@ class MasterincomenotstableSerializer(serializers.ModelSerializer):
 
 class MasterscoringinfoSerializer(serializers.ModelSerializer):
     username = serializers.CharField(read_only=True) 
+    first_name = serializers.CharField(read_only=True)  
     class Meta:
         model = Masterscoringinfo
         fields = '__all__'
