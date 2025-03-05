@@ -231,7 +231,6 @@ class updateData(BaseListAPIView):
         
         print('request ssss',request.session['user_id'])
         
-        
         data_type = post_data.get('data_type')
         type_button = post_data.get("type_button")
         
@@ -288,7 +287,7 @@ class updateData(BaseListAPIView):
                     stable_min=stable_min,
                     stable_percent=stable_percent,
                     not_stable_min=not_stable_min,
-                    not_stable_percent=not_stable_min,
+                    not_stable_percent=not_stable_percent,
                     updated_at=now
                 )
                 if updated == 0:
