@@ -49,7 +49,7 @@ $(document).ready(function () {
         { field: field_3, width: 100, title: title_3 },
     ];
 
-    if (url_userauth && !url_editauth) {
+    if (url_userauth && !url_editauth && authEdit == 'True') {
         columns.push(
             { field: field_4, width: 100, title: title_4 },
             {
@@ -59,21 +59,17 @@ $(document).ready(function () {
                     let editUrl = '/userauth/edit/' + dataItem.id;
                     let buttons = '';
 
-                    if (typeof authEdit !== 'undefined' && authEdit) {
-                        if (dataItem.status_approve !== 2) {
-                            buttons += `<a href="${editUrl}">
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="แก้ไขข้อมูล">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                            </a>`;
-                        }
-                    }
+                        buttons += `<a href="${editUrl}">
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="แก้ไขข้อมูล">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </a>`;
                     return buttons;
                 },
                 attributes: { style: "text-align: start;" },
             }
         );
-    } else if (url_editauth && url_userauth) {
+    } else if (url_editauth && url_userauth && authEdit == 'True') {
         columns.push({
             title: "<b>สถานะ</b>",
             width: 117,
