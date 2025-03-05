@@ -209,8 +209,7 @@ class updateStatus(BaseListAPIView):
         elif status_type == "statusScoring" and data_type == "scoring":
             Masterscoringinfo.objects.filter(id=status_id).update(status=status)
         elif status_type == "statusUserauth":
-            userauth_id = post_data.get('userauth_id')
-            UserAuth.objects.filter(user_id=userauth_id, auth_id=status_id).update(status=status)
+            UserAuth.objects.filter(id=status_id).update(status=status)
 
             return JsonResponse({
                 'status': 'success',
