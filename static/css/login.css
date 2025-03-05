@@ -1,0 +1,19 @@
+.btn-login {
+    border-radius: 60px;
+    background-color: #008030;
+    border-color: #008030;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    border: none;
+    color: #fff;
+}
+
+body {
+    font-family: 'Kanit' !important;
+    background-image: url('../img/80626.jpg');
+}
+
+.card {
+    top: 20%;
+}

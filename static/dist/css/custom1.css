@@ -1,0 +1,99 @@
+.k-grid-header th.k-header {
+    font-weight: 500;
+}
+
+.k-grid th, .k-grid td {
+    padding: .65rem .65rem;
+}
+
+.k-textbox {
+    /* padding: 0; */
+    width: 100%;
+    height: 28px;
+}
+
+.k-textbox > textarea {
+    /* padding: .375rem .75rem; */
+}
+
+span.k-list-filter {
+    padding: .5rem;
+    min-height: auto;
+}
+
+.k-list-filter > .k-icon {
+    right: 1rem;
+}
+
+.k-list-filter > .k-textbox {
+    padding-left: 0;
+}
+
+.k-picker-wrap .k-input {
+    text-indent: unset;
+}
+
+.k-numerictextbox .k-numeric-wrap .k-input {
+    padding-left: 0;
+}
+
+.k-dateinput, .k-datepicker {
+    width: 100%;
+}
+
+.k-state-readonly {
+    border-color: #e4e7eb;
+    color: #212529;
+    background-color: #e4e7eb;
+}
+
+.k-state-readonly:hover {
+    border-color: #c7cdd5;
+    color: #212529;
+    background-color: #c7cdd5;
+}
+
+.k-state-readonly:focus {
+    border-color: #bfc6d0;
+    color: #212529;
+    background-color: #c7cdd5;
+    box-shadow: 0 0 0 3px rgba(228, 231, 235, 0.5);
+}
+
+.myNumeric .k-numeric-wrap {
+    padding-right: 28px;
+}
+
+.myNumeric .k-input {
+    text-align: right;
+    padding-right: 5px;
+}
+
+.readonly .k-i-arrow-60-down {
+    display: none;
+}
+
+a {
+    color: #7EA700;
+}
+
+.checkbox-cell {
+    text-align: center !important;
+    padding: 0 !important;
+}
+
+.checkbox-header-cell {
+    text-align: center !important;
+    padding: 0 !important;
+}
+
+.checkbox-header-cell .k-checkbox-label:before {
+    margin-top: -12px !important;
+
+}
+
+.k-button.k-danger, .k-button.k-danger:active {
+    background-color: #f00;
+    color: #f00;
+    border-color: #f00;
+}

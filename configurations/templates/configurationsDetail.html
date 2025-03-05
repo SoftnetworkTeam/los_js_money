@@ -1,0 +1,318 @@
+{% extends "base.html" %} 
+{% load static %} 
+{% block title %}
+<title>ข้อมูลผู้ขอสินเชื่อ</title>
+<style>
+  {% comment %} .k-master-row:hover {
+      background-color: transparent !important;
+  } {% endcomment %}
+
+  .k-grid td, .k-grid th {
+    border: 0.5px solid transparent !important;
+    border-bottom: 0.5px solid #dfdfdf !important;
+  }
+
+  .input_conf {
+    width: 90%;
+    height: 50%;
+    border-radius: 20px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-body {
+    flex-grow: 1;
+  }
+
+  #empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  #empty-state .fas {
+    font-size: 60px;
+    color: #ccc;
+  }
+
+  #empty-state p {
+    margin-top: 1rem;
+  }
+
+  .col-xl-7 {
+    border-right: 1px solid #dfdfdf;
+  }
+</style>
+{% endblock %} 
+
+{% block content %}
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card">
+          <form method="POST" id="myForm">
+            <div class="card-header">
+                <span style="font-size: 20px;">รายละเอียดเกณฑ์การให้คะแนนผู้กู้ </span> 
+                <input class="form-control d-none" id="score_id" >
+            </div>
+            <div class="card-body p-2">
+                <div class="row">
+                    <!-- First Column -->
+                    <div class="col-xl-7">
+                        <div class="card-body px-3">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="mb-3 row">
+                                      <label class="col-lg-8 col-form-label">
+                                          <h4>เกณฑ์การให้คะแนนผู้กู้</h4>
+                                      </label>
+                                      <div class="col-lg-12">
+                                          <select class="js-data-scoringList-ajax w-100 select2-lg" id="scoring_type" name="scoring_type" ></select>
+                                      </div>
+                                    </div>
+                                </div>  
+                                <div class="col-xl-12" id="scoreView"></div>  
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-5">
+                        <div class="card-body px-3">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="mb-3 row">
+                                    <label class="col-lg-12 col-form-label">
+                                        <h4>เกณฑ์แนะนำสำหรับอนุมัติ</h4>
+                                    </label>
+                                    <label class="col-lg-12 col-form-label">
+                                        <h5 style="color:#888888">เกณฑ์ของผู้มีมีรายได้ประจำ</h5>
+                                    </label>
+                                    <label class="col-lg-4 col-form-label">
+                                        คะแนนขั้นต่ำ
+                                    </label>
+                                    <div class="col-lg-4">
+                                      <input class="form-control" value="{{ scoringinfo.stable_min|default:0.00 }}" name="stable_min" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                    </div>
+                                    </div>
+                                </div>  
+
+                                <div class="col-xl-12">
+                                    <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label">
+                                        หนี้ต่อรายได้ขั้นต่ำ (%)
+                                    </label>
+                                    <div class="col-lg-4">
+                                        <input class="form-control" value="{{scoringinfo.stable_percent|default:0.00}}" name="stable_percent" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                    </div>
+                                    </div>
+                                </div>  
+
+                                <div class="col-xl-12">
+                                    <div class="mb-3 row">
+                                    <label class="col-lg-12 col-form-label">
+                                        <h5 style="color:#888888">เกณฑ์ของผู้มีมีรายไม่สม่ำเสมอ</h5>
+                                    </label>
+                                    <label class="col-lg-4 col-form-label">
+                                        คะแนนขั้นต่ำ
+                                    </label>
+                                    <div class="col-lg-4">
+                                        <input class="form-control" value="{{scoringinfo.not_stable_min|default:0.00}}" name="not_stable_min" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                    </div>
+                                    </div>
+                                </div>  
+
+                                <div class="col-xl-12">
+                                    <div class="mb-3 row">
+                                    <label class="col-lg-4 col-form-label">
+                                        หนี้ต่อรายได้ขั้นต่ำ (%)
+                                    </label>
+                                    <div class="col-lg-4">
+                                        <input class="form-control" value="{{scoringinfo.not_stable_percent|default:0.00}}" name="not_stable_percent" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                    </div>
+                                    </div>
+                                </div>  
+
+                            </div>
+                        </div>
+                    </div>
+                </div><hr>
+                <div class="col-12 text-center">
+                  <div>
+                    <button type="button" id="btnSubmit" class="btn btn-outline-primary" >บันทึก</button>
+                    <a type="button"name="btncancel"id="btncancel"class="btn btn-outline-danger"href="/configurations">ยกเลิก</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} 
+
+{% block script %}
+
+<script defer>
+    $("#openDialogButton").kendoButton({
+        cssClass: "custom-button"
+    });
+
+    var urlMasterscoringinfo = "{% url 'configurations:scoringinfo' %}";
+    var urlMasterScoringView = "{% url 'configurations:scoringView' %}";
+    var urlMasterscoringList = "{% url 'configurations:scoringList' %}";
+    var urlUpdateConfig = "{% url 'configurations:updateConfig' %}";
+    
+    var urlPath = window.location.pathname;  
+    var urlParts = urlPath.split("/");      
+    var getId = urlParts[urlParts.length - 1];
+    $(document).ready(function () {
+
+    loadSelect2Data(urlMasterscoringinfo, ".js-data-scoring-ajax", "results", "id", "score_name");
+
+    loadSelectScore(urlMasterscoringList, ".js-data-scoringList-ajax", "results", "score_type", "score_name", {"id": getId});
+
+    
+
+    });
+
+    function loadSelectScore(url, selector, responseKey = null, idKey = null, textKey = null, additionalParams = {}, selectedValue = null, placeholder = '-- เลือกข้อมูล --') {
+
+        $(".js-data-scoringList-ajax").html('(`<option value="A" selected>ประเภทอาชีพ</option>`)')
+        // โหลดข้อมูลประเภทอาชีพก่อน
+        $.ajax({
+            url: urlMasterScoringView + "?id=" + getId + "&scoring_type=A",
+            type: 'GET',
+            success: function (response) {
+                $('#scoreView').empty(); // ล้างข้อมูลเก่า
+                i = 0;
+                $.each(response.results, function(index, item) {
+                    var newRow = `
+                        <div class="mb-3 row">
+                            <label class="col-lg-7 col-form-label" id="score_name_id${item.id}" name="">${item.name}</label>
+                            <div class="col-lg-5">
+                                <input class="form-control" id="score_id-${item.id}" name="score[]" value="${item.score}" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                <input class="form-control d-none" id="type_id-${item.id}" name="type_id[]" value="${item.id}">
+                            </div>
+                        </div>
+                    `;
+                    $('#scoreView').append(newRow);
+                });
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        $(selector).select2({
+          width: "100%",
+          placeholder: placeholder, 
+          ajax: {
+            url: url,
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+              return {
+                q: params.term,
+                page: params.page,
+                ...additionalParams 
+              };
+            },
+            processResults: function (data, params) {
+              params.page = params.page || 1;
+      
+              const selectData = data[responseKey].map((item) => ({
+                id: item[idKey] || item.score_type,
+                text: item[textKey],
+                title: item.score_type ,
+              }));
+      
+      
+              return {
+                results: selectData,
+                pagination: {
+                  more: (params.page * 30) < data.total_count 
+                }
+              };
+            },
+            cache: true
+          },
+          escapeMarkup: function (markup) { return markup; },
+          minimumInputLength: 0, 
+          templateResult: formatRepo,
+          templateSelection: formatRepoSelection
+        });
+      
+        if (selectedValue) {
+          $(selector).val(selectedValue).trigger('change');
+        }
+      
+        $(selector).on('change', function (e) {
+            const scoreType = $(this).find('option:selected').attr('title'); 
+            const url = urlMasterScoringView + "?id=" + getId + "&scoring_type=" + scoreType;
+          
+          $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                $('#scoreView').empty();
+                $.each(response.results, function(index, item) {
+                    var newRow = `
+                        <div class="mb-3 row">
+                            <label class="col-lg-7 col-form-label ">
+                                ${item.name}
+                            </label>
+                            <div class="col-lg-5">
+                                <input class="form-control" value="${item.score}" name="score[]" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                <input class="form-control d-none" id="type_id-${item.id}" name="type_id[]" value="${item.id}">
+                            </div>
+                        </div>
+                    `;
+                    
+                    $('#scoreView').append(newRow);
+                });
+              
+            },
+            error: function (error) {
+              console.error('Error:', error);
+            }
+          });
+        });
+      }
+
+      $('#btnSubmit').click(function() {
+        var score_id = getId;
+    
+        var formData = $('#myForm').serializeArray();
+        
+        formData.push({ name: 'score_id', value: score_id });
+    
+        $.ajax({
+            url: urlUpdateConfig,
+            method: 'POST',
+            data: formData,
+    
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken"), 
+            },
+            success: function(response) {
+                console.log('Success:', response);
+                if(response.message == 'success' ){
+                  notification("success", "บันทึกสำเร็จ", "success", "ปิด");
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+    
+      
+</script>
+{% endblock %}

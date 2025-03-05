@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>แก้ไขข้อมูลเกรดลูกค้า</title>
+
+{% endblock %}
+
+{% block content %}
+    <h2 class="mt-4">แก้ไขข้อมูลเกรดลูกค้า</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="card text-nowrap mt-4 mb-4" id="guarantor" style="font-size: 14px !important;">
+            <div class="card-body bg-nav">
+                <!-- <h5 class="card-title">ที่อยู่สำหรับส่งเอกสารสำคัญ</h5> -->
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3 col-md-2 col-lg-1 pt-2 text-end mb-2">
+                        <label for="" class="name">เกรดลูกค้า</label><span class="text-red">*</span>
+                    </div>
+                    <div class="col-9 col-md-10 col-lg-3 mb-2">
+                        <input type="text" class="form-control name" name="name" id="name" readonly
+                               value="{{ all_data.name }}">
+                    </div>
+                    <div class="col-3 col-md-2 col-lg-1 pt-2 text-end mb-2">
+                        <label for="" class="desc">รายละเอียด</label><span class="text-red">*</span>
+                    </div>
+                    <div class="col-9 col-md-10 col-lg-3 mb-2">
+                        <input type="text" class="form-control desc" name="desc" id="desc" required
+                               value="{{ all_data.description }}">
+                    </div>
+                    <div class="col-3 col-md-2 col-lg-1 pt-2 text-end mb-2">
+                        <label for="" class="status">สถานะ</label><span class="text-red">*</span>
+                    </div>
+                    <div class="col-9 col-md-10 col-lg-3 mb-2">
+                        <select name="status" id="status" class="form-control status" required>
+                            {% if all_data.status == 'A' %}
+                                <option value="A" selected>Active</option>
+                                <option value="C">InActive</option>
+                            {% else %}
+                                <option value="A">Active</option>
+                                <option value="C" selected>InActive</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="text-end mt-3">
+                    <a href="/ncb/ncb">
+                        <button type="button" class="btn cancel_btn" id="backButton">ย้อนกลับ</button>
+                    </a>
+                    <button type="submit" class="btn add_btn" id="submitButton">บันทึก</button>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $('.select2').select2({
+            theme: 'bootstrap-5'
+        });
+        $("#name").kendoTextBox();
+        $("#desc").kendoTextBox();
+        $("#submitButton").kendoButton({
+            themeColor: "success",
+        });
+        $("#backButton").kendoButton({
+            themeColor: "secondary",
+        });
+
+        $("#status").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: [{
+                text: "Active",
+                value: "A"
+            },
+                {
+                    text: "InActive",
+                    value: "C"
+                }
+            ],
+            index: 0
+        });
+        
+
+    </script>
+{% endblock %}

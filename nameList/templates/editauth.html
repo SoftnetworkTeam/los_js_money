@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+<title>แก้ไขสิทธิ์การใช้งาน
+</title>
+<style>
+    .k-grid .k-cell-inner>.k-link {
+        width: auto;
+    }
+</style>    
+{% endblock %}
+
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="content-header d-flex align-items-center">
+                    <h2>แก้ไขสิทธิ์การใช้งาน</h2>
+                    <span class="badge badge-{{badge_status}} ms-2 badgeStatus" id="statusApprove">{{loan_status}}</span>
+                    <span id="statusApproveNew"></span>
+                </div>
+                
+                <br>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+
+                <div class="card h-auto" style="border: 1px solid #ddd; border-radius: 8px;">
+                    <div class="card-header" style="background-color: #7EA700; color: white; text-align: center; font-size: 14px; font-weight: bold;">
+                    </div>
+                
+                    <div class="card-body d-flex flex-row justify-content-center align-items-center gap-4" style="gap: 9.5rem !important;font-size: 18px;">
+                        <div>
+                            <strong>ชื่อผู้ใช้งานใช้งาน ::</strong> 
+                           sdsdsd<br>
+                           {{ userauth.id }}
+                        </div>
+                
+                        <div>
+                            <strong>username :</strong> 
+                           sdsdsd
+                        </div>
+                
+                        
+                    </div>
+                </div>
+
+                <div class="card h-auto">
+                    <div class="card-body">
+                        <div id="gridEdit" class="grid_font_size"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script defer>
+var urlupdateStatus = "{% url 'configurations:updateStatus' %}";
+</script>
+<script src="{% static 'js/userauth.js' %}?v=24"></script>
+<link rel="stylesheet" href="{% static 'css/detail.css' %}?v=9" >
+{% endblock %}

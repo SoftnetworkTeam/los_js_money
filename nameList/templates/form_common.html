@@ -1,0 +1,1583 @@
+{% extends 'base.html' %} {% load static %} {% block title %}
+<title id="titleHead"></title>
+{% endblock %} {% block content %}
+<div class="content-body">
+  <div class="container-fluid">
+
+    <div >
+      <form novalidate class="needs-validation" method="POST" id="myForm" enctype="multipart/form-data" action="{% url 'nameList:insertInstallment' %}">
+        <input type="hidden" name="id" value="{{ id }}" />
+        <input type="hidden" name="address_diffshift" id="address_diffshift" />
+        {% csrf_token %}
+      
+        <div class="card">
+          <div class="card-header">
+            <span>ข้อมูลผู้เช่าซื้อ </span> 
+            <div class="ms-auto">
+              <button class="btn btn-facebook" id="id_dip_chip" type="button">
+                <i class="fas fa-address-card"></i> เริ่มอ่านบัตรประชาชน
+              </button>
+            </div>
+          </div>
+          <div class="card-body px-3">
+            <div class="row">
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>คำนำหน้า
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-prename-ajax w-100 select2-lg" id="prename-dropdown" name="prename" required>
+                    {% if prename %}
+                    <option value="{{ prename.id }}">
+                      {{ prename.pre_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกคำนำหน้า</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ชื่อ
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="first_name" name="first_name" placeholder="ชื่อ"
+                      value="{% if customer_info.first_name %}{{ customer_info.first_name }}{% endif %}" required />
+                    <div class="invalid-feedback">กรุณากรอกชื่อ</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>นามสกุล
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="last_name" name="last_name" placeholder="นามสกุล"
+                      value="{% if customer_info.last_name %}{{ customer_info.last_name }}{% endif %}" required />
+                    <div class="invalid-feedback">กรุณากรอกนามสกุล</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ช่วงอายุ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-customer_age-ajax w-100 select2-lg" id="customer_age" name="customer_age" required>
+                    {% if customer_range_age.age_name %}
+                    <option value="{{ customer_range_age.id }}">
+                      {{ customer_range_age.age_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกช่วงอายุ</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>สถานะภาพสมรส 
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="select2 form-control" id="married_status" name="married_status">
+                      {% if not customer_info.marital_status %}
+                        <option value="" selected>-- เลือกข้อมูล --</option>
+                      {% endif %}
+                    
+                      {% for option in married_status_options %}
+                        {% if option.text == "สมรส" or option.text == "โสด" or option.text == "หม้าย" or option.text == "หย่าร้าง" %}
+                          <option value="{{ option.value }}" 
+                            {% if customer_info.marital_status|default:""|striptags == option.value %}selected{% endif %}>
+                            {{ option.text }}
+                          </option>
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                    
+                    <div class="invalid-feedback">กรุณาเลือกสถานะภาพ</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    จำนวนบุตรไม่บรรลุนิติภาวะ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-minorchildren-ajax w-100 select2-lg" id="minorchildren" name="minorchildren" >
+                    {% if minorchildren.id %}
+                    <option value="{{ minorchildren.id }}">
+                      {{ minorchildren.children_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ระดับการศึกษา
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-educationlevel-ajax w-100 select2-lg" id="education_level_id" name="education_level_id" required>
+                    {% if education.education_name %}
+                    <option value="{{ education.id }}">
+                      {{ education.education_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกระดับการศึกษา</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>วันออกบัตร 
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="issue_date" name="issue_date" placeholder="วันออกบัตร"
+                      value="{% if formatted_date_time_issue_date %}{{ formatted_date_time_issue_date }}{% endif %}" required  />
+                    <div class="invalid-feedback">กรุณากรอกวันออกบัตร</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>วันบัตรหมดอายุ 
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="expire_date" name="expire_date" placeholder="วันบัตรหมดอายุ"
+                      value="{% if formatted_date_time_expire_date %}{{ formatted_date_time_expire_date }}{% endif %}" required  />
+                    <div class="invalid-feedback">กรุณากรอกวันบัตรหมดอายุ</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>วันที่อ่านบัตร 
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="read_card" name="read_card" placeholder="วันที่อ่านบัตร"
+                      value="{% if formatted_date_time_date_read_card %}{{ formatted_date_time_date_read_card }}{% endif %}" required  />
+                    <div class="invalid-feedback">กรุณากรอกวันที่อ่านบัตร</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>เพศ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="select2  form-control" id="gender" name="gender">
+                      {% if not customer_info.gender %}
+                        <option value=""> -- เลือกข้อมูล -- </option>
+                      {% endif %}
+                      <option value="M" {% if customer_info.gender == "ชาย" %}selected{% endif %}>ชาย</option>
+                      <option value="F" {% if customer_info.gender == "หญิง" %}selected{% endif %}>หญิง</option>
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกเพศ</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>โทรศัพท์มือถือ
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="mobile" name="mobile" placeholder="โทรศัพท์มือถือ"
+                      value="{% if customer_info.mobile %}{{ customer_info.mobile }}{% endif %}"  oninput="validateInput(this, 10, 'กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก')"
+                      maxlength="10"  required />
+                    <div class="invalid-feedback">กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    เบอร์สำรอง
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="telephone" name="telephone" placeholder="เบอร์สำรอง" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')"
+                      value="{% if customer_info.telephone %}{{ customer_info.telephone }}{% endif %}"  />
+                      <div class="invalid-feedback">กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    Email
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="email" name="email" placeholder="Email" value="{% if customer_info.email %}{{ customer_info.email }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    Line ID
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="line_id" name="line_id" placeholder="Line ID" value="{% if customer_info.line_id %}{{ customer_info.line_id }}{% endif %}" >
+                  </div>
+                </div>
+              </div><hr>
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
+                     <h4>ข้อมูลงาน และ รายได้ </h4>
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ประเภทอาชีพ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-occup-ajax w-100 select2-lg" id="occup-dropdown" name="occup" required>
+                    {% if occupation %}
+                    <option value="{{ occupation.id }}">
+                      {{ occupation.occup_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกประเภทอาชีพ</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>หมวดอาชีพ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="select2 form-control" name="category_occupation" required>
+                      <option value="" {% if not customer_info.category_occupation %}selected{% endif %}>-- เลือกข้อมูล --</option>
+                      <option value="1" {% if customer_info.category_occupation == 1 %}selected{% endif %}>รายได้คงที่</option>
+                      <option value="2" {% if customer_info.category_occupation == 2 %}selected{% endif %}>รายได้ไม่สม่ำเสมอ</option>
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกหมวดอาชีพ</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ลักษณะธุรกิจ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-business_type-ajax w-100" id="business_type_id" name="business_type_id" required>
+                    {% if business_type.id %}
+                    <option value="{{ business_type.id }}">
+                      {{ business_type.business_type_name}}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกลักษณะธุรกิจ</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ประเภทร้านค้า
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-shop_type-ajax w-100" id="shop_type_id" name="shop_type_id" required>
+                    {% if shop_type.id %}
+                    <option value="{{ shop_type.id }}">
+                      {{ shop_type.shop_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกประเภทร้านค้า</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>อายุสัญญาเช่าพื้นที่
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-rentalage-ajax w-100" id="rentalage_id" name="rentalage_id" required>
+                    {% if business_age.id %}
+                    <option value="{{ business_age.id }}">
+                      {{ business_age.age_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกอายุสัญญาเช่าพื้นที่</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>กำไร/เดือน
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-monthly_profit-ajax w-100" id="monthlyprofit_id" name="monthlyprofit_id" required>
+                    {% if monthly_profit.id %}
+                    <option value="{{ monthly_profit.id }}">
+                      {{ monthly_profit.profit_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกกำไร/เดือน</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>อายุของธุรกิจ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-business_age-ajax w-100" id="businessage_id" name="businessage_id" required>
+                    {% if business_age.id %}
+                    <option value="{{ business_age.id }}">
+                      {{ business_age.age_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกอายุของธุรกิจ</div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span>ข้อมูลการขอสินเชื่อ</span>
+          </div>
+          <div class="card-body px-3">
+            <div class="row">
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>วัตถุประสงค์การขอกู้
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-contract_reason-ajax w-100 select2-lg" id="contract_reason" name="contract_reason" required>
+                    {% if contract_reason.id %}
+                    <option value="{{ contract_reason.id }}">
+                      {{ contract_reason.reason_name }}
+                    </option>
+                    {% endif %}
+                  </select>
+                    <div class="invalid-feedback">กรุณาเลือกวัตถุประสงค์การขอกู้</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>รายได้ (บาท/เดือน)
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="base_income" name="base_income" placeholder="รายได้ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{% if installment_detail.base_income %}{{ installment_detail.base_income }}{% endif %}"  required/>
+                  </div>
+                  <div class="invalid-feedback">กรุณากรอกรายได้</div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-xl-3 col-form-label">
+                    ยอดขอกู้ (บาท)
+                  </label>
+                  <div class="col-xl-8">
+                    {% comment %} <input class="form-control" id="price" name="price" value="{{installment_detail.price}}" onchange="mathInstallment()" placeholder="ยอดขอกู้ (บาท)" onkeypress="return onlyNumberKey(event)" /> {% endcomment %}
+                    <input class="form-control" id="price" name="price" value="{{installment_detail.price}}"  placeholder="ยอดขอกู้ (บาท)" onkeypress="return onlyNumberKey(event)" required/>
+                  </div>
+                  <div class="invalid-feedback">กรุณากรอกยอดขอกู้</div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4 d-none">
+                <div class="mb-3 row">
+                  <label class="col-xl-3 col-form-label">
+                    เงินดาวน์
+                  </label>
+                  <div class="col-xl-8">
+                    <input class="form-control" id="down_payment" name="down_payment" value="{{ installment_detail.down_payment }}" onblur="mathInstallment()"  placeholder="เงินดาวน์" onkeypress="return onlyNumberKey(event)"/>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4 d-none">
+                <div class="mb-3 row">
+                  <label class="col-xl-3 col-form-label">
+                    <span class="text-danger">* </span>คิดเป็น(%)
+                  </label>
+                  <div class="col-xl-8">
+                    <input class="form-control" id="percent" name="percent" onload="mathInstallment()" readonly  placeholder="คิดเป็น(%)"/>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4 d-none">
+                <div class="mb-3 row">
+                  <label class="col-xl-3 col-form-label">
+                    <span class="text-danger">* </span>ยอดจัดสุทธิ
+                  </label>
+                  <div class="col-xl-8">
+                    <input class="form-control" id="net_amount" name="net_amount" value="{{installment_detail.total}}" readonly  placeholder="ยอดจัดสุทธิ"/>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4 d-none">
+                <div class="mb-3 row">
+                  <label class="col-xl-3 col-form-label">
+                    <span class="text-danger">* </span>ดอกเบี้ย/เดือน
+                  </label>
+                  <div class="col-xl-8">
+                    <select class="js-data-interest-ajax w-100" id="interest" name="interest" onchange="mathInstallment()">
+                      {% if installment_detail.interest %}
+                      <option>{{ installment_detail.interest }}</option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกดอกเบี้ย/เดือน</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4 d-none">
+                <div class="mb-3 row">
+                  <label class="col-xl-3 col-form-label">
+                    <span class="text-danger">* </span>เริ่มงวดแรก
+                  </label>
+                  <div class="col-xl-8">
+                    <div class="input-group">
+                      <input class="form-control" type="text" id="start_payment" name="start_payment"value="{{ formatted_date_time_start_payment }}" placeholder="เริ่มงวดแรก" />
+                      <span class="input-group-text">
+                        <i class="fa fa-calendar"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-xl-3 col-form-label">
+                    <span class="text-danger">* </span>จำนวนงวด (เดือน)
+                  </label>
+                  <div class="col-xl-8">
+                    <select class="js-data-installment-ajax w-100" id="installment" name="installment" required>
+                      {% if installment_detail.installment %}
+                      {% comment %} <option value="{{ installment_detail.installment }}" onchange="mathInstallment()">{{ installment_detail.installment }}</option> {% endcomment %}
+                      <option value="{{ installment_detail.installment }}">{{ installment_detail.installment }}</option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกจำนวนงวด</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-xl-3 col-form-label">
+                    <span class="text-danger">* </span>งวดละ
+                  </label>
+                  <div class="col-xl-8">
+                    <input class="form-control" id="price_installment" name="price_installment" value="{{installment_detail.price_installment}}" placeholder="งวดละ"  required/>
+                    <div class="invalid-feedback">กรุณาเลือกงวดละ</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    หนี้ในระบบ (บาท/เดือน)
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="debt_in" name="debt_in" placeholder="หนี้ในระบบ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{% if installment_detail.debt_in %}{{ installment_detail.debt_in }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    หนี้นอกระบบ (บาท/เดือน)
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="debt_informal" name="debt_informal" placeholder="หนี้นอกระบบ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{% if installment_detail.debt_informal %}{{ installment_detail.debt_informal }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span>ข้อมูลเพิ่มเติมเพื่อสร้างสัญญา</span>
+          </div>
+          <div class="card-body px-3">
+            <div class="row">
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>เลขบัตรประชาชน
+                  </label>
+                  <div class="col-lg-8">
+                    <input type="text" class="form-control" id="card_id" name="card_id" placeholder="เลขบัตรประชาชน" value="{% if customer_info.card_no %}{{ customer_info.card_no }}{% endif %}"  oninput="validateInput(this, 13, 'กรุณากรอกเลขบัตรประชาชนด้วยตัวเลข 13 หลัก')" maxlength="13" required />
+                  <div class="invalid-feedback">กรุณากรอกเลขบัตรประชาชนด้วยตัวเลข 13 หลัก</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ว/ด/ป เกิด
+                  </label>
+                  <div class="col-lg-8">
+                    <div class="input-group">
+                      <input class="form-control" type="text" id="birthday" name="birthday" value="{{ formatted_date_time_birth_date }}" placeholder="ว/ด/ป เกิด"  />
+                      <span class="input-group-text">
+                        <i class="fa fa-calendar"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>อายุ
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="age" name="age" placeholder="อายุ"
+                      value="{% if customer_info.age %}{{ customer_info.age }}{% endif %}" required readonly />
+                    <div class="invalid-feedback">กรุณากรอกอายุ</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                   เลขบัญชี
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="book_no" name="book_no" placeholder="เลขบัญชี"
+                      value="{% if customer_info.age %}{{ customer_info.age }}{% endif %}" oninput="validateInput(this, 10, 'กรุณากรอกเลขบัญชี 10 หลัก')"
+                      maxlength="10" required  />
+                    <div class="invalid-feedback">กรุณากรอกเลขบัญชี</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                   ชื่อบัญชี
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="book_name" name="book_name" placeholder="ชื่อบัญชี"
+                      value="{% if customer_info.book_name %}{{ customer_info.book_name }}{% endif %}" required  />
+                    <div class="invalid-feedback">กรุณากรอกชื่อบัญชี</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    ธนาคาร
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-bank-ajax w-100" id="bank_id" name="bank_id">
+                      {% if bank.id %}
+                      <option value="{{ bank.id }}">{{ bank.bank_name }}</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                   ผู้ค้ำประกัน / หลักประกัน
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี"
+                    value="{% if customer_info.guarantor_name %}{{ customer_info.guarantor_name }}{% endif %}" required  />
+                  <div class="invalid-feedback">กรุณากรอกผู้ค้ำประกัน / หลักประกัน</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    สัญชาติ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-nation-ajax w-100" id="country_id" name="country_id" required>
+                      {% if country.id %}
+                      <option value="{{ country.id }}" >{{ country.country_name_th }}</option>
+                      {% endif %}
+                    </select>
+                  <div class="invalid-feedback">กรุณาเลือกสัญชาติ</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    วันที่เงินเดือนออก
+                  </label>
+                  <div class="col-lg-8">
+                      <div class="input-group">
+                        <input class="form-control" type="text" id="salary_day" name="salary_day"
+                          value="{% if installment_detail.salary_day %}{{ installment_detail.salary_day }}{% endif %}" placeholder="วันที่เงินเดือนออก" />
+                        <span class="input-group-text">
+                          <i class="fa fa-calendar"></i>
+                        </span>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ช่องทางรับเงิน 
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="default-select wide form-control" id="channel_payment" name="channel_payment" required>
+                      <option value="" {% if not customer_info.channel_payment %}selected{% endif %}>-- เลือกข้อมูล --</option>
+                      <option value="1" {% if customer_info.channel_payment|default:""|stringformat:"s" == "1" %}selected{% endif %}>เงินสด</option>
+                      <option value="2" {% if customer_info.channel_payment|default:""|stringformat:"s" == "2" %}selected{% endif %}>เช็ค</option>
+                      <option value="3" {% if customer_info.channel_payment|default:""|stringformat:"s" == "3" %}selected{% endif %}>โอนเข้าบัญขีธนาคาร</option>
+                    </select>
+                  </div>
+                  <div class="invalid-feedback">กรุณาเลือกช่องทางรับเงิน</div>
+                </div>
+              </div><hr>
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
+                     <h4>ที่อยู่ตามบัตรประชาชน </h4>
+                    <input type="radio" id="card_doc" value="card" name="send_doc" class="custom-radio"/>
+                    <span>ใช้จัดส่งเอกสาร</span>
+                    
+                  </label>
+                </div>
+              </div>
+              
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ที่อยู่
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="address" name="address" placeholder="ที่อยู่"
+                      value="{% if customer_address_detail %}{{ customer_address_detail.house_no }}{% endif %}" required />
+                    <div class="invalid-feedback">กรุณากรอกที่อยู่</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    หมู่บ้าน/หอพัก
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="village" name="village" placeholder="หมู่บ้าน/หอพัก"
+                      value="{% if customer_address_detail %}{{ customer_address_detail.village }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    ซอย
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="soi" name="soi" placeholder="ซอย"
+                      value="{% if customer_address_detail %}{{ customer_address_detail.soi }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                   ถนน
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="road" name="road" placeholder="ถนน"
+                      value="{% if customer_address_detail %}{{ customer_address_detail.road }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>จังหวัด
+                  </label>
+                  <div class="col-lg-8">
+                      <select class="js-data-province-ajax w-100 select2-lg" id="province-dropdown" name="province" required>
+                      {% if customer_address_detail %}
+                      <option value="{{ customer_address_detail.province_id }}">
+                        {{ customer_address_detail.province_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกจังหวัด</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>อำเภอ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-amphoe-ajax w-100 select2-lg" id="amphoe-dropdown" name="amphoe" required>
+                      {% if customer_address_detail %}
+                      <option value="{{ customer_address_detail.amphoe_id }}">
+                        {{ customer_address_detail.amphoe_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณากรอกอำเภอ</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ตำบล
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-tambon-ajax w-100 select2-lg" id="tambon-dropdown"  name="tambon" required>
+                      {% if customer_address_detail %}
+                      <option value="{{ customer_address_detail.tambon_id }}">
+                        {{ customer_address_detail.tambon_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณากรอกตำบล</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>รหัสไปรษณีย์
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="postcode" name="postcode" placeholder="รหัสไปรษณีย์"
+                      value="{% if customer_address_detail %}{{ customer_address_detail.postcode }}{% endif %}"  />
+                    <div class="invalid-feedback">กรุณากรอกรหัสไปรษณีย์</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label">
+                    รายละเอียดที่อยู่
+                  </label>
+                  <div class="col-xl-11">
+                    <input class="form-control" id="relate" name="relate" placeholder="รายละเอียดที่อยู่"
+                    value="{% if customer_address_detail.relate %}{{ customer_address_detail.relate }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+              <hr>
+              
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
+                     <h4>ที่อยู่ปัจจุบัน </h4>
+                    <input type="radio" id="same_doc" value="current" name="send_doc" class="custom-radio"/>
+                    <span>ใช้จัดส่งเอกสาร</span>
+                    <input type="radio" id="same_card" name="same_card" class="custom-radio"/>
+                    <span>บันทึกเหมือนที่อยู่ตามทะเบียนบ้าน</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ที่อยู่
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="address_current" name="address_current" placeholder="ที่อยู่"
+                      value="{% if customer_address2_detail %}{{ customer_address2_detail.house_no }}{% endif %}" required />
+                    <div class="invalid-feedback">กรุณากรอกที่อยู่</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    หมู่บ้าน/หอพัก
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="village_current" name="village_current" placeholder="หมู่บ้าน/หอพัก"
+                      value="{% if customer_address2_detail %}{{ customer_address2_detail.village }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                   ซอย
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="soi_current" name="soi_current" placeholder="ซอย"
+                      value="{% if customer_address2_detail %}{{ customer_address2_detail.soi }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    ถนน
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="road_current" name="road_current" placeholder="ถนน"
+                      value="{% if customer_address2_detail %}{{ customer_address2_detail.road }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    จังหวัด
+                  </label>
+                  <div class="col-lg-8">
+                      <select class="js-data-province_current-ajax w-100 select2-lg" id="province_current-dropdown" name="province_current" >
+                      {% if customer_address2_detail %}
+                      <option value="{{ customer_address2_detail.province_id }}">
+                        {{ customer_address2_detail.province_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกจังหวัด</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    อำเภอ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-amphoe_current-ajax w-100 select2-lg" id="amphoe_current-dropdown" name="amphoe_current" >
+                      {% if customer_address2_detail %}
+                      <option value="{{ customer_address2_detail.amphoe_id }}">
+                        {{ customer_address2_detail.amphoe_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณากรอกอำเภอ</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                   ตำบล
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-tambon_current-ajax w-100 select2-lg" id="tambon_current-dropdown" name="tambon_current" >
+                      {% if customer_address2_detail %}
+                      <option value="{{ customer_address2_detail.tambon_id }}">
+                        {{ customer_address2_detail.tambon_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณากรอกตำบล</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    รหัสไปรษณีย์
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="postcode_current" name="postcode_current" placeholder="รหัสไปรษณีย์"
+                      value="{% if customer_address2_detail %}{{ customer_address2_detail.postcode }}{% endif %}"  />
+                    <div class="invalid-feedback">กรุณากรอกรหัสไปรษณีย์</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    ประเภทที่พักอาศัย
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-residence_current-ajax w-100 select2-lg" id="residence_current-dropdown" name="residence_current" required>
+                      {% if customer_address2_detail.residence_id %}
+                      <option value="{{ customer_address2_detail.residence_id }}">
+                        {{ customer_address2_detail.residence_name }}
+                      </option>
+                      {% endif %}
+                    </select> 
+                    <div class="invalid-feedback">กรุณาเลือกประเภทที่พักอาศัย</div>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>สถานะที่พักอาศัย
+                  </label>
+                  <div class="col-lg-8">
+                    <select
+                      class="js-data-living_type_current-ajax w-100 select2-lg"
+                      id="living_type_current-dropdown"
+                      name="living_type_current" required
+                      >
+                      {% if customer_address2_detail.living_type_id %}
+                      <option value="{{ customer_address2_detail.living_type_id }}">
+                        {{ customer_address2_detail.type_name }}
+                      </option>
+                      {% endif %}
+                    </select> 
+                    <div class="invalid-feedback">กรุณาเลือกสถานะที่พักอาศัย</div>
+                  </div>
+                </div>
+              </div>
+      
+              {% comment %} <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ค่าเช่า/เดือน
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="living_rental_current" name="living_rental_current" placeholder="ค่าเช่า/เดือน"
+                      value="{% if customer_address2_detail.living_rental %}{{ customer_address2_detail.living_rental }}{% endif %}"  />
+                  </div>
+                </div>
+              </div> {% endcomment %}
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label">
+                    รายละเอียดที่อยู่
+                  </label>
+                  <div class="col-xl-11">
+                    <input class="form-control" id="relate_current" name="relate_current" placeholder="รายละเอียดที่อยู่"
+                    value="{% if customer_address2_detail.relate %}{{ customer_address2_detail.relate }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+              <hr>
+      
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
+                     <h4>ที่อยู่ที่ทำงาน </h4>
+                    <input type="radio" id="company_doc" value="company" name="send_doc" class="custom-radio"  checked/>
+                    <span>ใช้จัดส่งเอกสาร</span>
+                  </label>
+                </div>
+              </div>
+      
+              <div class="col-xl-8">
+                <div class="mb-3 row">
+                  <label class="col-xl-2 col-form-label" style="width: 12.66667%;">
+                    ชื่อบริษัท/ซับคอนแทรค
+                  </label>
+                  <div class="col-xl-10">
+                    <input class="form-control" id="office" name="office" placeholder="ชื่อบริษัท/ซับคอนแทรค"
+                    value="{% if customer_address3_detail %}{{ customer_address3_detail.house_no }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    เบอร์โทรศัพท์
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="company_tel" name="company_tel" placeholder="ชื่อบริษัท/ซับคอนแทรค" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')"
+                      maxlength="10" 
+                    value="{% if customer_address3_detail.company_tel %}{{ customer_address3_detail.company_tel }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-8">
+                <div class="mb-3 row">
+                  <label class="col-xl-2 col-form-label" style="width: 12.66667%;">
+                   ประจำบริษัท
+                  </label>
+                  <div class="col-xl-10">
+                    <input class="form-control" id="place_of_work" name="place_of_work" placeholder="ชื่อบริษัท/ซับคอนแทรค"
+                    value="{% if installment_detail.place_of_work %}{{ installment_detail.place_of_work }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    เบอร์โทรศัพท์
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="place_work_tel" name="place_work_tel" placeholder="ชื่อบริษัท/ซับคอนแทรค"
+                    value="{% if installment_detail.company_tel %}{{ installment_detail.company_tel }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-red">*</span>ที่อยู่
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="company_address" name="company_address" placeholder="ที่อยู่"
+                      value="{% if customer_address3_detail %}{{ customer_address3_detail.house_no }}{% endif %}"  required/>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                   หมู่บ้าน/หอพัก
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="company_village" name="company_village" placeholder="ที่อยู่"
+                      value="{% if customer_address3_detail.village %}{{ customer_address3_detail.village }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    ซอย
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="company_soi" name="company_soi" placeholder="ซอย"
+                      value="{% if customer_address3_detail.soi %}{{ customer_address3_detail.soi }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                   ถนน
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="company_road" name="company_road" placeholder="ถนน"
+                      value="{% if customer_address3_detail %}{{ customer_address3_detail.road }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-red">*</span>จังหวัด
+                  </label>
+                  <div class="col-lg-8">
+                      <select class="js-data-company_province-ajax w-100 select2-lg" id="company_province-dropdown" name="company_province" required>
+                      {% if customer_address3_detail %}
+                      <option value="{{ customer_address3_detail.province_id }}">
+                        {{ customer_address3_detail.province_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-red">*</span>อำเภอ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-company_amphoe-ajax w-100 select2-lg" id="company_amphoet-dropdown" name="company_amphoe" required>
+                      {% if customer_address3_detail %}
+                      <option value="{{ customer_address3_detail.amphoe_id }}">
+                        {{ customer_address3_detail.amphoe_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-red">*</span>ตำบล
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-company_tambon-ajax w-100 select2-lg" id="company_tambon-dropdown" name="company_tambon" required>
+                      {% if customer_address3_detail %}
+                      <option value="{{ customer_address3_detail.tambon_id}}">
+                        {{ customer_address3_detail.tambon_name }}
+                      </option>
+                      {% endif %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    รหัสไปรษณีย์
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="company_postcode" name="company_postcode" placeholder="รหัสไปรษณีย์"
+                      value="{% if customer_address3_detail.postcode %}{{ customer_address3_detail.postcode }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label">
+                    รายละเอียดที่อยู่
+                  </label>
+                  <div class="col-xl-11">
+                    <input class="form-control" id="company_relate" name="company_relate" placeholder="รายละเอียดที่อยู่"
+                    value="{% if customer_address3_detail.relate %}{{ customer_address3_detail.relate }}{% endif %}"  />
+                  </div>
+                </div>
+              </div>
+
+              {% comment %} <div class="card">
+                <div class="card-header">
+                  <span>บุคคลที่ให้ติดต่อได้</span>
+                </div>
+                <div class="card-body px-3">
+
+
+
+                  <div class="row">
+                  </div>
+                </div>
+              </div> {% endcomment %}
+                  <hr>
+                  <div class="col-xl-12">
+                    <div class="mb-3 row">
+                      <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
+                        <h4>บันทักไปยัง </h4>
+                      </label>
+                    </div>
+                  </div>
+                    <div class="col-xl-6">
+                      <div class="mb-3 row">
+                        <label class="col-lg-2 col-form-label">
+                          <span class="text-danger">* </span>จังหวัด
+                        </label>
+                        <div class="col-lg-8">
+                            <select class="js-data-province_save-ajax w-100 select2-lg" id="province_save-dropdown" name="province_save" required>
+                            {% if province_branch %}
+                            <option value="{{ province_branch.id }}">
+                              {{ province_branch.province_name }}
+                            </option>
+                            {% endif %}
+                          </select>
+                          <div class="invalid-feedback">กรุณาเลือกจังหวัด</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-xl-6">
+                      <div class="mb-3 row">
+                        <label class="col-xl-2 col-form-label">
+                          <span class="text-danger">*</span>สาขา
+                        </label>
+                        <div class="col-xl-8">
+                          <select
+                            class="js-data-branch-ajax w-100"
+                            id="branch-dropdown"
+                            name="branch"
+                            required>
+                            {% if branch %}
+                            <option value="{{ branch.id }}">
+                              {{ branch.branch_name }}
+                            </option>
+                            {% endif %}
+                          </select>
+                          <div class="invalid-feedback">กรุณาเลือกสาขา</div>
+                        </div>
+                      </div>
+                    </div> <hr>
+  
+                    {% if file %}
+                        {% for files in file %}
+                        <div class="col-xl-6">
+                          <div class="mb-3 row">
+                            <div class="col-lg-10">
+                              <div class="input-group">
+                                <span class="btn btn-danger" style="position:absolute;right:0px;z-index:100" onclick="deleteFile('file_{{ files.id }}','true');">ลบ</span>
+                                <input class="form-control d-none" type="file" id="file_{{ files.id }}" name="file_{{ files.id }}" multiple onchange="attachFile('file_{{ files.id }}','true')" accept="image/jpeg,image/jpg,image/png" >
+                                <img id="img-file_{{ files.id }}" style="border-radius: 25px; cursor: pointer; height: 200px; object-fit: cover;" onclick="selectImg('file_{{ files.id }}','true')" src="/media/{{ files.name }}" width="100%">
+                              </div>
+                            </div>
+                          </div>
+                      
+                          <!-- ส่วนอัพโหลดเอกสาร -->
+                          <div class="mb-3 row">
+                            <label class="col-lg-2 col-form-label">
+                              <span class="text-danger">* </span>อัพโหลดเอกสาร {{ files.doc.doc_name }}
+                            </label>
+                            <div class="col-lg-8">
+                              <select class="js-data-file_type-ajax w-100" id="file_type-dropdown-{{ files.id }}" name="file_type_{{ files.id }}" disabled>
+                                {% if files %}
+                                <option value="{{ files.doc.id }}">
+                                  {{ files.doc.doc_name }}
+                                </option>
+                                {% endif %}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                      {% else %}
+                        {# ถ้า file เป็นค่าว่าง ให้แสดงช่องอัปโหลดเอกสาร 1 อัน #}
+                        <div class="col-xl-6">
+                          <div class="mb-3 row">
+                            <label class="col-lg-2 col-form-label">
+                              <span class="text-danger">* </span>อัพโหลดเอกสาร
+                            </label>
+                            <div class="col-lg-8">
+                              <select class="js-data-file_type-ajax w-100" id="file_type-dropdown-1" name="file_type_1">
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-xl-6">
+                          <div class="mb-3 row">
+                            <div class="col-lg-10">
+                              <div class="input-group">
+                                <input class="form-control" type="file" id="file_1" name="file_1" multiple onchange="attachFile('file_1')">
+                                <span class="input-group-text" id="view_file_1" onclick="viewPDF('file_1')">
+                                  <i class="fa fa-search"></i>
+                                </span>
+                                <button onclick="deleteFile('file_1')" type="button" id="delete_file_1" class="btn btn-outline-danger" disabled>
+                                  <i class="fa fa-trash"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endif %}
+
+              
+                    <div id="file-container"></div>
+              
+                    <!-- ปรับการแสดงผลปุ่ม -->
+                <div class="col-xl-12 text-start"> <!-- text-end เพื่อจัดให้ปุ่มอยู่ขวา -->
+                  <button type="button" class="btn btn-outline-primary d-inline-block" onclick="addFileRow()">+ เพิ่มเอกสาร</button>
+                </div>
+                
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 text-center">
+          <div>
+            <button type="button" id="btnSubmit" class="btn btn-outline-primary" >บันทึก</button>
+            <a type="button"name="btncancel"id="btncancel"class="btn btn-outline-danger"href="/name-list">ยกเลิก</a>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="previewFile" tabindex="-1" aria-labelledby="previewFileLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="background: transparent; border: none;">
+      <div class="modal-body text-center">
+        <iframe id="pdfViewer" style="width: 100%; height: 800px; display:none;"></iframe>
+        <img id="imageViewer" style="width: 100%; height: 800px;  object-fit: contain;;display:none;" />
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<iframe id="pdfViewer" width="100%" height="500px"></iframe>
+
+
+{% endblock %} {% block script %}
+<script>
+
+  const ref_id = new URLSearchParams(window.location.search).get("ref_id");
+  const add_loan = window.location.pathname.includes("create");
+
+  var idno = "{{ customer_loan_detail.idno }}";
+  var brand_id = ref_id ? "{{ contract_into.brand_id }}" : "{{ brand.id }}";
+  var model_id = ref_id ? "{{ contract_into.model_id }}" : "{{ model.id }}";
+  var ref_sub_model_id = "{{ contract_into.sub_model_id }}";
+
+  var province_id = "{{ province_name.id }}";
+  var amphoe_id = "{{ amphoe_name.id }}";
+  var customer_id = "{{ id }}";
+  var bank_id = "{{ customer_loan_detail.bank_id }}";
+
+  var ref_model_id = "{{ contract_into.model_id }}";
+  var ref_color_id = "{{contract_into.color_id}}";
+  var urlMasterOfficer = "{% url 'nameList:MasterOfficer' %}";
+
+  var urlinterest = "{% url 'nameList:interest' %}";
+  var urlMasterCustomerPrename = "{% url 'nameList:MasterCustomerPrename' %}";
+  var urlMasterOccupation = "{% url 'nameList:MasterOccupation' %}";
+  var urlMastercustomerage = "{% url 'nameList:Mastercustomerage' %}";
+  var urlMasterminorchildren = "{% url 'nameList:Masterminorchildren' %}";
+  var urlMastereducationlevel = "{% url 'nameList:Mastereducationlevel' %}";
+  var urlBusinesstype = "{% url 'nameList:businesstype' %}";
+  var urlMastershoptypes = "{% url 'nameList:Mastershoptypes' %}";
+  var urlMasterrentalage = "{% url 'nameList:Masterrentalage' %}";
+  var urlMastermonthlyprofit = "{% url 'nameList:Mastermonthlyprofit' %}";
+  var urlMasterbusinessage = "{% url 'nameList:Masterbusinessage' %}";
+  var urlMastercontractreason = "{% url 'nameList:Mastercontractreason' %}";
+  var urlMasterProvinceSave = "{% url 'nameList:MasterProvince' %}";
+  var urlMasterbranch = "{% url 'nameList:Masterbranch' %}";
+  var urlMastercountry = "{% url 'nameList:Mastercountry' %}";
+  
+  var urlMasterProvince = "{% url 'nameList:MasterProvince' %}";
+  var urlMasterAmphoe = "{% url 'nameList:MasterAmphoe' %}";
+  var urlMasterTambon = "{% url 'nameList:MasterTambon' %}";
+  var urlMasterResidence = "{% url 'nameList:MasterResidence' %}";
+  var urlMasterLivingOwner = "{% url 'nameList:MasterLivingOwner' %}";
+  var urlMasterLivingType = "{% url 'nameList:MasterLivingType' %}";
+
+  var urlMasterProvincecurrent = "{% url 'nameList:MasterProvince' %}";
+  var urlMasterAmphoecurrent = "{% url 'nameList:MasterAmphoe' %}";
+  var urlMasterTamboncurrent = "{% url 'nameList:MasterTambon' %}";
+  var urlMasterResidencecurrent = "{% url 'nameList:MasterResidence' %}";
+  var urlMasterLivingOwnercurrent = "{% url 'nameList:MasterLivingOwner' %}";
+  var urlMasterLivingTypecurrent = "{% url 'nameList:MasterLivingType' %}";
+  var urlMasterProvinceCompany = "{% url 'nameList:MasterProvince' %}";
+  var urlMasterAmphoeCompany = "{% url 'nameList:MasterAmphoe' %}";
+  var urlMasterTambonCompany = "{% url 'nameList:MasterTambon' %}";
+  var urlMasterBank = "{% url 'nameList:MasterBank' %}";
+  var urlMasterContractDocument = "{% url 'nameList:MasterContractDocument' %}";
+  var urlrangeAge = "{% url 'nameList:rangeAge' %}";
+
+  var price_installment = "{{ customer_loan_detail.price_installment }}";
+  var startPaymentDate = "{{ formatted_date_time_start_payment }}";
+  var birthDate = "{{ formatted_date_time_birth_date }}";
+  var issue_date = "{{ formatted_date_time_issue_date }}";
+  var expire_date = "{{ formatted_date_time_expire_date }}";
+  var read_card = "{{ formatted_date_time_date_read_card }}";
+  var salary_day = "{{ customer_loan_detail.salary_day }}";
+
+  {% comment %} var start_time = "{{ start_time }}";
+  var end_time = "{{ end_time }}"; {% endcomment %}
+
+  var ref_engine_no = "{{ contract_into.engine_no }}" ;
+  var ref_chassis_no = "{{ contract_into.chassis_no }}" ;
+
+  var machine_no = "{{ customer_loan_detail.machine_no }}" ;
+  var chassis_no = "{{ customer_loan_detail.chassis_no }}"
+
+
+
+  $(document).ready(function () {
+    
+    $("#brand-dropdown").prop("disabled", ref_id ? true : false);
+    $("#model-dropdown").prop("disabled", ref_id ? true : false);
+    $("#sub_model-dropdown").prop("disabled", ref_id ? true : false);
+    $("#color-dropdown").prop("disabled", ref_id ? true : false);
+    $("#machine_no").prop("disabled", ref_id ? true : false);
+    $("#chassis_no").prop("disabled", ref_id ? true : false);
+    $("#contract_no_old").prop("disabled", ref_id ? true : false);
+
+    $("#machine_no")
+      .val(
+        ref_id
+          ? "{{ contract_into.engine_no }}"
+          : "{{ customer_loan_detail.machine_no }}"
+      )
+      .text(
+        ref_id
+          ? "{{ contract_into.engine_no }}"
+          : "{{ customer_loan_detail.machine_no }}"
+      );
+    $("#chassis_no")
+      .val(
+        ref_id
+          ? "{{ contract_into.chassis_no }}"
+          : "{{ customer_loan_detail.chassis_no }}"
+      )
+      .text(
+        ref_id
+          ? "{{ contract_into.chassis_no }}"
+          : "{{ customer_loan_detail.chassis_no }}"
+      );
+    $("#registration_no")
+      .val(
+        ref_id
+          ? "{{ contract_into.reg_no }}"
+          : "{{ customer_loan_detail.registration_no }}"
+      )
+      .text(
+        ref_id
+          ? "{{ contract_into.reg_no }}"
+          : "{{ customer_loan_detail.registration_no }}"
+      );
+    $("#contract_no_old")
+      .val(
+        ref_id
+          ? "{{ contract_into.cont_no }}"
+          : "{{ customer_loan_detail.contact_no_old }}"
+      )
+      .text(
+        ref_id
+          ? "{{ contract_into.cont_no }}"
+          : "{{ customer_loan_detail.contact_no_old }}"
+      );
+
+    $("#title,#titleHead").text(
+      ref_id || add_loan
+        ? "แบบฟอร์มขอสินเชื่อ"
+        : "แก้ไขแบบฟอร์มขอสินเชื่อ"
+    );
+
+
+    {% comment %} $("#down_payment, #interest, #installment, #price_installment").prop("disabled", true); {% endcomment %}
+    {% comment %} $("#percent, #net_amount").prop("readonly", true); {% endcomment %}
+    {% comment %} $("#price").on("input", mathInstallment); {% endcomment %}
+    $("#down_payment").on("input", mathInstallment);
+    $("#interest").on("change", calculateInstallment);
+    {% comment %} $("#installment").on("change", calculateInstallment); {% endcomment %}
+  });
+
+
+  
+  var fileRowCount = 1;
+
+  function addFileRow() {
+    fileRowCount++;
+  
+    var newFileRow = `<div class="row">
+                        <div class="col-xl-6">
+                          <div class="mb-3 row">
+                            <label class="col-lg-2 col-form-label">
+                              <span class="text-danger">* </span>อัพโหลดเอกสาร
+                            </label>
+                            <div class="col-lg-8">
+                              <select class="js-data-file_type-${fileRowCount}-ajax" id="file_type-dropdown-${fileRowCount}" name="file_type_${fileRowCount}">
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                
+                        <div class="col-xl-6">
+                          <div class="mb-3 row">
+                            <div class="col-lg-10">
+                              <div class="input-group">
+                                <input class="form-control" type="file" id="file_${fileRowCount}" multiple  name="file_${fileRowCount}" onchange="attachFile('file_${fileRowCount}')">
+                                <span class="input-group-text" id="view_file_${fileRowCount}" onclick="viewPDF('file_${fileRowCount}')" style="cursor:pointer;">
+                                  <i class="fa fa-search"></i>
+                                </span>
+                                <button onclick="deleteFile('file_${fileRowCount}')" type="button" id="delete_file_${fileRowCount}" class="btn btn-outline-danger" disabled>
+                                  <i class="fa fa-trash"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+  
+                        <input type="hidden" name="file_row_count" value="${fileRowCount}">
+                      </div>`;
+  
+    $("#file-container").append(newFileRow);
+  
+    loadSelect2Data(urlMasterContractDocument, `.js-data-file_type-${fileRowCount}-ajax`, "results", "id", "doc_name");
+  }
+  
+
+
+</script>
+<script src="{% static 'js/form_common_script.js' %}?v=97"></script>
+<link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 
+{% endblock %}

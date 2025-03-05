@@ -1,0 +1,13 @@
+.table thead th {
+    background: #ffffff;
+    color: #4b3f3f;
+    border: 0;
+}
+
+.detailIssue {
+    margin-top: 2%;
+}
+
+.k-window-title .k-dialog-title {
+    color: #ffffff;
+}

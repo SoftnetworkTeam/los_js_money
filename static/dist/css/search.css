@@ -1,0 +1,20 @@
+.modal_search_row {
+    cursor: pointer;
+}
+.modal_search_table .selected{
+    background-color: rgba(255,99,88,.25) !important;
+    border-color: rgba(255,99,88,.25) !important;
+}
+
+.pn_list_row {
+    cursor: pointer;
+}
+
+.search_row {
+    cursor: pointer;
+}
+
+.pn_list_table .selected{
+    background-color: rgba(255,99,88,.25) !important;
+    border-color: rgba(255,99,88,.25) !important;
+}

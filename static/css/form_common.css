@@ -1,0 +1,52 @@
+  #id_dip_chip {
+    background-color: #105e4c; 
+    border-color: #105e4c; 
+  }
+
+  #id_dip_chip:hover {
+    background-color:rgb(14, 82, 66); 
+    border-color: rgb(14, 82, 66); 
+  }
+
+
+  #color-dropdown {
+    width: 100%;
+    max-width: 100%;
+  }
+  .modal-xl-custom {
+    max-width: 95vw; /* ปรับขนาดกว้างสุดให้เกือบเต็มจอ */
+    height: 95vh; /* ปรับความสูง */
+  }
+
+  .custom-width {
+    width: 100%;
+  }
+
+  .custom-radio {
+    transform: scale(1.5);
+    position: relative;
+    top: -5%;
+  }
+
+  .table thead th {
+    background: #ffffff;
+    color: #4a4141;
+    border: 0;
+    font-size: 18px;
+  }
+
+  #view_file_1 {
+    cursor: pointer; 
+  }
+  
+  #view_file_1:hover {
+    background-color: #7EA700;
+    color : #fff 
+  }
+  
+
+  @media (min-width: 1200px) {
+    .custom-width {
+      width: 22.3%;
+    }
+  }

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>ข้อมูลเกรดลูกค้า</title>
+    <style>
+        .k-toolbar .k-input, .k-toolbar .k-picker {
+            width:  15% !important;
+            height: 40px !important;
+        }
+
+        .label-status {
+            padding: 3px 10px;
+            line-height: 13px;
+            color: #fff;
+            font-weight: 400;
+            border-radius: 0.25rem;
+            font-size: 75%;
+            display: inline-block !important;
+        }
+
+        .label-danger {
+            background-color: #e46a76;
+        }
+
+        .label-success {
+            background-color: #00c292;
+        }
+
+        .label-warning {
+            background-color: #f2a600;
+        }
+
+        .grid_font_size {
+            font-size: 17px;
+        }
+
+        .addinfo_btn {
+            width: 100%;
+            height: 100%;
+            font-size: 16px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="mb-3 mt-3 d-flex justify-content-between">
+        <h3 class="card-title">ข้อมูลเกรดลูกค้า</h3>
+        {% if auth_insert_info == True %}
+            <a href="{% url 'ncb:add_ncb' %}">
+                <button class="btn addinfo_btn" id="addButton"><i class="fa-solid fa-circle-plus"></i>
+                    เพิ่มข้อมูล
+                </button>
+            </a>
+        {% elif auth_insert_info == False %}
+            <a href="{% url 'ncb:add_ncb' %}">
+                <button class="btn addinfo_btn" id="addButton" style="display: none"><i
+                        class="fa-solid fa-circle-plus"></i>
+                    เพิ่มข้อมูล
+                </button>
+            </a>
+        {% endif %}
+    </div>
+    <div id="grid" class="grid_font_size mb-5"></div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            function statusFilter(element) {
+                element.kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    dataSource: [
+                        {text: "ทั้งหมด", value: ""},
+                        {text: "Active", value: "A"},
+                        {text: "InActive", value: "C"},
+                    ],
+                });
+            }
+
+            let table = new DataTable('#myTable', {
+                responsive: true
+            });
+            $("#addButton").kendoButton({
+                themeColor: "success"
+            });
+            $("#grid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "/ncb/ncb-api",
+                            dataType: "json",
+                            type: "GET",
+                            contentType: "application/json"
+                        }
+                    },
+                    schema: {
+                        data: "results",
+                        total: "count",
+                        model: {
+                            fields: {
+                                name: {type: "string"},
+                                description: {type: "string"},
+                                status: {type: "string"},
+                                id: {type: "number"},
+                            }
+                        }
+                    },
+                    pageSize: 10,
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true,
+                    change: function (e) {
+                        let data = this.data();
+                        data.forEach(function (item, index) {
+                            item.index = e.sender.skip() + index + 1;
+                        });
+                    },
+                },
+                columns: [
+                    {
+                        title: "<b>ลำดับ</b>", template: "#= index #", width: 65
+                    },
+                    {field: "name", title: "<b>เกรดลูกค้า</b>", width: 120},
+                    {field: "description", title: "<b>รายละเอียด</b>", width: 270},
+                    {
+                        field: "status", title: "<b>สถานะ</b>", width: 80,
+                        template: function (dataItem) {
+                            return dataItem.status === 'A' ? '<div class="label-status label-success">Active</div>' : '<div class="label-status label-danger">InActive</div>';
+                        },
+                        filterable: {
+                            ui: statusFilter,
+                        }
+                    },
+                    {% if auth_edit_delete == True  %}
+                        {
+                            title: "<b>แก้ไข</b>",
+                            width: 75,
+                            template: function (dataItem) {
+                                let editUrl = '/ncb/editNCB/' + dataItem.id;
+                                return '<a href="' + editUrl + '" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>';
+                            }
+                        }
+                    {% elif auth_edit_delete == False %}
+                        {
+                            title: "<b>แก้ไข</b>",
+                            template: "",
+                            width: 75,
+                        }
+                    {% endif %}
+                ],
+                sortable: true,
+                pageable: true,
+                filterable: true,
+                toolbar: ['search']
+            });
+        });
+    </script>
+{% endblock %}

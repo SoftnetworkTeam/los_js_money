@@ -1,0 +1,369 @@
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="robots" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="SN | Loan Managment">
+    <meta property="og:title" content="SN | Loan Managment">
+    <meta property="og:description" content="SN | Loan Managment">
+    <meta property="og:image" content="{% static 'img/logo_login02.png' %}">
+
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- PAGE TITLE HERE -->
+    {% comment %} <title>SN | HOME</title> {% endcomment %}
+
+    <!-- dataTables -->
+    <link rel="stylesheet" href="{% static 'vendor/datatables/css/jquery.dataTables.min.css' %}">
+    <!-- FAVICONS ICON -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=75">
+    <link rel="stylesheet" href="{% static 'css/css_all/css_all.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'css/button.css' %}">
+    
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{% static 'vendor/toastr/css/toastr.min.css' %}">
+    <!-- select2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+
+    {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/css/select2.min.css' %}?v=2"> {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+
+    <!-- include fonts -->
+    
+    {#kendo#}
+    <link href="{% static 'kendo/styles/kendo.default-ocean-blue.min.css' %}" rel="stylesheet">
+    <link href="{% static 'kendo/styles/kendo.metro.min.css' %}" rel="stylesheet">
+    <link href="{% static 'kendo/styles/kendo.common.min.css' %}" rel="stylesheet">
+    <link href="{% static 'kendo/styles/kendo.metro.mobile.min.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}?v=3">
+
+    <!-- Required vendors -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <!-- โหลด jQuery ก่อน -->
+    <script src="{% static 'vendor/global/global.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap-select/dist/js/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/deznav-init.js' %}"></script>
+    <script src="{% static 'js/demo.js' %}"></script>
+    <script src="{% static 'js/styleSwitcher.js' %}"></script>
+    <script src="{% static 'vendor/chart.js/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/apexchart/apexchart.js' %}"></script>
+
+    <!-- theme -->
+    <script src="{% static 'js/function_all/function_all.js' %}?v=141"></script>
+
+    <!-- Toastr -->
+    <script src="{% static 'vendor/toastr/js/toastr.min.js' %}"></script>
+    <script src="{% static 'js/plugins-init/toastr-init.js' %}"></script>
+
+    <!-- dataTables -->
+    <script src="{% static 'vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/plugins-init/datatables.init.js' %}"></script>
+
+    <!-- sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.7/dist/autoNumeric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"></script>
+        
+
+    <!-- Kendo JS -->
+    <script src="{% static 'kendo/js/kendo.all.min.js' %}"></script>
+    <script src="{% static 'kendo/js/messages/kendo.messages.en-US.min.js' %}"></script>
+    <script src="{% static 'kendo/js/jszip.min.js' %}"></script>
+    <script src="{% static 'kendo/js/cultures/kendo.culture.th-TH.min.js' %}"></script>
+    <script src="{% static 'kendo/js/kendo.validator.min.js' %}"></script>
+
+
+    {% block title %}
+    <style>
+        .dropdown-menu .dropdown-item.active,
+        .dropdown-menu .dropdown-item:active, {
+            color: #7EA700;
+            background: #919b0d;
+        }  
+        body {
+            overflow-y: auto;
+          }
+        
+          /* Scrollbar สำหรับ Webkit (Chrome, Safari) */
+          body::-webkit-scrollbar {
+            width: 10px;
+          }
+        
+          body::-webkit-scrollbar-thumb {
+            background-color: #444; /* สีของแถบเลื่อน */
+            border-radius: 5px;
+          }
+        
+          body::-webkit-scrollbar-track {
+            background-color: #ccc; /* สีพื้นหลังของ scrollbar */
+          }
+
+          .footer .copyright a {
+            color: #7EA700 !important;
+        }
+        
+    </style>
+    {% endblock %}
+
+</head>
+
+  <body>
+  
+
+<body style="overflow-y: auto;max-height: 100vh;scrollbar-color: #444 #ccc;!important">
+	<div id="preloader">
+		<div class="lds-ripple">
+			<div></div>
+			<div></div>
+		</div>
+	</div> 
+	<div id="main-wrapper" style="max-height: 100vh;overflow-y: auto;">
+		<div class="nav-header" style="position:fixed;">
+			<div class="nav-control">
+				<div class="hamburger" id="hamburger">
+					<span class="line"></span>
+					<span class="line"></span>
+					<span class="line"></span>
+				</div>
+			</div>
+			<a href="/" class="brand-logo">
+				<img src="{% static 'img/logo_login02.png' %}" width="11%">
+				<span class="k-ml-2" id="titleBase"> ระบบขออนุมัติสินเชื่อ</span>
+			</a>
+		</div>
+		<div class="header" style="position: fixed;width: 100%;">
+			<div class="header-content">
+				<nav class="navbar navbar-expand">
+					<div class="collapse navbar-collapse justify-content-between">
+						<div class="header-left">
+
+						</div>
+						<ul class="navbar-nav header-right">
+
+							<li class="nav-item ps-3">
+								<div class="dropdown header-profile2">
+									<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										<div class="header-info2 d-flex align-items-center">
+											<center>
+												<div class="header-media" id="profileImage-1" style=" background: #105e4c; color: #fff; border-radius: 50%;">
+													<!-- <img id="profileImage" alt=""> -->
+												</div>
+											</center>
+											<div class="header-info" >
+												<h6 style="color: white;" id="firstName">{{ request.user }}</h6>
+											</div>
+
+										</div>
+									</a>
+									<div class="dropdown-menu dropdown-menu-end" style="">
+										<div class="card border-0 mb-0">
+											<div class="card-header py-2">
+												<div class="products">
+													<!-- <img src="images/tab/1.jpg" class="avatar avatar-md" alt=""> -->
+													<center>
+														<div class="header-media" id="profileImage-2" style="font-size: 12px; background: #105e4c; color: #fff; border-radius: 50%; padding-top: 5px;">
+														</div>
+													</center>
+													<div>
+														<h6>{{ request.user }}</h6>
+													</div>
+												</div>
+											</div>
+											<div class="card-body px-0 py-2">
+												<a href="javascript:void(0);" class="dropdown-item ai-icon ">
+													<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+														<path fill-rule="evenodd" clip-rule="evenodd" d="M11.9848 15.3462C8.11714 15.3462 4.81429 15.931 4.81429 18.2729C4.81429 20.6148 8.09619 21.2205 11.9848 21.2205C15.8524 21.2205 19.1543 20.6348 19.1543 18.2938C19.1543 15.9529 15.8733 15.3462 11.9848 15.3462Z" stroke="#7EA700" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+														<path fill-rule="evenodd" clip-rule="evenodd" d="M11.9848 12.0059C14.5229 12.0059 16.58 9.94779 16.58 7.40969C16.58 4.8716 14.5229 2.81445 11.9848 2.81445C9.44667 2.81445 7.38857 4.8716 7.38857 7.40969C7.38 9.93922 9.42381 11.9973 11.9524 12.0059H11.9848Z" stroke="#7EA700" stroke-width="1.42857" stroke-linecap="round" stroke-linejoin="round" />
+													</svg>
+													<span class="ms-2">Profile </span>
+												</a>
+												<a href="/logout" class="dropdown-item ai-icon">
+													<svg class="profle-logout" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff7979" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+														<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+														<polyline points="16 17 21 12 16 7"></polyline>
+														<line x1="21" y1="12" x2="9" y2="12"></line>
+													</svg>
+													<span class="ms-2 text-danger">Logout </span>
+												</a>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+
+<div class="deznav" style="position: fixed;">
+    <div class="deznav-scroll">
+        <ul class="metismenu" id="menu">
+            <li class="menu-title">SOFT NETWORK</li>
+
+			<div class="menu-search">
+				<input type="text" id="menuSearch" placeholder="ค้นหาเมนู..." class="form-control font14" />
+			</div>
+
+            <li {% if request.path == '/dashboard' or request.path == '' %} class="mm-active" {% endif %}>
+
+                <a href="/dashboard" aria-expanded="false">
+                    <div class="menu-icon">
+                        <svg width="20" height="20" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.15722 20.7714V17.7047C9.1572 16.9246 9.79312 16.2908 10.581 16.2856H13.4671C14.2587 16.2856 14.9005 16.9209 14.9005 17.7047V17.7047V20.7809C14.9003 21.4432 15.4343 21.9845 16.103 22H18.0271C19.9451 22 21.5 20.4607 21.5 18.5618V18.5618V9.83784C21.4898 9.09083 21.1355 8.38935 20.538 7.93303L13.9577 2.6853C12.8049 1.77157 11.1662 1.77157 10.0134 2.6853L3.46203 7.94256C2.86226 8.39702 2.50739 9.09967 2.5 9.84736V18.5618C2.5 20.4607 4.05488 22 5.97291 22H7.89696C8.58235 22 9.13797 21.4499 9.13797 20.7714V20.7714" stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span class="nav-text font14">Dashboard</span>
+                </a>
+            </li>
+
+            <li {% if request.path == '/name-list' or '/detail/' in request.path or '/edit/' in request.path %} {% if 'configurations' not in request.path %} class="mm-active" {% endif %} {% endif %}>
+
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="menu-icon">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M9.59151 15.2068C13.2805 15.2068 16.4335 15.7658 16.4335 17.9988C16.4335 20.2318 13.3015 20.8068 9.59151 20.8068C5.90151 20.8068 2.74951 20.2528 2.74951 18.0188C2.74951 15.7848 5.88051 15.2068 9.59151 15.2068Z"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M9.59157 12.0198C7.16957 12.0198 5.20557 10.0568 5.20557 7.63482C5.20557 5.21282 7.16957 3.24982 9.59157 3.24982C12.0126 3.24982 13.9766 5.21282 13.9766 7.63482C13.9856 10.0478 12.0356 12.0108 9.62257 12.0198H9.59157Z"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M16.4829 10.8816C18.0839 10.6566 19.3169 9.28265 19.3199 7.61965C19.3199 5.98065 18.1249 4.62065 16.5579 4.36365"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M18.5952 14.7322C20.1462 14.9632 21.2292 15.5072 21.2292 16.6272C21.2292 17.3982 20.7192 17.8982 19.8952 18.2112"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span class="nav-text font14">ข้อมูลผู้ขอสินเชื่อ</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li>
+                        <a class="sub-menu-item font14 {% if request.path == '/name-list'  or '/detail/' in request.path  or '/edit/' in request.path%}  mm-active left mm-collapse mm-show{% endif %}" href="/name-list">
+                            รายชื่อผู้ขอสินเชื่อ
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li {% if  'configurations' in request.path or '/detail/' in request.path  or  'grade-income' in request.path or 'grade-unstable' in request.path or 'scoring' in request.path %} {% if 'name-list' not in request.path %} class="mm-active" {% endif %} {% endif %}>
+
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="menu-icon">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M9.59151 15.2068C13.2805 15.2068 16.4335 15.7658 16.4335 17.9988C16.4335 20.2318 13.3015 20.8068 9.59151 20.8068C5.90151 20.8068 2.74951 20.2528 2.74951 18.0188C2.74951 15.7848 5.88051 15.2068 9.59151 15.2068Z"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M9.59157 12.0198C7.16957 12.0198 5.20557 10.0568 5.20557 7.63482C5.20557 5.21282 7.16957 3.24982 9.59157 3.24982C12.0126 3.24982 13.9766 5.21282 13.9766 7.63482C13.9856 10.0478 12.0356 12.0108 9.62257 12.0198H9.59157Z"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M16.4829 10.8816C18.0839 10.6566 19.3169 9.28265 19.3199 7.61965C19.3199 5.98065 18.1249 4.62065 16.5579 4.36365"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M18.5952 14.7322C20.1462 14.9632 21.2292 15.5072 21.2292 16.6272C21.2292 17.3982 20.7192 17.8982 19.8952 18.2112"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span class="nav-text font14">กำหนดข้อมูล</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li>
+                        <a class="sub-menu-item font14 {% if request.path == 'configurations' or  'grade-income' in request.path  %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/grade-income">
+                            เกรดผู้มีรายได้ประจำ
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="sub-menu-item font14 {% if request.path == 'configurations' or 'grade-unstable' in request.path  %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/grade-unstable">
+                            เกรดผู้มีรายได้ไม่สม่ำเสมอ
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="sub-menu-item font14 {% if request.path == 'configurations' or 'scoring' in request.path %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/scoring">
+                            เกณฑ์การให้คะแนนผู้กู้
+                        </a>
+                    </li>
+                </ul>
+
+                
+            </li>
+
+            <li {% if request.path == '/userauth/' %} class="mm-active" {% endif %}>
+
+                <a href="/userauth/" aria-expanded="false">
+                    <div class="menu-icon">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M9.59151 15.2068C13.2805 15.2068 16.4335 15.7658 16.4335 17.9988C16.4335 20.2318 13.3015 20.8068 9.59151 20.8068C5.90151 20.8068 2.74951 20.2528 2.74951 18.0188C2.74951 15.7848 5.88051 15.2068 9.59151 15.2068Z"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M9.59157 12.0198C7.16957 12.0198 5.20557 10.0568 5.20557 7.63482C5.20557 5.21282 7.16957 3.24982 9.59157 3.24982C12.0126 3.24982 13.9766 5.21282 13.9766 7.63482C13.9856 10.0478 12.0356 12.0108 9.62257 12.0198H9.59157Z"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M16.4829 10.8816C18.0839 10.6566 19.3169 9.28265 19.3199 7.61965C19.3199 5.98065 18.1249 4.62065 16.5579 4.36365"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M18.5952 14.7322C20.1462 14.9632 21.2292 15.5072 21.2292 16.6272C21.2292 17.3982 20.7192 17.8982 19.8952 18.2112"
+                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span class="nav-text font14">สิทธิ์การใช้งาน</span>
+                </a>
+            </li>
+        </ul>
+        <p id="noMenuMessage" style="display: none;text-align: center;">-- ไม่พบเมนูที่ต้องการ --</p>
+    </div>
+</div>
+
+{% block content %}
+    {% if show_alert %}
+    <script>
+        alert("คุณไม่มีสิทธิ์ใช้งานระบบนี้");
+    </script>
+{% endif %}
+{% endblock %}
+<footer class="footer out-footer">
+    <div class="copyright">
+        <p>Copyright © Developed by <a href="https://www.softnetwork.co.th/" target="_blabk">Soft nerwork</a> 2025</p>
+    </div>
+</footer>
+</div>
+</body>
+        
+{% block script %}
+<script>
+    {% if request.session.alert_login == 'success' %}
+        showToast('success', 'เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับ {{request.user}}', 'bottom-right');
+        setTimeout(function() {
+            $.ajax({
+                url: "clear_alert_login/",
+                type: "GET",  
+                success: function(response) {
+                },
+            });
+        });
+    {% endif %}
+
+    
+</script>
+{% endblock %}

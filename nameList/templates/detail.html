@@ -1,0 +1,735 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% load humanize %}
+{% block title %}
+<title>รายละเอียดผู้ขอสินเชื่อ
+</title>
+{% endblock %}
+
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="content-header d-flex align-items-center">
+                    <h2>ข้อมูลผู้ขอสินเชื่อ</h2>
+                    <span class="badge badge-{{badge_status}} ms-2 badgeStatus" id="statusApprove">{{loan_status}}</span>
+                    <span id="statusApproveNew"></span>
+                </div>
+                
+                <br>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+
+                <div class="card h-auto" style="border: 1px solid #ddd; border-radius: 8px;">
+                    <!-- Header -->
+                    <div class="card-header" style="background-color: #7EA700; color: white; text-align: center; font-size: 14px; font-weight: bold;">
+                    </div>
+                
+                    <!-- Body -->
+                    <div class="card-body d-flex flex-row justify-content-center align-items-center gap-4" style="gap: 9.5rem !important;font-size: 18px;">
+                        <!-- ชื่อผู้ใช้ -->
+                        <div>
+                            <strong>ชื่อผู้ใช้:</strong> 
+                            {% comment %} {{ prename.pre_name }}  {% endcomment %}
+                            {{ customer_info.first_name }} 
+                            {{ customer_info.first_name }}
+                        </div>
+                
+                        <!-- เลขที่ขอสินเชื่อ -->
+                        <div>
+                            <strong>เลขที่ขอสินเชื่อ:</strong> 
+                            {{ installment_detail.app_id }}
+                        </div>
+                
+                        <!-- วันที่ขอสินเชื่อ -->
+                        <div>
+                            <strong>วันที่ขอสินเชื่อ:</strong> 
+                            {% with customer.created_at|date:"d/m/Y" as formatted_date %}
+                                {{ formatted_date }}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+
+                {% comment %} <div class="card h-auto">
+                    <div class="card-body">
+                        <div>
+                            <h3>กลุ่มใบสมัคร</h3> 
+                            <div class="ms-auto"><p  style="font-size: 16px;">ยังไม่ได้จัดกลุ่ม <button class="btn btn-outline-primary" id="id_dip_chip" type="button" style="margin-left: 20px;">จัดกลุ่ม</button></p></div>
+                          </div>
+                    </div>
+                </div> {% endcomment %}
+
+                <div class="card h-auto">
+                    <div class="card-body">
+                        <div class="profile-tab">
+                            <div class="custom-tab-1">
+                                <ul class="nav nav-tabs d-flex justify-content-between align-items-center">
+                                    <div class="d-flex">
+                                        <li class="nav-item">
+                                            <a href="#infoCustomer" data-bs-toggle="tab" class="nav-link active show">ข้อมูลจากฟอร์มผู้สมัคร</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#infoDocument" data-bs-toggle="tab" class="nav-link">ข้อมูลเอกสาร</a>
+                                        </li>
+                                    </div>
+                                    <li class="d-flex align-items-center gap-2"  style="white-space: nowrap;margin-top: -15px;">
+                                        เกณฑ์การให้คะแนน
+                                            <select class="js-data-scoringinfo-ajax">
+                                                <option value="1">SCORE SET 1</option>
+                                            </select>
+                                    </li>
+                                </ul>
+                                
+                                <div class="tab-content">
+                                    <div id="infoCustomer" class="tab-pane fade active show">
+                                       
+                                        <div class="row mt-3">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h4>ข้อมูลลูกค้า<h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <b>ชื่อ-นามสกุล </b>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2 text-start">
+                                                <b>{{ prename.pre_name }} {{ customer_info.first_name }} {{ customer_info.last_name }}</b>
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                โทรศัพท์มือถือ
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2 text-start">
+                                                {{ customer_info.mobile }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                Email
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2 text-start">
+                                                {{ customer_info.email }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <b>Line ID </b>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2 text-start">
+                                                {{ customer_info.line_id }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-customer-age="{{ customer_info.customer_age_id }}">
+                                                ช่วงอายุ
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" style="display:none" data-category-occupation="{{ customer_info.category_occupation }}">
+                                                หมวดอาชัพ
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2 text-start">
+                                                {{ customer_range_age.age_name }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                สถานะภาพสมรส
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2 text-start">
+                                                {{ marital_status.status_name }}
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-minorchildren="{{ customer_info.minorchildren_id }}">
+                                                <b>จำนวนบุตรไม่บรรลุนิติภาวะ</b>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2 text-start">
+                                                {{ minorchildren.minorchildren_name|default:"ไม่มีบุตร" }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-education="{{ customer_info.education_level_id }}">
+                                                ระดับการศึกษา
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2 text-start">
+                                                {{ education.education_name }}
+                                            </div>
+                                        </div>
+
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4>ข้อมูลที่อยู่ปัจจุบัน<h4>
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row mt-1">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >ที่อยู่</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ customer_address2_detail.house_no }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >หมู่บ้าน/อาคาร</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {% if customer_address2_detail.village is not None %}
+                                                    {{ customer_address2_detail.village }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >ซอย</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ customer_address2_detail.soi }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >ถนน</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ customer_address2_detail.road }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >ตำบล</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ customer_address2_detail.tambon_name }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >อำเภอ</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ customer_address2_detail.amphoe_name }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >จังหวัด</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ customer_address2_detail.province_name }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >รหัสไปรษณีย์</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ customer_address2_detail.postcode }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end"  data-residence="{{ customer_address2_detail.residence_id }}">
+                                                <label >ประเภทที่พักอาศัย</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {% if customer_address2_detail.residence_name is not None %}
+                                                {{ customer_address2_detail.residence_name }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-living-type="{{ customer_address2_detail.living_type_id }}">
+                                                <label >สถานะที่พักอาศัย</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2" >
+                                                {% if customer_address2_detail.living_type is not None %}
+                                                    {{ customer_address2_detail.living_type }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </div>
+                                           
+                                        </div>
+
+                                        <div class="row">
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" style="margin-top: 20px;" >
+                                                <h5>คะแนนที่ได้</h5>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2" style="margin-top: 20px;" id="score_1">
+                                            </div>
+                                        </div>
+                            
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4>ข้อมูลงาน และ รายได้<h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-occupation="{{ customer_info.occupation_id }}">
+                                                <label >ประเภทอาชีพ</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ occupation.occup_name }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label>ที่ทำงาน</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ customer_address2_detail.house_no }}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-business-type="{{ customer_info.business_type_id }}">
+                                                <label >ลักษณะธุรกิจ</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{business_type.business_type_name}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-shop-type="{{ customer_info.shop_type_id }}">
+                                                <label >ประเภทร้านค้า</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{shop_type.shop_name}}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-rentalage="{{ customer_info.rentalage_id }}">
+                                                <label >อายุสัญญาเช่าพื้นที่</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{rentalage.age_name}}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-profit="{{ customer_info.monthlyprofit_id }}">
+                                                <label >กำไร/เดือน</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{monthly_profit.profit_name}}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-business-age="{{ customer_info.businessage_id }}">
+                                                <label >อายุของธุรกิจ</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{business_age.age_name}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" style="margin-top: 20px;" >
+                                                <h5 >คะแนนที่ได้</h5>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2" id="score_2" style="margin-top: 20px;">
+
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4>ข้อมูลการขอสินเชื่อ<h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" data-reason="{{ customer_info.contract_reason_id }}">
+                                                <label >วัตถุประสงค์การขอกู้</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                               {{contract_reason.reason_name}}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label>ยอดขอกู้ (บาท)</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{installment_detail.price}}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >จำนวนงวด (เดือน)</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{number_Installment.installment_amount}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >ค่างวด (บาท/เดือน)</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                               {{installment_detail.price_installment}}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label>รายได้ (บาท/เดือน)</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{installment_detail.base_income}}
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >หนี้ในระบบ (บาท/เดือน)</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ installment_detail.debt_in }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label >หนี้นอกระบบ (บาท/เดือน)</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                               0
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end">
+                                                <label>หนี้ต่อรายได้ (%)</label>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2">
+                                                {{ installment_detail.debt_informal }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" style="margin-top: 20px;" >
+                                                <h5>คะแนนที่รวม</h5>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2" id="score_3" style="margin-top: 20px;">
+                                                
+                                            </div>
+                                            <div class="col-5 col-md-3 col-lg-2 text-end" style="margin-top: 20px;">
+                                                <h5>Grade</h5>
+                                            </div>
+                                            <div class="col-7 col-md-9 col-lg-2" id="grade" style="margin-top: 20px;">
+                                                
+                                            </div>
+                                        </div>
+
+                                        <div id="guide">
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                    </div>
+                                    <div id="infoDocument" class="tab-pane fade">
+                                        <table id="example"class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>ชื่อเอกสาร</th>
+                                                <th>File name</th>
+                                                <th>ลบ</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% if file %}
+                                                {% for files in file %}
+                                                    <tr id="confirmDelete-{{ files.id }}">
+                                                        <td>{{ files.doc.doc_name }}</td>
+                                                        <td>
+                                                            <a href="/media/{{ files.name }}" id="fileLink" target="_blank">{{ files.name }}</a>
+                                                        </td>
+                                                        <td>
+                                                            {% if auth_edit_delete == False %}
+                                                                <button
+                                                                        type="button"
+                                                                        onclick="confirmDelete('{{ files.id }}')"
+                                                                        class="btn btn-outline-danger"
+                                                                        style="display: none"
+                                                                >
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            {% elif auth_edit_delete == True %}
+                                                                <button
+                                                                        type="button"
+                                                                        onclick="confirmDelete('{{ files.id }}')"
+                                                                        class="btn btn-outline-danger"
+                                                                >
+                                                                    <i class="fa-solid fa-trash"></i>
+                                                                </button>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col justify-content-end my-3" style="text-align: left">
+                {% if customer_loan_detail.status_approve == 1 %}
+                    <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')">
+                        ยกเลิก
+                    </button>
+                {% elif customer_loan_detail.status_approve == 9 %}
+                    <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')">
+                        ยกเลิก
+                    </button>
+                {% elif customer_loan_detail.status_approve == 5 %}
+                    <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')" style="display: none">
+                        ยกเลิก
+                    </button>
+                {% elif customer_loan_detail.status_approve == 2 %}
+    
+                {% else %}
+    
+                    {% if auth_reject_approve == False %}
+                        <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')">
+                            ยกเลิก
+                        </button>
+                    {% elif auth_reject_approve == True %}
+                        <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')">
+                            ยกเลิก
+                        </button>
+                    {% endif %}
+    
+                {% endif %}
+            </div>
+            <div class="col justify-content-start my-3 " style="text-align: right">
+                {% if customer_loan_detail.status_approve == 1 %}
+                    <a href="/name-list">
+                        <button type="button" class="btn btn-outline-primary mx-2">ย้อนกลับ</button>
+                    </a>
+                    <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('9')">
+                        ไม่อนุมัติ
+                    </button>
+                {% elif customer_loan_detail.status_approve == 9 %}
+                    <a href="/name-list">
+                        <button type="button" class="btn btn-outline-primary mx-2">ย้อนกลับ</button>
+                    </a>
+                    <button type="button" class="btn btn-outline-success" onclick="approve('1')">
+                        อนุมัติ
+                    </button>
+                {% elif customer_loan_detail.status_approve == 2 %}
+                    <a href="/name-list">
+                        <button type="button" class="btn btn-outline-primary">ย้อนกลับ</button>
+                    </a>
+                {% elif customer_loan_detail.status_approve == 5 %}
+                    <a href="/name-list">
+                        <button type="button" class="btn btn-outline-primary">ย้อนกลับ</button>
+                    </a>
+                {% else %}
+                    <a href="/name-list">
+                        <button type="button" class="btn btn-outline-primary">ย้อนกลับ</button>
+                    </a >
+    
+                    {% if auth_reject_approve == False %}
+                        <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('9')" style="display: none">
+                            ไม่อนุมัติ
+                        </button>
+                        <button type="button" class="btn btn-outline-success" onclick="approve('1')" style="display: none">
+                            อนุมัติ
+                        </button>
+                    {% elif auth_reject_approve == True %}
+                        <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('9')">
+                            ไม่อนุมัติ
+                        </button>
+                        <button type="button" class="btn btn-outline-success" onclick="approve('1')">
+                            อนุมัติ
+                        </button>
+                    {% endif %}
+    
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script defer>
+    var urlMasterscoringinfo = "{% url 'nameList:Masterscoringinfo' %}";
+
+    var urlCalScoring = "{% url 'nameList:cal-scoring' %}";
+
+    const score_set = $(".js-data-scoringinfo-ajax").val() || 1;
+    
+    const customer_age = $(".col-5[data-customer-age]").data("customer-age");
+    const occupation = $(".col-5[data-occupation]").data("occupation");
+    const education = $(".col-5[data-education]").data("education");
+    const minorchildren = $(".col-5[data-minorchildren]").data("minorchildren");
+    const business_age = $(".col-5[data-business-age]").data("business-age");
+    const reason = $(".col-5[data-reason]").data("reason");
+    const residence = $(".col-5[data-residence]").data("residence");
+    const living_type = $(".col-5[data-living-type]").data("living-type");
+    const business_type = $(".col-5[data-business-type]").data("business-type");
+    const profit = $(".col-5[data-profit]").data("profit");
+    const category_occupation = $(".col-5[data-category-occupation]").data("category-occupation");
+    const shop_type = $(".col-5[data-shop-type]").data("shop-type");
+    const rentalage = $(".col-5[data-rentalage]").data("rentalage");
+
+    $(document).ready(function () {
+    loadSelect2Data(urlMasterscoringinfo, ".js-data-scoringinfo-ajax", "results", "id", "score_name");
+       
+        
+        var form_data = {
+            "score_set": score_set,
+            "customer_age": customer_age,
+            "occupation": occupation,
+            "education": education, 
+            "minorchildren": minorchildren,
+            "business_age": business_age,
+            "reason": reason,
+            "residence": residence,
+            "living_type": living_type,
+            "business_type": business_type,
+            "profit": profit,
+            "category_occupation": category_occupation,
+            "shop_type": shop_type,
+            "rentalage": rentalage
+        };
+    
+        $.ajax({
+            url: urlCalScoring,
+            data: form_data,
+            type: 'POST', 
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')  
+            },
+            success: function (response) {
+                console.log('Success:', response);
+                if (response.status === 'success') {
+                    $('#score_1').text(response.score_1);
+                    $('#score_2').text(response.score_2);
+                    $('#score_3').text(response.score_3);
+                    $('#grade').text(response.grade);
+
+                    if (response.message === 'แนะนำให้อนุมัติ') {
+                        $('#guide').html(`<br>
+                            <div style="background-color: #7EA700; color: white; padding: 10px; text-align: center; font-weight: bold;">
+                                คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ผ่านเกณฑ์ แนะนำให้อนุมัติ
+                            </div>
+                        `);
+                    }else{
+                        $('#guide').html(`
+                        <div style="background-color:rgb(218, 57, 70); color: white; padding: 10px; text-align: center; font-weight: bold;">
+                            คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ไม่ผ่านเกณฑ์ แนะนำ ไม่ให้อนุมัติ
+                        </div>
+                    `);
+                    }
+                }
+            }
+        });
+    
+       
+    
+        // กดที่ .js-data-scoringinfo-ajax ส่ง AJAX
+        $(document).on("change", ".js-data-scoringinfo-ajax", function () {
+    
+            var form_data = {
+                "score_set": $('.js-data-scoringinfo-ajax').val(),
+                "customer_age": customer_age,
+                "occupation": occupation,
+                "education": education, 
+                "minorchildren": minorchildren,
+                "business_age": business_age,
+                "reason": reason,
+                "residence": residence,
+                "living_type": living_type,
+                "business_type": business_type,
+                "profit": profit,
+                "category_occupation": category_occupation,
+                "shop_type": shop_type,
+                "rentalage": rentalage
+            };
+    
+            $.ajax({
+                url: urlCalScoring,
+                data: form_data,
+                type: 'POST', 
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')  
+                },
+                success: function (response) {
+                    console.log('Success:', response);
+                    if (response.status === 'success') {
+                        $('#score_1').text(response.score_1);
+                        $('#score_2').text(response.score_2);
+                        $('#score_3').text(response.score_3);
+                        $('#grade').text(response.grade);
+
+                        if (response.message === 'แนะนำให้อนุมัติ') {
+                            $('#guide').html(`
+                                <div style="background-color: #7EA700; color: white; padding: 10px; text-align: center; font-weight: bold;">
+                                    คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ผ่านเกณฑ์ แนะนำให้อนุมัติ
+                                </div>
+                            `);
+                        }else{
+                            $('#guide').html(`
+                            <div style="background-color:rgb(218, 57, 70); color: white; padding: 10px; text-align: center; font-weight: bold;">
+                                คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ไม่ผ่านเกณฑ์ แนะนำ ไม่ให้อนุมัติ
+                            </div>
+                        `);
+                        }
+                    }
+                }
+            });
+        });
+    });
+    
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.querySelectorAll(".fileLink").forEach(link => {
+        link.addEventListener("click", function (event) {
+            event.preventDefault(); // ป้องกันการเปิดลิงก์ทันที
+            let fileLink = this.getAttribute("href"); 
+
+            fetch(fileLink, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        window.open(fileLink, '_blank');
+                    } else {
+                        window.open('https://www.google.com', '_blank');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking file link:', error);
+                    window.open('https://www.google.com', '_blank'); 
+                });
+        });
+    });
+
+  var urlupdateStatus = "{% url 'nameList:updateStatus' %}";
+
+
+    {% comment %} function approve(id) {
+        var formData = new FormData();
+        formData.append("status", id);
+        formData.append("id", {{id}});
+        var csrf_token = getCookie('csrftoken'); 
+        console.log('csrf_token',csrf_token,'formData',formData)
+        $.ajax({
+            url: urlupdateStatus,
+            data: form_data,
+            type: 'POST', 
+            headers: {
+                'X-CSRFToken': csrf_token
+            },
+            processData: false,  
+            contentType: false,  
+            success: function (response) {
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+        
+    } {% endcomment %}
+    
+    
+</script>
+<script src="{% static 'js/detail.js' %}?v=4"></script>
+{% comment %} <script src="{% static 'js/form_common_script.js' %}"></script> {% endcomment %}
+<link rel="stylesheet" href="{% static 'css/detail.css' %}?v=9" >
+{% endblock %}

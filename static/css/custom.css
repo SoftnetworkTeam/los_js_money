@@ -1,0 +1,39 @@
+.k-textbox,
+.k-dropdownlist {
+    border: 1px solid #ccc !important;
+}
+
+.addinfo_btn {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+}
+
+.add_btn {
+    width: 10%;
+    height: 100%;
+    font-size: 16px;
+}
+
+.cancel_btn {
+    width: 10%;
+    height: 100%;
+    font-size: 16px;
+}
+
+.sale,
+.branch,
+.status,
+.salesperson,
+.branch_code,
+.branch_name,
+.interest_rate,
+.desc,
+.installment_amount {
+    height: 2.5rem;
+    font-size: 16px;
+}
+
+.k-picker-solid.k-invalid, .k-picker-solid.ng-invalid.ng-dirty, .k-picker-solid.ng-invalid.ng-touched {
+    border-color: #d51923 !important;
+}

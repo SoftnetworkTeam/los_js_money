@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% load static %} {% block title %}
+<title>ข้อมูลผู้ขอสินเชื่อ</title>
+<style>
+  .k-dialog-title,
+  .k-window-titlebar .k-window-action {
+    color: #ffffff;
+  }
+</style>
+{% endblock %} {% block content %}
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card">
+          <div class="card-body p-2">
+            <div class="table-responsive active-projects style-1">
+              <div class="mb-3 mt-3 d-flex justify-content-between">
+                <h3 style="margin-left: 13px">สิทธิ์การใช้งาน</h3>
+              </div>
+              <div id="dialog" class="dialog"></div>
+              <div id="grid" class="grid_font_size"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block script %}
+<script>
+  $(document).ready(function () {
+    {% for message in messages %}
+      showToast('success', '{{ message }}', '', 'bottom-right');
+    {% endfor %}
+  });
+  var authEdit = "{{ request.session.auth_edit_delete }}";
+</script>
+<script src="{% static 'js/userauth.js' %}?v=13"></script>
+{% endblock %}

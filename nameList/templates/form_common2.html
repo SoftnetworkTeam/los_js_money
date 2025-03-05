@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title id="titleHead"></title>
+{% endblock %}
+
+{% block content %}
+<div class="content-body">
+  <div class="container-fluid">
+    <div>
+      <form novalidate class="needs-validation" method="POST" id="myForm" enctype="multipart/form-data" action="{% url 'nameList:insertInstallment' %}">
+        {% csrf_token %}
+        {{ form.id }}
+        {{ form.address_diffshift }}
+
+        <div class="card">
+          <div class="card-header">
+            <span>ข้อมูลผู้เช่าซื้อ</span> 
+            <div class="ms-auto">
+              <button class="btn btn-facebook" id="id_dip_chip" type="button">
+                <i class="fas fa-address-card"></i> เริ่มอ่านบัตรประชาชน
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body px-3">
+            <div class="row">
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>คำนำหน้า
+                  </label>
+                  <div class="col-lg-8">
+                    {{ form.prename }}
+                    <div class="invalid-feedback">กรุณาเลือกคำนำหน้า</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+  var urlMasterCustomerPrename = "{% url 'nameList:MasterCustomerPrename' %}";
+  
+
+
+  $(document).ready(function() {
+    loadSelect2Data(urlMasterCustomerPrename, ".js-data-prename-ajax", "results", "id", "pre_name");
+  });
+</script>
+{% endblock %}

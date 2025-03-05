@@ -1,0 +1,33 @@
+/* สไตล์สำหรับ Mobile */
+body {
+    font-family: 'Kanit' !important;
+    color: rgb(255, 255, 255);
+}
+
+.bg-nav {
+    background-color: #278200;
+}
+
+nav {
+    position: absolute;
+}
+
+.text-red {
+    color: red;
+}
+
+#data_seller {
+    font-size: 14px !important;
+}
+
+.card {
+    border-color: #278200 !important;
+}
+
+.container {
+    max-width: 90% !important;
+}
+
+table {
+    width: 100% !important;
+}
