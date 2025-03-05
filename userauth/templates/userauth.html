@@ -8,6 +8,9 @@
   .k-grid .k-cell-inner>.k-link {
     width: auto;
 }
+.active-projects tbody tr td:last-child {
+  text-align: left;
+}
 </style>
 {% endblock %} {% block content %}
 
@@ -38,7 +41,7 @@
       showToast('success', '{{ message }}', '', 'bottom-right');
     {% endfor %}
   });
-  var authEdit = "{{ request.session.auth_edit_delete }}";
+  var authEdit = "{{ auth_edit_delete }}";
 </script>
-<script src="{% static 'js/userauth.js' %}?v=14"></script>
+<script src="{% static 'js/userauth.js' %}?v=16"></script>
 {% endblock %}
