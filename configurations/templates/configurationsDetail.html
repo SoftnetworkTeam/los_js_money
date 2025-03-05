@@ -143,8 +143,11 @@
                 </div><hr>
                 <div class="col-12 text-center">
                   <div>
-                    <button type="button" id="btnSubmit" class="btn btn-outline-primary" >บันทึก</button>
-                    <a type="button"name="btncancel"id="btncancel"class="btn btn-outline-danger"href="/configurations">ยกเลิก</a>
+                    {% if auth_edit_delete == True %}
+                      <button type="button" id="btnSubmit" class="btn btn-outline-primary" >บันทึก</button>
+                    {% endif %}
+                    <a type="button"name="btncancel"id="btncancel"class="btn btn-outline-danger"href="/configurations/scoring">ย้อนกลับ</a>
+                    
                   </div>
                 </div>
               </div>
