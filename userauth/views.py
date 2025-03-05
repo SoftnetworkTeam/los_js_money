@@ -25,7 +25,7 @@ def check_permission(view_func):
         if user.is_authenticated:
             user_auth = UserAuth.objects.filter(user=user, auth__auth_code='A005').first()
             if user_auth and not user_auth.status:
-                return redirect('index')
+                return redirect('dashboard')
 
         return view_func(request, *args, **kwargs)
 
