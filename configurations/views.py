@@ -39,8 +39,8 @@ def check_permission(view_func):
 
     return _wrapped_view
 
-@login_required(login_url='/user_login')
-@check_permission
+# @login_required(login_url='/user_login')
+# @check_permission
 def configurationsDetail(request, id):
     scoringinfo = Masterscoringinfo.objects.filter(id=id).first()
     
@@ -77,7 +77,12 @@ class AdminscoringinfoApiView(BaseListAPIView):
     serializer_class = MasterscoringinfoSerializer
     
     def get_queryset(self):
-        return Masterscoringinfo.objects.all().order_by("id") 
+        return Masterscoringinfo.objects.filter(status='A').annotate(
+            first_name=Subquery(
+                AuthUser.objects.filter(id=OuterRef('user_id')).values('first_name')[:1]
+            )
+        ).order_by("id")
+
        
 class MasterscoringdetailApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
