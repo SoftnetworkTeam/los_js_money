@@ -13,16 +13,15 @@ $(document).ready(function () {
       const text = item.text().toLowerCase();
 
       if (item.hasClass("menu-title")) {
-        item.show(); // แสดง "SOFT NETWORK" เสมอ
+        item.show(); 
       } else if (text.includes(filter)) {
-        item.show(); // แสดงเมนูที่ตรงกับคำค้นหา
+        item.show();
         hasVisibleMenu = true;
       } else {
-        item.hide(); // ซ่อนเมนูที่ไม่ตรงกับคำค้นหา
+        item.hide(); 
       }
     });
 
-    // แสดงหรือซ่อนข้อความ "ไม่พบเมนู" ตามผลการค้นหา
     if (filter && !hasVisibleMenu) {
       noMenuMessage.show();
     } else {
