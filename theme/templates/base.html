@@ -308,6 +308,7 @@
                 
             </li>
 
+            {% if auth_permission_menu == True %}
             <li {% if request.path == '/userauth/' %} class="mm-active" {% endif %}>
 
                 <a href="/userauth/" aria-expanded="false">
@@ -330,6 +331,7 @@
                     <span class="nav-text font14">สิทธิ์การใช้งาน</span>
                 </a>
             </li>
+            {% endif %}
         </ul>
         <p id="noMenuMessage" style="display: none;text-align: center;">-- ไม่พบเมนูที่ต้องการ --</p>
     </div>
