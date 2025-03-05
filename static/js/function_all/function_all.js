@@ -2,6 +2,7 @@ $(document).ready(function () {
   const searchInput = $("#menuSearch");
   const menuItems = $("#menu > li");
   const noMenuMessage = $("#noMenuMessage");
+  $('.select2').select2();
 
   searchInput.on("input", function () {
     const filter = searchInput.val().toLowerCase();
