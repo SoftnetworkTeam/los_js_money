@@ -39,6 +39,7 @@
     {% endfor %}
   });
   var authEdit = "{{ request.session.auth_edit_delete }}";
+  console.log('authEdit',authEdit)
 </script>
-<script src="{% static 'js/nameList.js' %}?v=4"></script>
+<script src="{% static 'js/nameList.js' %}?v=6"></script>
 {% endblock %}
