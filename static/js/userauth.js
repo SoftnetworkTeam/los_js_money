@@ -12,11 +12,6 @@ $(document).ready(function () {
     var pathParts = window.location.pathname.split("/");
     var id = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
 
-    console.log('url_url_userauth555',url_userauth)
-
-    console.log('url_editauth555',url_editauth)
-    console.log('id',id)
-
     var title_1 = "";
     var title_2 = "";
     var title_3 = "";
