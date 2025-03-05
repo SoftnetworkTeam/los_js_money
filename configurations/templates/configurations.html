@@ -1,8 +1,6 @@
 {% extends "base.html" %} {% load static %} {% block title %}
 <title>ข้อมูลผู้ขอสินเชื่อ</title>
 <style>
-
-
   .k-grid td, .k-grid th {
     border: 0.5px solid transparent !important;
     border-bottom: 0.5px solid #dfdfdf !important;
@@ -66,6 +64,7 @@
 
 {% endblock %} {% block script %}
 <script>
+  var authEdit = "{{ request.session.auth_edit_delete }}";
   var typeUrl = null;
   if (window.location.pathname.includes("grade-income")) {
     typeUrl = "statusIncome";
@@ -185,7 +184,7 @@
 
       title_new5 = {
         title: "ผู้บันทึก",
-        field: "username",
+        field: "first_name",
         width: 100,
       };
 
@@ -201,12 +200,28 @@
         not_stable_percent: { type: "string" },
       };
       btn = function (dataItem) {
-        return `
-          <a href="detail/${dataItem.id}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="รายละเอียด"><i class="fa-solid fa-magnifying-glass"></i></a>
-          <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" onclick="submitData(this, '${dataItem.id}','save','${data_type}')"><i class="fas fa-save"></i></button>
-          <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" type="button" title="ลบ" onclick="submitData(this,'${dataItem.id}','delete','${data_type}')"><i class="fas fa-trash"></i></button>
+        let btnHTML = `
+            <a href="detail/${dataItem.id}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="รายละเอียด">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </a>
         `;
+    
+        if (authEdit == true) {
+            btnHTML += `
+                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" 
+                    onclick="submitData(this, '${dataItem.id}', 'save', '${data_type}')">
+                    <i class="fas fa-save"></i>
+                </button>
+                <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" type="button" title="ลบ" 
+                    onclick="submitData(this, '${dataItem.id}', 'delete', '${data_type}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+        }
+    
+        return btnHTML;
       };
+    
     }
 
     var type = "{{ type }}";
@@ -247,68 +262,72 @@
     if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
       columns.push( title_new2, title_new3, title_new4);
     }
-
-    columns.push({
-      title: "<b>สถานะ</b>",
-      width: 100,
-      field: "status",
-      template: function (dataItem) {
-        return `
-        <div class="d-flex justify-content-between border-0" id="status-${
-          dataItem.id
-        }">
-            <ul class="nav nav-tabs dzm-tabs" role="tablist" style="background-color: #ebebeb;">
-                <li class="nav-item" role="presentation" onclick="changStatus('active', '${dataItem.id}','${data_type}','A','${typeUrl}')">
-                    <button class="nav-link btn btn-success btn-sm" type="button" role="tab" aria-selected="false"
-                        ${
-                          dataItem.status == "A"
-                            ? ' style="background-color: #3AC977;" '
-                            : ""
-                        } id="status-active-${dataItem.id}">ใช้งาน
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation" onclick="changStatus('inActive', '${dataItem.id}','${data_type}','C','${typeUrl}')">
-                    <button class="nav-link btn btn-danger btn-sm" type="button" role="tab" aria-selected="true"
-                        ${
-                          dataItem.status == "C"
-                            ? ' style="background-color: #FF5E5E;" '
-                            : ""
-                        } id="status-inactive-${dataItem.id}">ไม่ใช้งาน
-                    </button>
-                </li>
-            </ul>
-        </div>`;
-      },
-    });
-
-    if (url_grade_income || url_grade_unstable) {
+    if(authEdit == true){
       columns.push({
-        title: "<b>Action</b>",
+        title: "<b>สถานะ</b>",
         width: 100,
+        field: "status",
         template: function (dataItem) {
           return `
-            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" onclick="submitData(this,'${dataItem.id}','save','${data_type}','A','${typeUrl}')"><i class="fas fa-save"></i></button>
-            <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" type="button" title="ลบ" onclick="submitData(this,${dataItem.id},'delete','${data_type}','C','${typeUrl}')"><i class="fas fa-trash"></i></button>
-          `;
+          <div class="d-flex justify-content-between border-0" id="status-${
+            dataItem.id
+          }">
+              <ul class="nav nav-tabs dzm-tabs" role="tablist" style="background-color: #ebebeb;">
+                  <li class="nav-item" role="presentation" onclick="changStatus('active', '${dataItem.id}','${data_type}','A','${typeUrl}')">
+                      <button class="nav-link btn btn-success btn-sm" type="button" role="tab" aria-selected="false"
+                          ${
+                            dataItem.status == "A"
+                              ? ' style="background-color: #3AC977;" '
+                              : ""
+                          } id="status-active-${dataItem.id}">ใช้งาน
+                      </button>
+                  </li>
+                  <li class="nav-item" role="presentation" onclick="changStatus('inActive', '${dataItem.id}','${data_type}','C','${typeUrl}')">
+                      <button class="nav-link btn btn-danger btn-sm" type="button" role="tab" aria-selected="true"
+                          ${
+                            dataItem.status == "C"
+                              ? ' style="background-color: #FF5E5E;" '
+                              : ""
+                          } id="status-inactive-${dataItem.id}">ไม่ใช้งาน
+                      </button>
+                  </li>
+              </ul>
+          </div>`;
         },
-        attributes: { style: "text-align: left;" },
       });
+
+    
+      if (url_grade_income || url_grade_unstable) {
+        columns.push({
+          title: "<b>Action</b>",
+          width: 100,
+          template: function (dataItem) {
+            return `
+              <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" onclick="submitData(this,'${dataItem.id}','save','${data_type}','A','${typeUrl}')"><i class="fas fa-save"></i></button>
+              <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" type="button" title="ลบ" onclick="submitData(this,${dataItem.id},'delete','${data_type}','C','${typeUrl}')"><i class="fas fa-trash"></i></button>
+            `;
+          },
+          attributes: { style: "text-align: left;" },
+        });
+      }
     }
+   
 
     if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
       columns.push(title_new5);
     }
 
-    if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
-      columns.push({
-        title: "<b>Action</b>",
-        width: 100,
-        template: function (dataItem) {
-          return btn(dataItem);
-        },
-        attributes: { style: "text-align: left;" },
-      });
-    }
+      if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
+        columns.push({
+          title: "<b>Action</b>",
+          width: 100,
+          template: function (dataItem) {
+            return btn(dataItem);
+          },
+          attributes: { style: "text-align: left;" },
+        });
+      }
+    
 
     initKendoGrid(
       "#grid",
@@ -320,7 +339,8 @@
         not_stable_min: { type: "number", defaultValue: 0 },
         not_stable_percent: { type: "number", defaultValue: 0 },
       },
-      "id"
+      "id",
+      "desc"
     );
 
 
