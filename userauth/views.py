@@ -48,14 +48,6 @@ def EditAuthPage(request, id_auth):
     userauth = UserAuth.objects.filter(user_id=id_auth)
     authname = MasterAuth.objects.all()
     user = User.objects.filter(id=id_auth).first()
-    if request.method == 'POST':
-        for data in userauth:
-            status_value = request.POST.get(f'status_m_{data.id}')
-
-            data.status = status_value
-            data.save()
-
-        return redirect('userauth:userauth')
 
     return render(request, "editauth.html", {'userauth': userauth, 'authname': authname, 'id': id_auth, 'user': user})
 
@@ -121,6 +113,7 @@ class editAuth(APIView):
         serializer = AuthListSerializer(paginated_queryset, many=True)
         
         return paginator.get_paginated_response(serializer.data) 
+        return render(request, "editauth.html", {'userauth': userauth, 'authname': authname, 'id': id_auth, 'user': user})
 
 
         
