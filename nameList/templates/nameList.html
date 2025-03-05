@@ -38,7 +38,7 @@
       showToast('success', '{{ message }}', '', 'bottom-right');
     {% endfor %}
   });
-  var authEdit = "{{ request.session.auth_edit_delete }}";
+  var authEdit = "{{ auth_edit_delete }}";
   console.log('authEdit',authEdit)
 </script>
 <script src="{% static 'js/nameList.js' %}?v=6"></script>
