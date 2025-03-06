@@ -406,10 +406,6 @@ def save_branch(request):
                 return JsonResponse({'status': 'error', 'message': 'error'}, status=400)
 
             now = datetime.now()
-            print('user_id', user_id)
-            print('company_id', company_id)
-            print('branch_id', branch_id)
-
             updated = LogUserLogin.objects.filter(user_id=user_id).update(
                 company_id=company_id,
                 branch_id=branch_id
