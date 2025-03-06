@@ -233,9 +233,17 @@ function formatRepoSelection(repo) {
 }
 
 function loadSelect2Data(url, selector, responseKey = null, idKey = null, textKey = null, additionalParams = {}, selectedValue = null, placeholder = '-- เลือกข้อมูล --') {
+
+  let textSelector;
+  if (selector == ".js-data-file_type-ajax") {
+    textSelector = '-- เลือกประเภทเอกสาร --';
+  } else {
+    textSelector = '-- เลือกข้อมูล --';
+  }
+
   $(selector).select2({
     width: "100%",
-    placeholder: placeholder,
+    placeholder: textSelector,
     ajax: {
       url: url,
       dataType: 'json',
@@ -251,7 +259,7 @@ function loadSelect2Data(url, selector, responseKey = null, idKey = null, textKe
         params.page = params.page || 1;
 
         const selectData = data[responseKey].map((item) => {
-          let text = item[textKey]; // Default text
+          let text = item[textKey]; 
 
           if (selector === ".js-data-branch-ajax") {
             text = item.branch_code + "-" + item.branch_name;
@@ -284,40 +292,6 @@ function loadSelect2Data(url, selector, responseKey = null, idKey = null, textKe
     $(selector).val(selectedValue).trigger('change');
   }
 
-}
-
-function select2(selector, data) {
-
-  let textSelector;
-  if (selector == ".js-data-file_type-ajax") {
-    textSelector = '-- เลือกประเภทเอกสาร --';
-  } else {
-    textSelector = '-- เลือกข้อมูล --';
-  }
-
-  $(selector).select2({
-    width: "100%",
-    data: data,
-    placeholder: textSelector,
-    escapeMarkup: (markup) => markup,
-    minimumInputLength: 0,
-    maximumSelectionLength: 1000,
-    templateResult: formatRepo,
-    templateSelection: formatRepoSelection,
-    matcher: function (params, data) {
-      if ($.trim(params.term) === "") return data;
-      if (data.text.toUpperCase().indexOf(params.term.toUpperCase()) > -1)
-        return data;
-      return null;
-    },
-    processResults: function (data) {
-      return {
-        results: data.results,
-        pagination: { more: false }
-      };
-    },
-    cache: true
-  });
 }
 
 function mathInstallment() {
