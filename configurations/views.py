@@ -92,7 +92,15 @@ class MasterscoringdetailApiView(BaseListAPIView):
 class MastercustomerageApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MastercustomerageSerializer
-    queryset = Mastercustomerage.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Mastercustomerage.objects.filter(status='A')
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(age_name__icontains=query_param))
+
+        return queryset
     
 class rangeAge(BaseListAPIView):
     pagination_class = NoLimitPagination
@@ -115,49 +123,120 @@ class rangeAge(BaseListAPIView):
 class MasterminorchildrenApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterminorchildrenSerializer
-    queryset = Masterminorchildren.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Masterminorchildren.objects.filter(status='A')
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(children_name__icontains=query_param))
+
+        return queryset
         
 
 class MastereducationlevelApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MastereducationlevelSerializer
-    queryset = Mastereducationlevel.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Mastereducationlevel.objects.filter(status='A')
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(education_name__icontains=query_param))
+
+        return queryset
         
     
 class MasterbusinesstypeApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterbusinesstypeSerializer
-    queryset = Masterbusinesstype.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Masterbusinesstype.objects.filter(status='A')
+
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(business_type_name__icontains=query_param))
+
+        return queryset
         
 
 class MastershoptypesApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MastershoptypesSerializer
-    queryset = Mastershoptypes.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Mastershoptypes.objects.filter(status='A')
+
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(shop_name__icontains=query_param))
+
+        return queryset
         
     
 class MasterrentalageApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterrentalageSerializer
-    queryset = Masterrentalage.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Masterrentalage.objects.filter(status='A')
+
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(age_name__icontains=query_param))
+
+        return queryset
         
     
 class MastermonthlyprofitApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MastermonthlyprofitSerializer
-    queryset = Mastermonthlyprofit.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Mastermonthlyprofit.objects.filter(status='A')
+
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(profit_name__icontains=query_param))
+
+        return queryset
         
 
 class MasterbusinessageApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterbusinessageSerializer
     queryset = Masterbusinessage.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Masterbusinessage.objects.filter(status='A')
+
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(age_name__icontains=query_param))
+
+        return queryset
         
     
 class MastercontractreasonApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MastercontractreasonSerializer
-    queryset = Mastercontractreason.objects.filter(status='A')
+    
+    def get_queryset(self):
+        queryset = Mastercontractreason.objects.filter(status='A')
+
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(reason_name__icontains=query_param))
+
+        return queryset
         
 
 class MastercountryApiView(BaseListAPIView):
@@ -166,6 +245,11 @@ class MastercountryApiView(BaseListAPIView):
     
     def get_queryset(self):
         queryset = Mastercountry.objects.all()
+        
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(nation_name_th__icontains=query_param))
 
         order_by = [
             'ไทย', 'จีน', 'ลาว', 'พม่า', 'เวียดนาม', 
@@ -192,9 +276,6 @@ class businesstypeApiView(BaseListAPIView):
     serializer_class = MasterbusinesstypeSerializer
     queryset = Masterbusinesstype.objects.filter(status="A")
     
-    
-
-
 
 @method_decorator(csrf_exempt, name='dispatch')
 class updateStatus(BaseListAPIView):    
