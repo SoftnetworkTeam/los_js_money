@@ -180,19 +180,17 @@ class MasterOccupationAPIView(BaseListAPIView):
 
         return queryset
 
-from rest_framework import generics
-class MasterProvinceAPIView(generics.ListAPIView):
+class MasterProvinceAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterProvinceSerializer
 
     def get_queryset(self):
         queryset = MasterProvince.objects.all()
-        search_query = self.request.query_params.get('q', None)
-        if search_query:
-            queryset = queryset.filter(
-                Q(province_name_th__icontains=search_query) |
-                Q(province_name_en__icontains=search_query)
-            )
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(province_name__icontains=query_param))
+
         return queryset
 
 
