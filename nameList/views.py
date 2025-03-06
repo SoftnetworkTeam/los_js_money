@@ -168,14 +168,32 @@ class MasterCustomerPrenameAPIView(BaseListAPIView):
 
 class MasterOccupationAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
-    queryset = MasterOccupation.objects.filter(status='A').order_by('id')
     serializer_class = MasterOccupationSerializer
-
     
-class MasterProvinceAPIView(BaseListAPIView):
+    def get_queryset(self):
+        queryset = MasterOccupation.objects.filter(status='A')
+
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(occup_name__icontains=query_param))
+
+        return queryset
+
+from rest_framework import generics
+class MasterProvinceAPIView(generics.ListAPIView):
     pagination_class = NoLimitPagination
-    queryset = MasterProvince.objects.all()
     serializer_class = MasterProvinceSerializer
+
+    def get_queryset(self):
+        queryset = MasterProvince.objects.all()
+        search_query = self.request.query_params.get('q', None)
+        if search_query:
+            queryset = queryset.filter(
+                Q(province_name_th__icontains=search_query) |
+                Q(province_name_en__icontains=search_query)
+            )
+        return queryset
 
 
 class MasterAmphoeAPIView(BaseListAPIView):
@@ -186,16 +204,18 @@ class MasterAmphoeAPIView(BaseListAPIView):
 
 class MasterTambonAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
+    queryset = MasterTambon.objects.all()
     serializer_class = MasterTambonSerializer
 
-    def get_queryset(self):
-        queryset = MasterTambon.objects.all()
+    # def get_queryset(self):
+    #     queryset = MasterTambon.objects.all()
         
-        tambon_name = self.request.GET.get('tambon_name')
-        if tambon_name:
-            queryset = queryset.filter(tambon_name=tambon_name)
+    #     tambon_name = self.request.GET.get('tambon_name')
+    #     if tambon_name:
+    #         queryset = queryset.filter(tambon_name=tambon_name)
+            
 
-        return queryset
+    #     return queryset
 
         
 class MasterResidenceAPIView(BaseListAPIView):
@@ -593,16 +613,16 @@ def insertInstallment(request):
                         amphoe_customer = post_data['amphoe']
                         tambon_customer = post_data['tambon']
                         
-                    # postcode = post_data.get('postcode', '') 
-                    # if postcode == '' or not postcode.isdigit():
-                    #     postcode = 0  
+                    postcode = post_data.get('postcode', '') 
+                    if postcode == '' or not postcode.isdigit():
+                        postcode = 0  
                         
                     customerAddress.send_doc = card_send_doc
                     customerAddress.house_no = post_data.get('address', '')  
                     customerAddress.village = post_data.get('village', '')
                     customerAddress.soi = post_data.get('soi', '')
                     customerAddress.road = post_data.get('road', '')
-                    customerAddress.postcode = post_data['postcode']
+                    customerAddress.postcode = postcode
                     customerAddress.updated_at = current_date
                     customerAddress.amphoe_id = amphoe_customer
                     customerAddress.province_id = province_customer
@@ -636,7 +656,7 @@ def insertInstallment(request):
                         village=post_data['village'],
                         soi=post_data['soi'],
                         road=post_data['road'],
-                        postcode = post_data['postcode'],
+                        postcode = postcode,
                         status='A',
                         slug=auto_slug(),
                         created_at=current_date,
@@ -680,7 +700,7 @@ def insertInstallment(request):
                     customerAddress2.village = post_data.get('village_current', '')
                     customerAddress2.soi = post_data.get('soi_current', '')
                     customerAddress2.road = post_data.get('road_current', '')
-                    customerAddress2.postcode = post_data['postcode']
+                    customerAddress2.postcode = postcode
                     customerAddress2.updated_at = current_date
                     customerAddress2.amphoe_id = amphoe_customer
                     customerAddress2.customer_id = customerInfo.id
@@ -837,7 +857,7 @@ def insertInstallment(request):
                     installment.debt_informal = post_data.get('debt_informal', '')
                     installment.create_to_branch_id = post_data.get('branch', '')
                     installment.create_to_province_id = post_data.get('province_save', '')
-                    installment.company_id = post_data.get('company', '')
+                    installment.company_id = post_data.get('company_id', '')
 
                     installment.save()
                   
@@ -869,7 +889,7 @@ def insertInstallment(request):
                         debt_informal=safe_decimal(post_data.get('debt_informal', '0')),  
                         create_to_branch_id=post_data.get('branch', ''),
                         create_to_province_id=post_data.get('province_save', ''),
-                        company_id=post_data.get('company', '')
+                        company_id=post_data.get('company_id', '')
                     )
                     installment.save()
 
