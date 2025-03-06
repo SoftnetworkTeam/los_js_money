@@ -25,7 +25,7 @@ from theme.models import MasterProvince, MasterAmphoe, MasterTambon, \
     MasterCifDigit, \
     MasterCustomerPrename, MasterOccupation, apmast, MasterNCB,Masterincomestable,Masterincomenotstable,Masterscoringinfo,Mastercustomerage,Mastermaritalstatus,Masterminorchildren,Mastereducationlevel,Masterbusinesstype,Mastermonthlyprofit,Masterbusinessage,Mastercontractreason,MasterNumberOfInstallment,Mastershoptypes,Masterrentalage,MasterBank,Masterbranch,MasterContractDocument,LogUserLogin,Masterbranch, MasterCompany, UserBranch
 from django.db.models import Q 
-from userauth.models import UserAuth
+from userauth.models import UserAuth,AuthUser
 from configurations.models import AuthUser
 from .models import CustomerInfo, InstallmentDetail, CustomerLoanDetail, CustomerAddressDetail, \
     InstallmentFile
@@ -345,12 +345,22 @@ def user_login(request):
         password = request.POST['password']
 
         user = authenticate(username=name, password=password)
+        auth_user = AuthUser.objects.filter(username=name).first()
+        full_name = auth_user.first_name + ' ' + auth_user.last_name
 
         if user is not None:
             auth_login(request, user)
             request.session['username'] = user.username
             request.session['alert_login'] = 'success'
             request.session['user_id'] = user.id
+            
+            mid_user_auth = UserAuth.objects.filter(user=user)
+            if mid_user_auth.exists():
+                for foo in mid_user_auth:
+                    if foo.auth.auth_code == 'A007':
+                        if not foo.status:
+                            return render(request, "login.html",
+                                          {'msg': 'คุณไม่มีสิทธิ์ใช้งานระบบนี้', 'show_alert': True})
 
             user_branch = UserBranch.objects.filter(user_id=user.id, status=True)
             master_branch = Masterbranch.objects.filter(
@@ -369,7 +379,9 @@ def user_login(request):
                 'show_branch_modal': True,
                 'master_company': master_company,
                 'master_branch': master_branch,
-                'user_id' : user.id
+                'user_id' : user.id,
+                'username' : user.username,
+                'name' : full_name
             })
 
         else:
