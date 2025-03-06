@@ -8,6 +8,9 @@
       <form novalidate class="needs-validation" method="POST" id="myForm" enctype="multipart/form-data" action="{% url 'nameList:insertInstallment' %}">
         <input type="hidden" name="id" value="{{ id }}" />
         <input type="hidden" name="address_diffshift" id="address_diffshift" />
+        <input type="hidden" name="branch" id="branch" />
+        <input type="hidden" name="company" id="company" />
+        <input type="hidden" name="province_save" id="province_save" />
         {% csrf_token %}
       
         <div class="card">
@@ -1238,7 +1241,7 @@
                 </div>
               </div> {% endcomment %}
                   <hr>
-                  <div class="col-xl-12">
+                  {% comment %} <div class="col-xl-12">
                     <div class="mb-3 row">
                       <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
                         <h4>บันทักไปยัง </h4>
@@ -1283,7 +1286,7 @@
                           <div class="invalid-feedback">กรุณาเลือกสาขา</div>
                         </div>
                       </div>
-                    </div> <hr>
+                    </div> <hr> {% endcomment %}
   
                     {% if file %}
                         {% for files in file %}
@@ -1388,7 +1391,9 @@
 
 {% endblock %} {% block script %}
 <script>
-
+  var company_id = "{{ request.session.company_id }}";
+  var branch_id = "{{ request.session.branch_id }}";
+  var branch_province_id = "{{ request.session.branch_province_id }}";
   const ref_id = new URLSearchParams(window.location.search).get("ref_id");
   const add_loan = window.location.pathname.includes("create");
 
@@ -1579,6 +1584,6 @@
 
 
 </script>
-<script src="{% static 'js/form_common_script.js' %}?v=97"></script>
+<script src="{% static 'js/form_common_script.js' %}?v=98"></script>
 <link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 
 {% endblock %}
