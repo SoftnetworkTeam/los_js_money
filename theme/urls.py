@@ -27,6 +27,7 @@ urlpatterns = [
     
     path("notfound/<id>", views.notfound, name='notfound'),
     path("user_login", views.user_login),
+    path('save_branch/', views.save_branch),
     path("logout", views.logout_view, name="logout"),
 
 
