@@ -837,6 +837,7 @@ def insertInstallment(request):
                     installment.debt_informal = post_data.get('debt_informal', '')
                     installment.create_to_branch_id = post_data.get('branch', '')
                     installment.create_to_province_id = post_data.get('province_save', '')
+                    installment.company_id = post_data.get('company', '')
 
                     installment.save()
                   
@@ -867,7 +868,8 @@ def insertInstallment(request):
                         debt_in=safe_decimal(post_data.get('debt_in', '0')),  
                         debt_informal=safe_decimal(post_data.get('debt_informal', '0')),  
                         create_to_branch_id=post_data.get('branch', ''),
-                        create_to_province_id=post_data.get('province_save', '')
+                        create_to_province_id=post_data.get('province_save', ''),
+                        company_id=post_data.get('company', '')
                     )
                     installment.save()
 
