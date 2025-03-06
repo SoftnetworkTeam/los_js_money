@@ -9,7 +9,7 @@
         <input type="hidden" name="id" value="{{ id }}" />
         <input type="hidden" name="address_diffshift" id="address_diffshift" />
         <input type="hidden" name="branch" id="branch" />
-        <input type="hidden" name="company" id="company" />
+        <input type="hidden" name="company_id" id="company_id" />
         <input type="hidden" name="province_save" id="province_save" />
         {% csrf_token %}
       
@@ -93,7 +93,7 @@
                     <span class="text-danger">* </span>สถานะภาพสมรส 
                   </label>
                   <div class="col-lg-8">
-                    <select class="select2 form-control" id="married_status" name="married_status">
+                    <select class="select2 form-control" id="married_status" name="married_status" required>
                       {% if not customer_info.marital_status %}
                         <option value="" selected>-- เลือกข้อมูล --</option>
                       {% endif %}
@@ -107,8 +107,7 @@
                         {% endif %}
                       {% endfor %}
                     </select>
-                    
-                    <div class="invalid-feedback">กรุณาเลือกสถานะภาพ</div>
+                    <div class="invalid-feedback">กรุณาเลือกสถานะภาพสมรส</div>
                   </div>
                 </div>
               </div>
@@ -611,7 +610,7 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                   เลขบัญชี
+                    <span class="text-danger">* </span>เลขบัญชี
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="book_no" name="book_no" placeholder="เลขบัญชี"
@@ -625,7 +624,7 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                   ชื่อบัญชี
+                    <span class="text-danger">* </span>ชื่อบัญชี
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="book_name" name="book_name" placeholder="ชื่อบัญชี"
@@ -638,14 +637,15 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    ธนาคาร
+                    <span class="text-danger">* </span>ธนาคาร
                   </label>
                   <div class="col-lg-8">
-                    <select class="js-data-bank-ajax w-100" id="bank_id" name="bank_id">
+                    <select class="js-data-bank-ajax w-100" id="bank_id" name="bank_id" required>
                       {% if bank.id %}
                       <option value="{{ bank.id }}">{{ bank.bank_name }}</option>
                       {% endif %}
                     </select>
+                    <div class="invalid-feedback">กรุณาเลือกธนาคาร</div>
                   </div>
                 </div>
               </div>
@@ -653,12 +653,12 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                   ผู้ค้ำประกัน / หลักประกัน
+                    <span class="text-danger">* </span>ผู้ค้ำประกัน / หลักประกัน
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี"
                     value="{% if customer_info.guarantor_name %}{{ customer_info.guarantor_name }}{% endif %}" required  />
-                  <div class="invalid-feedback">กรุณากรอกผู้ค้ำประกัน / หลักประกัน</div>
+                    <div class="invalid-feedback">กรุณากรอกผู้ค้ำประกัน / หลักประกัน</div>
                   </div>
                 </div>
               </div>
@@ -666,7 +666,7 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    สัญชาติ
+                    <span class="text-danger">* </span>สัญชาติ
                   </label>
                   <div class="col-lg-8">
                     <select class="js-data-nation-ajax w-100" id="country_id" name="country_id" required>
@@ -674,7 +674,7 @@
                       <option value="{{ country.id }}" >{{ country.country_name_th }}</option>
                       {% endif %}
                     </select>
-                  <div class="invalid-feedback">กรุณาเลือกสัญชาติ</div>
+                    <div class="invalid-feedback">กรุณาเลือกสัญชาติ</div>
                   </div>
                 </div>
               </div>
@@ -703,7 +703,7 @@
                   </label>
                   <div class="col-lg-8">
                     <select class="default-select wide form-control" id="channel_payment" name="channel_payment" required>
-                      <option value="" {% if not customer_info.channel_payment %}selected{% endif %}>-- เลือกข้อมูล --</option>
+                      <option  {% if not customer_info.channel_payment %}selected{% endif %}>-- เลือกข้อมูล --</option>
                       <option value="1" {% if customer_info.channel_payment|default:""|stringformat:"s" == "1" %}selected{% endif %}>เงินสด</option>
                       <option value="2" {% if customer_info.channel_payment|default:""|stringformat:"s" == "2" %}selected{% endif %}>เช็ค</option>
                       <option value="3" {% if customer_info.channel_payment|default:""|stringformat:"s" == "3" %}selected{% endif %}>โอนเข้าบัญขีธนาคาร</option>
@@ -719,7 +719,6 @@
                      <h4>ที่อยู่ตามบัตรประชาชน </h4>
                     <input type="radio" id="card_doc" value="card" name="send_doc" class="custom-radio"/>
                     <span>ใช้จัดส่งเอกสาร</span>
-                    
                   </label>
                 </div>
               </div>
@@ -920,7 +919,7 @@
                     จังหวัด
                   </label>
                   <div class="col-lg-8">
-                      <select class="js-data-province_current-ajax w-100 select2-lg" id="province_current-dropdown" name="province_current" >
+                      <select class="js-data-province_current-ajax w-100 select2-lg" id="province_current-dropdown" name="province_current" required>
                       {% if customer_address2_detail %}
                       <option value="{{ customer_address2_detail.province_id }}">
                         {{ customer_address2_detail.province_name }}
@@ -938,7 +937,7 @@
                     อำเภอ
                   </label>
                   <div class="col-lg-8">
-                    <select class="js-data-amphoe_current-ajax w-100 select2-lg" id="amphoe_current-dropdown" name="amphoe_current" >
+                    <select class="js-data-amphoe_current-ajax w-100 select2-lg" id="amphoe_current-dropdown" name="amphoe_current" required>
                       {% if customer_address2_detail %}
                       <option value="{{ customer_address2_detail.amphoe_id }}">
                         {{ customer_address2_detail.amphoe_name }}
@@ -956,7 +955,7 @@
                    ตำบล
                   </label>
                   <div class="col-lg-8">
-                    <select class="js-data-tambon_current-ajax w-100 select2-lg" id="tambon_current-dropdown" name="tambon_current" >
+                    <select class="js-data-tambon_current-ajax w-100 select2-lg" id="tambon_current-dropdown" name="tambon_current" required>
                       {% if customer_address2_detail %}
                       <option value="{{ customer_address2_detail.tambon_id }}">
                         {{ customer_address2_detail.tambon_name }}
@@ -1113,6 +1112,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="company_address" name="company_address" placeholder="ที่อยู่"
                       value="{% if customer_address3_detail %}{{ customer_address3_detail.house_no }}{% endif %}"  required/>
+                      <div class="invalid-feedback">กรุณากรอกที่อยู่</div>
                   </div>
                 </div>
               </div>
@@ -1164,6 +1164,7 @@
                       <option value="{{ customer_address3_detail.province_id }}">
                         {{ customer_address3_detail.province_name }}
                       </option>
+                      <div class="invalid-feedback">กรุณาเลือกจังหวัด</div>
                       {% endif %}
                     </select>
                   </div>
@@ -1181,6 +1182,7 @@
                       <option value="{{ customer_address3_detail.amphoe_id }}">
                         {{ customer_address3_detail.amphoe_name }}
                       </option>
+                      <div class="invalid-feedback">กรุณาเลือกอำเภอ</div>
                       {% endif %}
                     </select>
                   </div>
@@ -1198,6 +1200,7 @@
                       <option value="{{ customer_address3_detail.tambon_id}}">
                         {{ customer_address3_detail.tambon_name }}
                       </option>
+                      <div class="invalid-feedback">กรุณาเลือกตำบล</div>
                       {% endif %}
                     </select>
                   </div>
@@ -1304,10 +1307,10 @@
                           <!-- ส่วนอัพโหลดเอกสาร -->
                           <div class="mb-3 row">
                             <label class="col-lg-2 col-form-label">
-                              <span class="text-danger">* </span>อัพโหลดเอกสาร {{ files.doc.doc_name }}
+                              อัพโหลดเอกสาร {{ files.doc.doc_name }}
                             </label>
                             <div class="col-lg-8">
-                              <select class="js-data-file_type-ajax w-100" id="file_type-dropdown-{{ files.id }}" name="file_type_{{ files.id }}" disabled>
+                              <select class="js-data-file_type-ajax w-100" id="file_type-dropdown-{{ files.id }}" name="file_type_{{ files.id }}" disabled >
                                 {% if files %}
                                 <option value="{{ files.doc.id }}">
                                   {{ files.doc.doc_name }}
@@ -1323,10 +1326,10 @@
                         <div class="col-xl-6">
                           <div class="mb-3 row">
                             <label class="col-lg-2 col-form-label">
-                              <span class="text-danger">* </span>อัพโหลดเอกสาร
+                              อัพโหลดเอกสาร
                             </label>
                             <div class="col-lg-8">
-                              <select class="js-data-file_type-ajax w-100" id="file_type-dropdown-1" name="file_type_1">
+                              <select class="js-data-file_type-ajax w-100" id="file_type-dropdown-1" name="file_type_1" >
                               </select>
                             </div>
                           </div>
@@ -1584,6 +1587,6 @@
 
 
 </script>
-<script src="{% static 'js/form_common_script.js' %}?v=98"></script>
+<script src="{% static 'js/form_common_script.js' %}?v=100"></script>
 <link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 
 {% endblock %}
