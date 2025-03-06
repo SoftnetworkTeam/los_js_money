@@ -1,4 +1,7 @@
 $(document).ready(function () {
+  $('#branch').val(branch_id)
+  $('#company_id').val(company_id)
+  $('#province_save').val(branch_province_id)
  
   loadSelect2Data(urlMasterCustomerPrename, ".js-data-prename-ajax", "results", "id", "pre_name");
   loadSelect2Data(urlMasterOccupation, ".js-data-occup-ajax", "results", "id", "occup_name");
