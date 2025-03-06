@@ -2,7 +2,7 @@ from utilis.function import BaseListAPIView
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from functools import wraps
-from userauth.models import UserAuth
+from userauth.models import UserAuth,AuthUser
 from django.shortcuts import render, redirect
 from decimal import Decimal, InvalidOperation
 from django.urls import reverse
