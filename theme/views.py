@@ -23,7 +23,7 @@ from configurations.views import Mastercountry
 
 from theme.models import MasterProvince, MasterAmphoe, MasterTambon, \
     MasterCifDigit, \
-    MasterCustomerPrename, MasterOccupation, apmast, MasterNCB,Masterincomestable,Masterincomenotstable,Masterscoringinfo,Mastercustomerage,Mastermaritalstatus,Masterminorchildren,Mastereducationlevel,Masterbusinesstype,Mastermonthlyprofit,Masterbusinessage,Mastercontractreason,MasterNumberOfInstallment,Mastershoptypes,Masterrentalage,MasterBank,Masterbranch,MasterContractDocument
+    MasterCustomerPrename, MasterOccupation, apmast, MasterNCB,Masterincomestable,Masterincomenotstable,Masterscoringinfo,Mastercustomerage,Mastermaritalstatus,Masterminorchildren,Mastereducationlevel,Masterbusinesstype,Mastermonthlyprofit,Masterbusinessage,Mastercontractreason,MasterNumberOfInstallment,Mastershoptypes,Masterrentalage,MasterBank,Masterbranch,MasterContractDocument,LogUserLogin,Masterbranch, MasterCompany, UserBranch
 from django.db.models import Q 
 from userauth.models import UserAuth
 from configurations.models import AuthUser
@@ -339,7 +339,6 @@ def editFormcommon(request,id):
         ],
     }) 
 
-
 def user_login(request):
     if request.method == "POST":
         name = request.POST['username']
@@ -352,26 +351,72 @@ def user_login(request):
             request.session['username'] = user.username
             request.session['alert_login'] = 'success'
             request.session['user_id'] = user.id
-            # print('user aaaa',vars(user))
-            
-            mid_user_auth = UserAuth.objects.filter(user=user)
-            # print('foo',vars(mid_user_auth))
-            
-            if mid_user_auth.exists():
-                for foo in mid_user_auth:
-                    if foo.auth.auth_code == 'A002':  # auth_edit_delete
-                        request.session['auth_edit_delete'] = foo.status  # เก็บค่าลงใน session
-                    if foo.auth.auth_code == 'A007':
-                        if not foo.status:
-                            return render(request, "login.html",
-                                          {'msg': 'คุณไม่มีสิทธิ์ใช้งานระบบนี้', 'show_alert': True})
 
-            return redirect("/", user=user)
+            user_branch = UserBranch.objects.filter(user_id=user.id, status=True)
+            master_branch = Masterbranch.objects.filter(
+                id__in=[ub.branch_id for ub in user_branch]
+            )
+            # print("Masterbranch:", [ub.branch_id for ub in user_branch])
+            master_company = MasterCompany.objects.filter(
+                id__in=[mb.company_id for mb in master_branch]
+            )
+            # print("Companies:", [mb.company_id for mb in master_branch])
+            
+            request.session['master_company'] = [company.id for company in master_company]
+            request.session['master_branch'] = [branch.id for branch in master_branch]
+
+            return render(request, "login.html", {
+                'show_branch_modal': True,
+                'master_company': master_company,
+                'master_branch': master_branch,
+                'user_id' : user.id
+            })
+
         else:
             return render(request, "login.html", {'msg': 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'})
     else:
         return render(request, "login.html")
 
+def save_branch(request):
+    if request.method == 'POST':
+        try:
+            user_id = request.POST.get('user_id')
+            company_id = request.POST.get('company')
+            branch_id = request.POST.get('branch')
+            
+            branch = Masterbranch.objects.filter(id=branch_id).first()
+            
+            request.session['company_id'] = company_id 
+            request.session['branch_id'] = branch_id
+            request.session['branch_province_id'] = branch.province_id
+
+            if not user_id or not company_id or not branch_id:
+                return JsonResponse({'status': 'error', 'message': 'error'}, status=400)
+
+            now = datetime.now()
+            print('user_id', user_id)
+            print('company_id', company_id)
+            print('branch_id', branch_id)
+
+            updated = LogUserLogin.objects.filter(user_id=user_id).update(
+                company_id=company_id,
+                branch_id=branch_id
+            )
+            if updated == 0:
+                grade = LogUserLogin(
+                    user_id=user_id,
+                    company_id=company_id,
+                    branch_id=branch_id,
+                    created_at=now,
+                    updated_at=now
+                )
+                grade.save()
+
+            return JsonResponse({'status': 'success'})
+
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        
 def clear_alert_login(request):
     
         if request.session['alert_login'] == 'success':
