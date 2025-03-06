@@ -1211,3 +1211,50 @@ class Masterbranch(models.Model):
     class Meta:
         managed = False  
         db_table = 'tb_masterbranch' 
+        
+class MasterCompany(models.Model):
+    id = models.AutoField(primary_key=True)
+    company_code = models.CharField(max_length=50, unique=True)
+    company_name = models.CharField(max_length=255)
+    house_no = models.CharField(max_length=50, blank=True, null=True)
+    village = models.CharField(max_length=100, blank=True, null=True)
+    soi = models.CharField(max_length=100, blank=True, null=True)
+    road = models.CharField(max_length=100, blank=True, null=True)
+    postcode = models.CharField(max_length=10, blank=True, null=True)
+    tax_id = models.CharField(max_length=20, blank=True, null=True)
+    telephone = models.CharField(max_length=20, blank=True, null=True)
+    fax = models.CharField(max_length=20, blank=True, null=True)
+    status = models.CharField(max_length=1) 
+    slug = models.CharField(max_length=200, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    tambon_id = models.IntegerField(blank=True, null=True)
+    amphoe_id = models.IntegerField(blank=True, null=True)
+    province_id = models.IntegerField(blank=True, null=True)
+    max_collection_amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    billing_day = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'tb_mastercompany'
+
+class UserBranch(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField() 
+    branch_id = models.IntegerField()
+    status = models.CharField(max_length=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'tb_userbranch'
+
+class LogUserLogin(models.Model):
+    id = models.AutoField(primary_key=True)  # Auto-increment primary key
+    user_id = models.IntegerField()          # User ID
+    company_id = models.IntegerField()       # Company ID
+    branch_id = models.IntegerField()        # Branch ID
+    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp when the record is created
+    updated_at = models.DateTimeField(auto_now=True)      # Timestamp when the record is updated
+
+    class Meta:
+        db_table = 'log_userlogin'
