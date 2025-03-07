@@ -38,7 +38,7 @@ $(function() {
             width: '100%',
             resize: true,
             barSpacing: '5',
-            barColor: '#7EA700'
+            barColor: '#03A9F3'
         });
         $('.range2').sparkline([10, 15, 11, 13, 12, 12, 15], {
             type: 'bar',
