@@ -63,7 +63,7 @@ class MasterincomenotstableApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterincomenotstableSerializer
     def get_queryset(self):
-        return Masterincomenotstable.objects.filter(status='C').order_by("id")  
+        return Masterincomenotstable.objects.exclude(status='C').order_by("id")
 
 class MasterscoringinfoApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
@@ -291,7 +291,7 @@ class updateStatus(BaseListAPIView):
         if status_type == "statusIncome" and data_type == "grade":
             Masterincomestable.objects.filter(id=status_id).update(status=status)
         elif status_type== "statusNotIncome" and data_type == "grade":
-            Masterincomestable.objects.filter(id=status_id).update(status=status)
+            Masterincomenotstable.objects.filter(id=status_id).update(status=status)
         elif status_type == "statusScoring" and data_type == "scoring":
             Masterscoringinfo.objects.filter(id=status_id).update(status=status)
         elif status_type == "statusUserauth":
@@ -403,12 +403,13 @@ class updateData(BaseListAPIView):
                 }
 
                 for scoring_type, (model, field) in scoring_type_mapping.items():
-                    id = model.objects.filter(Q(status="A") & ~Q(**{field: ''})).values_list('id', flat=True)
-                    
-                    for tpye_id in id:
+                    existing_ids = set(Masterscoringdetail.objects.filter(score_id=score_id).values_list('type_id', flat=True))
+                    new_ids = model.objects.filter(Q(status="A") & ~Q(**{field: ''})).exclude(id__in=existing_ids).values_list('id', flat=True)
+
+                    for type_id in new_ids:
                         Masterscoringdetail.objects.create(
                             score_type=scoring_type,  
-                            type_id=tpye_id,             
+                            type_id=type_id,             
                             score=0.00,               
                             score_id=score_id,       
                             created_at=now,           
