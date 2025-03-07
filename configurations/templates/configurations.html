@@ -215,7 +215,7 @@
                 <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" type="button" title="ลบ" 
                     onclick="submitData(this, '${dataItem.id}', 'delete', '${data_type}')">
                     <i class="fas fa-trash"></i>
-                </button>
+                </button> 
             `;
         }
     
@@ -262,7 +262,7 @@
     if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
       columns.push( title_new1,title_new2, title_new3, title_new4);
     }
-    if(authEdit == "true"){
+    if(authEdit == "True"){
       columns.push({
         title: "<b>สถานะ</b>",
         width: 100,
@@ -348,73 +348,7 @@
 
   urlupdateStatus = "{% url 'configurations:updateStatus' %}";
 
-  {% comment %} function changStatus(type, id, dataType) {
-    var color = "";
-    var status = "";
-    var tmpTitle = "";
 
-    if (type == "active") {
-      color = "#3AC977";
-      status = "A";
-      tmpTitle = "<h3><b>คุณต้องเปิดการใช้งาน <br/> ใช่หรือไม่?</b></h3>";
-    } else {
-      status = "C";
-      color = "#FF5E5E";
-      tmpTitle = "<h3><b>คุณต้องปิดการใช้งาน <br/> ใช่หรือไม่?</b></h3>";
-    }
-
-    Swal.fire({
-      title: "",
-      html: tmpTitle,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      cancelButtonText: "ยกเลิก",
-      confirmButtonText: "ตกลง",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $(document).ready(function () {
-          var formData = new FormData();
-          formData.append("type", typeUrl);
-          formData.append("status", status);
-          formData.append("id", id);
-          formData.append("data_type", data_type);
-
-          $.ajax({
-            url: urlupdateStatus,
-            type: "POST",
-            data: formData,
-            headers: {
-              "X-CSRFToken": getCookie("csrftoken"),
-            },
-            contentType: false,
-            processData: false,
-            success: function (response) {
-              var data = response;
-
-              if (data.status == "success") {
-                $("#status-active-" + id).css("background-color", "");
-                $("#status-inactive-" + id).css("background-color", "");
-                if (type == "active") {
-                  $("#status-active-" + id).css("background-color", color);
-                } else {
-                  $("#status-inactive-" + id).css("background-color", color);
-                }
-              } else {
-                notification(
-                  "แจ้งเตือน",
-                  "เปลี่ยนสถานะไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
-                  "error",
-                  "ปิด"
-                );
-              }
-            },
-          });
-        });
-      }
-    });
-  } {% endcomment %}
 
   var urlupdateData = "{% url 'configurations:updateData' %}";
 
@@ -478,6 +412,8 @@
           var grid = $("#grid").data("kendoGrid");
           var dataItem = grid.dataItem(selectedRow);
           grid.dataSource.remove(dataItem);
+        }else if (response.status == "can't delete"){
+          notification("แจ้งเตือน", "ไม่สามารถลบข้อมูลหลักได้", "warnning", "ปิด");
         }
       },
       error: function (error) {
