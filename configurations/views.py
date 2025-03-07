@@ -63,7 +63,7 @@ class MasterincomenotstableApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterincomenotstableSerializer
     def get_queryset(self):
-        return Masterincomenotstable.objects.all().order_by("id")  
+        return Masterincomenotstable.objects.filter(status='C').order_by("id")  
 
 class MasterscoringinfoApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
@@ -297,11 +297,9 @@ class updateStatus(BaseListAPIView):
         elif status_type == "statusUserauth":
             UserAuth.objects.filter(id=status_id).update(status=status)
 
-            return JsonResponse({
-                'status': 'success',
-            })
+        return JsonResponse({'status': 'success'})
 
-        return JsonResponse({'status': 'failed', 'message': 'Invalid status type'})
+        # return JsonResponse({'status': 'failed', 'message': 'Invalid status type'})
  
 def auto_slug():
     return datetime.now().strftime('%Y%m%d%H%M%S%f') 
@@ -351,12 +349,9 @@ class updateData(BaseListAPIView):
                     
         elif data_type == "scoring" :
             from decimal import Decimal
-            
-            print('request ssss',request.session['user_id'])
-
             score_id = post_data.get("id")
             score_name = post_data.get('score_name')
-              # แปลงค่าเป็น Decimal ถ้าไม่สามารถแปลงได้ให้ใช้ค่า default เป็น 0
+            # แปลงค่าเป็น Decimal ถ้าไม่สามารถแปลงได้ให้ใช้ค่า default เป็น 0
             stable_min = Decimal(post_data.get('stable_min', "0") or "0")
             stable_percent = Decimal(post_data.get('stable_percent', "0") or "0")
             not_stable_min = Decimal(post_data.get('not_stable_min', "0") or "0")
@@ -423,9 +418,14 @@ class updateData(BaseListAPIView):
                 response_status = "save success"
 
             elif type_button == "delete":
-                    grade = Masterscoringinfo.objects.get(id=grade_id)
+                count_row = Masterscoringinfo.objects.count()  
+
+                if count_row > 1:
+                    grade = Masterscoringinfo.objects.get(id=score_id)
                     grade.delete()
                     response_status = "delete success"
+                else:
+                    response_status = "can't delete"
             
         return JsonResponse({'status': response_status})
         
