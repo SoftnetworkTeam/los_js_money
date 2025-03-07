@@ -250,32 +250,32 @@ ribbons page
   border-bottom-color: #00c292; }
 
 .ribbon-info {
-  background: #7EA700; }
+  background: #03A9F3; }
 
 .ribbon-bookmark.ribbon-info:before {
-  border-color: #7EA700;
+  border-color: #03A9F3;
   border-right-color: transparent; }
 
 .ribbon-bookmark.ribbon-right.ribbon-info:before {
-  border-right-color: #7EA700;
+  border-right-color: #03A9F3;
   border-left-color: transparent; }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-info:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-info:before {
-  border-right-color: #7EA700;
+  border-right-color: #03A9F3;
   border-bottom-color: transparent; }
 
 .ribbon-info.ribbon-corner:before {
-  border-top-color: #7EA700;
-  border-left-color: #7EA700; }
+  border-top-color: #03A9F3;
+  border-left-color: #03A9F3; }
 
 .ribbon-info.ribbon-corner.ribbon-right:before {
-  border-right-color: #7EA700;
+  border-right-color: #03A9F3;
   border-left-color: transparent; }
 
 .ribbon-info.ribbon-corner.ribbon-bottom:before {
   border-top-color: transparent;
-  border-bottom-color: #7EA700; }
+  border-bottom-color: #03A9F3; }
 
 .ribbon-warning {
   background: #fec107; }
