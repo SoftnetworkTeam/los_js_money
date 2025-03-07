@@ -23,19 +23,19 @@ $(document).ready(function () {
     });
 
     var columns = [
-            { title: "<b>ลำดับ</b>", template: "#= index #", width: "auto" },
-            // { field: "apname", width: "auto", title: "<b>ผู้จำหน่าย</b>" },
-            { field: "app_id", width: "auto", title: "<b>เลขที่ขอสินเชื่อ</b>" },
+            { title: "ลำดับ", template: "#= index #", width: "auto" },
+            // { field: "apname", width: "auto", title: "ผู้จำหน่าย" },
+            { field: "app_id", width: "auto", title: "เลขที่ขอสินเชื่อ" },
             {
-                field: "created_at", title: "<b>วันที่ขอสินเชื่อ</b>",
+                field: "created_at", title: "วันที่ขอสินเชื่อ",
                 width: "auto",
                 template: "#= kendo.toString(kendo.parseDate(created_at), 'dd/MM/yy') #",
                 filterable: false
             },
-            { field: "customer_name", width: "auto", title: "<b>ชื่อ - นามสกุล</b>" },
-            { field: "card_no", width: "auto", title: "<b>เลขที่บัตร</b>" },
+            { field: "customer_name", width: "auto", title: "ชื่อ - นามสกุล" },
+            { field: "card_no", width: "auto", title: "เลขที่บัตร" },
             {
-                title: "<b>สถานะสัญญา</b>",
+                title: "สถานะสัญญา",
                 width: "auto",
                 field: "n_status_approve",
                 template: function (dataItem) {
@@ -50,7 +50,7 @@ $(document).ready(function () {
                 }
             },
             {
-                title: "<b>Action</b>",
+                title: "Action",
                 width: "auto",
                 template: function (dataItem) {
                     let detailUrl = 'name-list/detail/' + dataItem.id;

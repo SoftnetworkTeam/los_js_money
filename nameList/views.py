@@ -40,6 +40,15 @@ def safe_decimal(value, default=Decimal('0')):
 class CustomerLoanDetailApiView(BaseListAPIView):
     queryset = CustomerLoanDetail.objects.all()
     serializer_class = CustomerLoanDetailSerializer
+    
+# class CustomerDetailApiView(BaseListAPIView):
+#     queryset = CustomerLoanDetail.objects.all()
+#     serializer_class = CustomerLoanDetailSerializer
+    
+#     customer_info = CustomerInfo.objects.all()
+#     Installment_detail = InstallmentDetail.objects.all()
+#     def post(request):
+#         branch = Masterbranch.objects.filter(id=request.session['branch_id'])
 
 class NoLimitPagination(PageNumberPagination):
     page_size = 1000  
@@ -258,9 +267,7 @@ def MasterAddress(province_name: str, amphoe_name: str, tambon_name: str):
     province = MasterProvince.objects.filter(province_name=province_name).first()
     amphoe = MasterAmphoe.objects.filter(amphoe_name=amphoe_name, province_id=province.id).first()
     tambon = MasterTambon.objects.filter(tambon_name=tambon_name, amphoe_id=amphoe.id).first()
-    print('mmm province',province.id)   
-    print('mmm amphoe',amphoe.id) 
-    print('mmm tambon',tambon.id) 
+
 
     return str(province.id) + '##' + str(amphoe.id) + '##' + str(tambon.id)
 

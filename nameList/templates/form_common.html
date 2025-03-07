@@ -31,7 +31,7 @@
                     <span class="text-danger">* </span>คำนำหน้า
                   </label>
                   <div class="col-lg-8">
-                    <select class="js-data-prename-ajax w-100 select2-lg" id="prename-dropdown" name="prename" required>
+                    <select class="js-data-prename-ajax w-100 select2-lg" id="prename" name="prename" required>
                     {% if prename %}
                     <option value="{{ prename.id }}">
                       {{ prename.pre_name }}
@@ -1394,6 +1394,7 @@
 
 {% endblock %} {% block script %}
 <script>
+
   var company_id = "{{ request.session.company_id }}";
   var branch_id = "{{ request.session.branch_id }}";
   var branch_province_id = "{{ request.session.branch_province_id }}";
@@ -1587,6 +1588,6 @@
 
 
 </script>
-<script src="{% static 'js/form_common_script.js' %}?v=100"></script>
+<script src="{% static 'js/form_common_script.js' %}?v=101"></script>
 <link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 
 {% endblock %}

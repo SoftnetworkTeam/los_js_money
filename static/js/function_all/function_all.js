@@ -185,14 +185,16 @@ function initKendoGrid(gridSelector, dataSourceUrl, columns, fields = null, sort
       }
     },
     filterable: true,
-    toolbar: ["search", {
-      name: "excel",
-      template: '<button type="button" class="k-grid-excel k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-icon-button"  data-bs-toggle="tooltip" title="Export to Excel"><span class="k-icon k-i-file-excel k-button-icon"></span></button>'
-    }],
-    excel: {
-      fileName: "ex.xlsx",
-      filterable: true
-    },
+    toolbar: ["search", 
+      // {
+      //   name: "excel",
+      //   template: '<button type="button" class="k-grid-excel k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-icon-button"  data-bs-toggle="tooltip" title="Export to Excel"><span class="k-icon k-i-file-excel k-button-icon"></span></button>'
+      // } 
+  ],
+    // excel: {
+    //   fileName: "ex.xlsx",
+    //   filterable: true
+    // },
     dataBound: function () {
 
       $("th[data-bs-toggle='tooltip']").each(function () {

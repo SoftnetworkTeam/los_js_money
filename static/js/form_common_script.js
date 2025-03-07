@@ -2,6 +2,18 @@ $(document).ready(function () {
   $('#branch').val(branch_id)
   $('#company_id').val(company_id)
   $('#province_save').val(branch_province_id)
+
+  $('#prename').change(function() {
+    var prename = $(this).val();
+    if (prename === '1') {
+      $('#gender').val('M').trigger('change');  
+    }
+    else if (prename === '2' || prename === '3') {
+      $('#gender').val('F').trigger('change');  
+    }else {
+      $('#gender').val('').trigger('change');  
+    }
+  });
  
   loadSelect2Data(urlMasterCustomerPrename, ".js-data-prename-ajax", "results", "id", "pre_name");
   loadSelect2Data(urlMasterOccupation, ".js-data-occup-ajax", "results", "id", "occup_name");
