@@ -16,13 +16,13 @@ html, body{
 }
 
 .page-link {
-    color: #7EA700;
+    color: #03A9F3;
 }
 
 .page-item.active .page-link {
     color: white !important;
-    background-color: #7EA700;
-    border-color: #7EA700;
+    background-color: #03A9F3;
+    border-color: #03A9F3;
 }
 
 .k-grid-header th.k-header {
@@ -58,9 +58,9 @@ html, body{
 
 .card {
     margin-bottom: 20px;
-    border-left: 1px solid #7EA700;
-    border-bottom: 1px solid #7EA700;
-    border-right: 1px solid #7EA700;
+    border-left: 1px solid #03A9F3;
+    border-bottom: 1px solid #03A9F3;
+    border-right: 1px solid #03A9F3;
 }
 
 .card-dashboard {
@@ -147,15 +147,15 @@ html, body{
 }
 
 .customtab2 li a.nav-link.active {
-    border-color: #dee2e6 #dee2e6 #7EA700;
-    background: #7EA700;
+    border-color: #dee2e6 #dee2e6 #03A9F3;
+    background: #03A9F3;
     color: #fff;
     font-weight: 500;
 }
 
 .customtab2 li a.nav-link:hover {
     color: #fff;
-    background: #7EA700;
+    background: #03A9F3;
 }
 
 .docno-running {
@@ -211,17 +211,17 @@ html, body{
 }
 
 .lms-tab-contract {
-    border-top: 1px solid #7EA700; 
-    border-left: 1px solid #7EA700; 
-    border-right: 1px solid #7EA700; 
+    border-top: 1px solid #03A9F3; 
+    border-left: 1px solid #03A9F3; 
+    border-right: 1px solid #03A9F3; 
     padding: 1.25rem;
 }
 
 .lms-tab-contract-b {
-    border-top: 1px solid #7EA700; 
-    border-left: 1px solid #7EA700; 
-    border-right: 1px solid #7EA700; 
-    border-bottom: 1px solid #7EA700; 
+    border-top: 1px solid #03A9F3; 
+    border-left: 1px solid #03A9F3; 
+    border-right: 1px solid #03A9F3; 
+    border-bottom: 1px solid #03A9F3; 
     padding: 1.25rem;
 }
 
