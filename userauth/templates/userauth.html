@@ -36,11 +36,6 @@
 
 {% endblock %} {% block script %}
 <script>
-  $(document).ready(function () {
-    {% for message in messages %}
-      showToast('success', '{{ message }}', '', 'bottom-right');
-    {% endfor %}
-  });
   var authEdit = "{{ auth_edit_delete }}";
 </script>
 <script src="{% static 'js/userauth.js' %}?v=16"></script>
