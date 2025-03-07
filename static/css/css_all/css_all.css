@@ -16,7 +16,7 @@ body {
 }
 
 .card-header {
-  background-color: #7ea700;
+  background-color: #03A9F3;
   color: white;
   text-align: center;
   font-size: 14px;
@@ -30,7 +30,7 @@ body {
 }
 
 .toast-success {
-  background-color: #7ea700 !important;
+  background-color: #03A9F3 !important;
   color: #fff !important;
 }
 
@@ -145,7 +145,7 @@ body {
 }
 
 .table thead th {
-  background: #7ea700;
+  background: #03A9F3;
   color: #fff;
   border: 0;
 }
@@ -187,12 +187,12 @@ body {
 }
 
 #openDialogButton.k-button {
-  background-color: #7ea700;
+  background-color: #03A9F3;
   color: white;
 }
 
 .k-dialog-titlebar {
-  background-color: #7ea700 !important;
+  background-color: #03A9F3 !important;
 }
 
 .k-prompt-container,
