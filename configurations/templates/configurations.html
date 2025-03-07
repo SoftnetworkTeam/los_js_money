@@ -235,7 +235,7 @@
                       <i class="fas fa-box-open"></i>
                       <p class="mt-3" id="empty-state-text">
                           ${type_text}
-                          <a href="${href}/add" id="select-link" style="color: #7EA700; text-decoration: underline;">
+                          <a href="${href}/add" id="select-link" style="color: #03A9F3; text-decoration: underline;">
                               เพิ่มข้อมูล
                           </a>
                       </p>
@@ -286,7 +286,7 @@
                       <button class="nav-link btn btn-danger btn-sm" type="button" role="tab" aria-selected="true"
                           ${
                             dataItem.status == "C"
-                              ? ' style="background-color: #FF5E5E;" '
+                              ? ' style="background-color: #E46A76;" '
                               : ""
                           } id="status-inactive-${dataItem.id}">ไม่ใช้งาน
                       </button>
@@ -370,7 +370,7 @@
     } else if (window.location.pathname.includes("grade-unstable")) {
       typeUrl = "statusNotIncome";
       var input_text1 =
-        selectedRow.find("input.form-control .text1").val() || "";
+        selectedRow.find("input.form-control.text1").val() || "";
 
       formData.append("grade_code", input_text1);
     } else if (window.location.pathname.includes("scoring")) {
