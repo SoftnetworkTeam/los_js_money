@@ -86,7 +86,7 @@ $(function () {
             , barWidth: '4'
             , resize: true
             , barSpacing: '5'
-            , barColor: '#7EA700'
+            , barColor: '#03A9F3'
         });
         $('#sparklinedash4').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
             type: 'bar'
