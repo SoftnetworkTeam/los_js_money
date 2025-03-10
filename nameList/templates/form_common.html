@@ -196,8 +196,8 @@
                       {% if not customer_info.gender %}
                         <option value=""> -- เลือกข้อมูล -- </option>
                       {% endif %}
-                      <option value="M" {% if customer_info.gender == "ชาย" %}selected{% endif %}>ชาย</option>
-                      <option value="F" {% if customer_info.gender == "หญิง" %}selected{% endif %}>หญิง</option>
+                      <option value="M" {% if customer_info.gender == "M" %}selected{% endif %}>ชาย</option>
+                      <option value="F" {% if customer_info.gender == "F" %}selected{% endif %}>หญิง</option>
                     </select>
                     <div class="invalid-feedback">กรุณาเลือกเพศ</div>
                   </div>
@@ -614,7 +614,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="book_no" name="book_no" placeholder="เลขบัญชี"
-                      value="{% if customer_info.age %}{{ customer_info.age }}{% endif %}" oninput="validateInput(this, 10, 'กรุณากรอกเลขบัญชี 10 หลัก')"
+                      value="{% if customer_info.book_no %}{{ customer_info.book_no }}{% endif %}" oninput="validateInput(this, 10, 'กรุณากรอกเลขบัญชี 10 หลัก')"
                       maxlength="10" required  />
                     <div class="invalid-feedback">กรุณากรอกเลขบัญชี</div>
                   </div>

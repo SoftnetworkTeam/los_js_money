@@ -839,12 +839,15 @@ def insertInstallment(request):
                     installment = None
 
                 if installment:
+                    base_income = post_data.get('base_income', '')
+                    base_income_raw = base_income.replace(",", "") if base_income else ''
+                    
                     installment.price = post_data.get('price', '')
                     installment.down_payment = post_data.get('down_payment', '')
-                    installment.total = post_data.get('net_amount', '')
-                    installment.interest = post_data.get('interest', '')
-                    installment.installment = post_data.get('installment', '')
-                    installment.start_payment = start_payment
+                    installment.total = safe_decimal(post_data.get('net_amount', '0'))
+                    installment.interest = safe_decimal(post_data.get('interest', '0'))
+                    installment.installment = int(post_data.get('installment', 0))
+                    # installment.start_payment = start_payment
                     installment.date_read_card = formatDate(post_data.get('read_card', ''))
                     installment.user_id = request.session.get('username', '')
                     installment.salary_day = post_data.get('salary_day', '')
@@ -854,12 +857,11 @@ def insertInstallment(request):
                     installment.updated_at = current_date
                     installment.company_tel = post_data.get('company_tel', '')
                     installment.place_work_tel = post_data.get('place_work_tel', '')
-                    base_income = post_data.get('base_income', '')
-                    base_income_raw = base_income.replace(",", "") if base_income else ''
-                    installment.base_income = base_income_raw
+                   
+                    installment.base_income = safe_decimal(base_income_raw)
                     installment.office = post_data.get('office', '')
-                    installment.debt_in = post_data.get('debt_in', '')
-                    installment.debt_informal = post_data.get('debt_informal', '')
+                    installment.debt_in = safe_decimal(post_data.get('debt_in', '0'))
+                    installment.debt_informal = safe_decimal(post_data.get('debt_informal', '0'))
                     installment.create_to_branch_id = post_data.get('branch', '')
                     installment.create_to_province_id = post_data.get('province_save', '')
                     installment.company_id = post_data.get('company_id', '')
