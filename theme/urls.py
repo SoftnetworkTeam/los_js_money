@@ -16,7 +16,7 @@ urlpatterns = [
     path("name-list/edit/<id>", views.editFormcommon, name='edit'),
     path("name-list/create", views.createCustomer, name='name-list_create'),
     re_path(r"^edit/$", views.createCustomer, name="editoldcar"),
-    
+    path("detaildelete/<int:file_id>/", views.DetailDeleteFile, name='detaildelete_file'),
   
     path("configurations/<str:grade_type>",views.configurations,  name='configurations'),
     path("configurations/<str:grade_type>/create", views.configurations, name='grade-low'),

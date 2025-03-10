@@ -1297,7 +1297,7 @@
                           <div class="mb-3 row">
                             <div class="col-lg-10">
                               <div class="input-group">
-                                <span class="btn btn-danger" style="position:absolute;right:0px;z-index:100" onclick="deleteFile('file_{{ files.id }}','true');">ลบ</span>
+                                {% comment %} <span class="btn btn-danger" style="position:absolute;right:0px;z-index:100" onclick="deleteFile('file_{{ files.id }}','true');">ลบ</span> {% endcomment %}
                                 <input class="form-control d-none" type="file" id="file_{{ files.id }}" name="file_{{ files.id }}" multiple onchange="attachFile('file_{{ files.id }}','true')" accept="image/jpeg,image/jpg,image/png" >
                                 <img id="img-file_{{ files.id }}" style="border-radius: 25px; cursor: pointer; height: 200px; object-fit: cover;" onclick="selectImg('file_{{ files.id }}','true')" src="/media/{{ files.name }}" width="100%">
                               </div>
@@ -1321,6 +1321,7 @@
                           </div>
                         </div>
                         {% endfor %}
+                        <input type="hidden" value="{{ file|length }}" id="countFile" readonly>
                       {% else %}
                         {# ถ้า file เป็นค่าว่าง ให้แสดงช่องอัปโหลดเอกสาร 1 อัน #}
                         <div class="col-xl-6">
@@ -1543,7 +1544,18 @@
 
 
   
-  var fileRowCount = 1;
+  var fileRowCount = '';
+
+  if (add_loan) {
+    fileRowCount = 1;
+  } else {
+    var countFile = $('#countFile').val();
+    if (countFile === '0' || countFile === '' || countFile === undefined) {
+       fileRowCount = 1;
+    } else {
+       fileRowCount = 0;
+    }
+  }
 
   function addFileRow() {
     fileRowCount++;

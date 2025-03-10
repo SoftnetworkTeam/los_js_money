@@ -25,8 +25,8 @@ from rest_framework import status
 from django.contrib import messages
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-
-
+import os
+import time
 import re
 
 def safe_decimal(value, default=Decimal('0')):
@@ -444,7 +444,7 @@ def insertInstallment(request):
         
         # return JsonResponse({"status": "success", "message": "Received data", "data": request.POST}, status=200)
         id = request.POST.get('id', None)
-        print('ssss id',id)
+        # print('ssss id',id)
         post_data = request.POST.dict()
         
         print('post_data',post_data)
@@ -818,10 +818,10 @@ def insertInstallment(request):
                     )
                     customerAddress.save()
                
-                if post_data['start_payment']:
-                    start_payment = formatDate(post_data['start_payment'])
-                else:
-                    start_payment = None
+                # if post_data['start_payment']:
+                #     start_payment = formatDate(post_data['start_payment'])
+                # else:
+                #     start_payment = None
 
                 if post_data['bank_id']:
                     bank_id = post_data['bank_id']
@@ -880,7 +880,7 @@ def insertInstallment(request):
                         total=safe_decimal(post_data.get('net_amount', '0')),  
                         interest=safe_decimal(post_data.get('interest', '0')),  
                         installment=int(post_data.get('installment', 0)),  
-                        start_payment=start_payment,
+                        # start_payment=start_payment,
                         date_read_card=formatDate(post_data.get('read_card', '')),
                         user_id=request.session.get('username', ''),
                         salary_day=post_data.get('salary_day', ''),
@@ -922,6 +922,7 @@ def insertInstallment(request):
                     )
                     customerIncome.save()
 
+                
                 file_index = 1  
 
                 for file_key in request.FILES.keys():
@@ -929,39 +930,43 @@ def insertInstallment(request):
                         new_file_key = f'file_{file_index}'
                         
                         files = request.FILES.getlist(file_key)
-                        file_id = file_key.split('_')[1]
-                        file_id = int(file_id)
+                        file_id = int(file_key.split('_')[1])
                         
                         if files:
                             for file in files:
                                 file_type_key = f'file_type_{file_index}'
-                                print('file_type_key',file_type_key)
                                 file_type = request.POST.get(file_type_key, '')
-                                
-                                print(f"File {new_file_key}: {file}")
-                                print(f"File type {new_file_key}: {file_type}")
-                                
+
                                 try:
                                     installmentFileFilter = InstallmentFile.objects.filter(id=file_id).first()
-                                    print('installmentFileFilter',installmentFileFilter)
                                 except InstallmentFile.DoesNotExist:
                                     installmentFileFilter = None
-                                    
+                                
+                                fs = FileSystemStorage()
+                                
+                                # สร้างชื่อไฟล์ใหม่โดยเพิ่ม timestamp
+                                timestamp = int(time.time())
+                                filename, file_extension = os.path.splitext(file.name)
+                                new_filename = f"{filename}_{timestamp}{file_extension}"
+                                
                                 if installmentFileFilter:
+                                    file_path = installmentFileFilter.name.path
+                                    print('Deleting old file:', file_path)
+                                    FileSystemStorage().delete(file_path)
+
+                                    fs.save(new_filename, file)
                                     installmentFile = installmentFileFilter
-                                    installmentFile.installment_id = installment.id
-                                    installmentFile.name = file.name
-                                    if file_type not in (None, ''):
+                                    installmentFile.name = new_filename
+                                    if file_type:
                                         installmentFile.type = file_type
                                         installmentFile.doc_id = file_type
 
                                     installmentFile.save()
                                 else:
-                                    fs = FileSystemStorage()
-                                    fs.save(file.name, file)  
+                                    fs.save(new_filename, file)
                                     installmentFile = InstallmentFile.objects.create(
                                         installment_id=installment.id,
-                                        name=file.name,
+                                        name=new_filename,
                                         type=file_type,
                                         doc_id=file_type 
                                     )

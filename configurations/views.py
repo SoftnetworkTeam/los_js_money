@@ -308,7 +308,7 @@ class updateData(BaseListAPIView):
     def post(self, request, *args, **kwargs):
         post_data = request.POST.dict()
         
-        print('request ssss',request.session['user_id'])
+        # print('request ssss',request.session['user_id'])
         
         data_type = post_data.get('data_type')
         type_button = post_data.get("type_button")
