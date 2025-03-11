@@ -240,3 +240,59 @@ body {
   --bs-btn-disabled-border-color: #0069d9;
   --bs-gradient: none;
 }
+
+:root {
+ --bs-emphasis-color: rgb(20, 63, 85);
+}
+
+
+.tooltip-inner {
+  border-radius: 0;
+  border-color: var(--bs-emphasis-color);
+  color: #fff;
+  background-color: var(--bs-emphasis-color);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2); 
+  font-size: 14px; 
+}
+
+.tooltip-arrow {
+  border-top-color: var(--bs-emphasis-color) !important;
+
+}
+
+.k-grid td,
+.k-grid th {
+  border: 0.5px solid  rgb(20, 63, 85) !important;
+  border-bottom: 0.5px solid #dfdfdf !important;
+}
+
+.input_conf {
+  width: 80;
+  height: 50%;
+  border-radius: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body {
+  flex-grow: 1;
+}
+
+#empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#empty-state .fas {
+  font-size: 60px;
+  color: #ccc;
+}
+
+#empty-state p {
+  margin-top: 1rem;
+}

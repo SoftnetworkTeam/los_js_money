@@ -574,7 +574,7 @@ function getCookie(name) {
 
 
 
-function changStatus(type, id, dataType,status=null,typeUrl=null,userauth=null) {
+function changStatus(type, id, status,statusType,userauth=null) {
   var color = "";
   var tmpTitle = "";
 
@@ -599,10 +599,9 @@ function changStatus(type, id, dataType,status=null,typeUrl=null,userauth=null) 
     if (result.isConfirmed) {
       $(document).ready(function () {
         var formData = new FormData();
-        formData.append("type", typeUrl);
+        formData.append("type", statusType);
         formData.append("status", status);
         formData.append("id", id);
-        formData.append("data_type", dataType);
         formData.append("userauth_id", userauth);
 
         $.ajax({

@@ -78,12 +78,12 @@ $(document).ready(function () {
                 return `
                 <div class="d-flex justify-content-between border-0" id="status-${dataItem.id}">
                     <ul class="nav nav-tabs dzm-tabs" role="tablist" style="background-color: #ebebeb;">
-                        <li class="nav-item" role="presentation" onclick="changStatus('active', '${dataItem.id}','userauth','t','statusUserauth','${id}')">
+                        <li class="nav-item" role="presentation" onclick="changStatus('active', '${dataItem.id}','t','statusUserauth','${id}')">
                             <button class="nav-link btn btn-success btn-sm" type="button" role="tab" aria-selected="false"${dataItem.status === true ? ' style="background-color: #3AC977;" ' : ""} id="status-active-${dataItem.id}">
                                 ใช้งาน
                             </button>
                         </li>
-                        <li class="nav-item" role="presentation" onclick="changStatus('inActive', '${dataItem.id}','userauth','f','statusUserauth','${id}')">
+                        <li class="nav-item" role="presentation" onclick="changStatus('inActive', '${dataItem.id}','f','statusUserauth','${id}')">
                             <button class="nav-link btn btn-danger btn-sm" type="button" role="tab" aria-selected="true" ${dataItem.status === false ? ' style="background-color: #FF5E5E;" ' : ""} id="status-inactive-${dataItem.id}">ไม่ใช้งาน
                             </button>
                         </li>

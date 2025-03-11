@@ -1,42 +1,5 @@
 {% extends "base.html" %} {% load static %} {% block title %}
 <title>ข้อมูลผู้ขอสินเชื่อ</title>
-<style>
-  .k-grid td, .k-grid th {
-    border: 0.5px solid transparent !important;
-    border-bottom: 0.5px solid #dfdfdf !important;
-  }
-
-  .input_conf {
-    width: 80;
-    height: 50%;
-    border-radius: 20px;
-  }
-
-  .card {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .card-body {
-    flex-grow: 1;
-  }
-
-  #empty-state {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-  }
-
-  #empty-state .fas {
-    font-size: 60px;
-    color: #ccc;
-  }
-
-  #empty-state p {
-    margin-top: 1rem;
-  }
-</style>
 {% endblock %} {% block content %}
 
 <div class="content-body">
@@ -48,12 +11,91 @@
             <div class="mb-3 mt-3 d-flex justify-content-between">
               <h3 style="margin-left: 13px" id="title"></h3>
               {% if auth_insert_info == True %}
-                <a id="openDialogButton" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>เพิ่มข้อมูล</a>
+              <a id="openDialogButton" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>เพิ่มข้อมูล</a>
               {% endif %}
-            </div><hr />
+            </div>
+            <hr />
             <form method="POST">
-              {% csrf_token %}
+              {% csrf_token %} {% comment %}
               <div id="form_data"></div>
+              {% endcomment %}
+              <table id="example" class="display table">
+                <thead>
+                  <tr>
+                    <th>ลำดับ</th>
+                    <th>
+                        {% if data_type == "grade" %}
+                            เกรด
+                        {% else %}
+                            ชื่อ
+                        {% endif %}
+                    </th>
+                    {% if data_type == "scoring" %}
+                    <th><span style='cursor: pointer' data-bs-toggle='tooltip' title='คะแนนขั้นต่ำ (เกณฑ์ของผู้มีรายได้สม่ำเสมอ)'>คะแนนขั้นต่ำ...</span></th>
+                    <th><span style='cursor: pointer' data-bs-toggle='tooltip' title='หนี้ต่อรายได้ขั้นต่ำ (เกณฑ์ของผู้มีรายได้สม่ำเสมอ)'>หนี้ต่อรายได้ขั้นต่ำ...</span></th>
+                    <th><span style='cursor: pointer' data-bs-toggle='tooltip' title='คะแนนขั้นต่ำ (เกณฑ์ของผู้มีรายได้ไม่สม่ำเสมอ)'>คะแนนขั้นต่ำ...</span></th>
+                    <th><span style='cursor: pointer' data-bs-toggle='tooltip' title='หนี้ต่อรายได้ขั้นต่ำ (เกณฑ์ของผู้มีรายได้ไม่สม่ำเสมอ)'>หนี้ต่อรายได้ขั้นต่ำ...</span></th>
+                    <th>ผู้บันทึก</th>
+                    {% endif %}
+
+                    <th>สถานะ</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if type_obj %} {% for grade in type_obj %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+
+                    {% if data_type == "grade" %}
+                        <td><input class='form-control input_conf text1' value='{{ grade.grade_code }}'></td>
+                    {% else %}
+                        <td><input class='form-control input_conf text1' style="width: 120;" value='{{ grade.score_name }}'></td>
+                        <td><input class='form-control input_conf text2' value='{{ grade.stable_min }}'></td>
+                        <td><input class='form-control input_conf text3' value='{{ grade.stable_percent }}'></td>
+                        <td><input class='form-control input_conf text4' value='{{ grade.not_stable_min }}'></td>
+                        <td><input class='form-control input_conf text5' value='{{ grade.not_stable_percent }}'></td>
+                        <td>{{ grade.first_name }}</td>
+                    {% endif %}
+
+                    <td>
+                        <div class="d-flex justify-content-between border-0" id="status-{{ grade.id }}">
+                            <ul class="nav nav-tabs dzm-tabs" role="tablist" style="background-color: #ebebeb;">
+                              <li class="nav-item" role="presentation" onclick="changStatus('active', {{ grade.id }},  'A', '{{status_type}}')">
+                                <button class="nav-link btn btn-success btn-sm" type="button" role="tab" aria-selected="false"
+                                  id="status-active-{{ grade.id }}"
+                                  {% if grade.status == "A" %} style="background-color: #3AC977;" {% endif %}>
+                                  ใช้งาน
+                                </button>
+                              </li>
+                              <li class="nav-item" role="presentation" onclick="changStatus('inActive', {{ grade.id }},  'C', '{{status_type}}')">
+                                <button class="nav-link btn btn-danger btn-sm" type="button" role="tab" aria-selected="true"
+                                  id="status-inactive-{{ grade.id }}"
+                                  {% if grade.status == "C" %} style="background-color: #E46A76;" {% endif %}>
+                                  ไม่ใช้งาน
+                                </button>
+                              </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        {% if data_type == "scoring" %}
+                            <a href="detail/${dataItem.id}" class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" title="รายละเอียด">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </a>
+                        {% endif %}
+
+                        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" onclick="submitData(this,{{ grade.id }},'save','{{status_type}}','A','{{data_type}}')"><i class="fas fa-save"></i></button>
+                        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" type="button" title="ลบ" onclick="submitData(this,{{ grade.id }},'delete','{{status_type}}','C','{{data_type}}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  {% endfor %} {% else %}
+                  <tr>
+                    <td colspan="8" class="text-center">ไม่พบข้อมูล</td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
             </form>
           </div>
         </div>
@@ -65,17 +107,15 @@
 {% endblock %} {% block script %}
 <script>
   var authEdit = "{{ auth_edit_delete }}";
-  var typeUrl = null;
-  if (window.location.pathname.includes("grade-income")) {
-    typeUrl = "statusIncome";
+  var typeUrl = "{{ grade_type }}";
+
+  if (typeUrl == "grade-income") {
     title = "กำหนดข้อมูล เกรดผู้มีรายได้ประจำ";
     $("#title").text(title);
-  } else if (window.location.pathname.includes("grade-unstable")) {
-    typeUrl = "statusNotIncome";
+  } else if (typeUrl == "grade-unstable") {
     title = "กำหนดข้อมูล เกรดผู้มีรายได้ไม่สม่ำเสมอ";
     $("#title").text(title);
-  } else if (window.location.pathname.includes("scoring")) {
-    typeUrl = "statusScoring";
+  } else if (typeUrl == "scoring") {
     title = "กำหนดข้อมูล การให้คะแนนผู้กู้";
     $("#title").text(title);
   }
@@ -84,307 +124,36 @@
     $("#openDialogButton").kendoButton({
       cssClass: "custom-button",
     });
-
-    var url_grade_income = window.location.href.includes("grade-income");
-    var url_grade_unstable = window.location.href.includes("grade-unstable");
-    var url_scoring = window.location.href.includes("scoring");
-    var url_create = window.location.href.includes("create");
-
-    var href = "";
-    var type_text = "";
-    var title_name = "";
-    var field_name = "";
-    var title_new1 = "";
-    var title_new2 = "";
-    var title_new3 = "";
-    var title_new4 = "";
-    var title_new5 = "";
-    var init = "";
-    var btn = "";
-
-    function truncateText(text, maxLength = 10) {
-      return text.length > maxLength
-        ? text.substring(0, maxLength) + "..."
-        : text;
-    }
-
-    if (url_grade_income) {
-      href = "grade-income";
-      width_name = "35%";
-      $("#openDialogButton").attr("href", href + "/create");
-      type_text = "ยังไม่ได้เพิ่มมูลเกรดผู้มีรายได้ประจำ";
-      title_name = "เกรด";
-      field_name = "grade_code";
-     
-      url_table = "{% url 'configurations:Masterincomestable' %}";
-      data_type = "grade";
-      init = {
-        id: { type: "int" },
-        grade_code: { type: "string" },
-        status: { type: "string" },
-      };
-    } else if (url_grade_unstable) {
-      href = "grade-unstable";
-      width_name = "35%";
-      $("#openDialogButton").attr("href", href + "/create");
-      type_text = "ยังไม่ได้เพิ่มมูลเกรดผู้มีรายได้ไม่คงที่";
-      title_name = "เกรด";
-      field_name = "grade_code";
-      url_table = "{% url 'configurations:Masterincomenotstable' %}";
-      data_type = "grade";
-      init = {
-        id: { type: "int" },
-        grade_code: { type: "string" },
-        status: { type: "string" },
-      };
-    } else if (url_scoring) {
-      href = "scoring";
-      type_text = "ยังไม่ได้เพิ่มเกณฑ์การให้คะแนนผู้กู้";
-      width_name = "87%";
-      $("#openDialogButton").attr("href", href + "/create");
-      title_name = "ชื่อ";
-      field_name = "score_name";
-      title_new1 = {
-        field: "stable_min",
-        width: 50,
-        headerTemplate:
-          "<span style='cursor: pointer' data-bs-toggle='tooltip' title='คะแนนขั้นต่ำ (เกณฑ์ของผู้มีรายได้สม่ำเสมอ)'>คะแนนขั้นต่ำ...</span>",
-        template:
-          "<input class='form-control input_conf text2' value='#=stable_min#' onkeypress='return event.charCode >= 48 && event.charCode <= 57'>",
-      };
-
-      title_new2 = {
-        field: "stable_percent",
-        width: 50,
-        headerTemplate:
-          "<span style='cursor: pointer' data-bs-toggle='tooltip' title='หนี้ต่อรายได้ขั้นต่ำ (เกณฑ์ของผู้มีรายได้สม่ำเสมอ)'>หนี้ต่อรายได้ขั้นต่ำ...</span>",
-        template:
-          "<input class='form-control input_conf text3' value='#=stable_percent#' onkeypress='return event.charCode >= 48 && event.charCode <= 57'>",
-      };
-
-      title_new3 = {
-        title: "คะแนนขั้นต่ำ...",
-        field: "not_stable_min",
-        width: 50,
-        headerTemplate:
-          "<span style='cursor: pointer' data-bs-toggle='tooltip' title='คะแนนขั้นต่ำ (เกณฑ์ของผู้มีรายได้ไม่สม่ำเสมอ)'>คะแนนขั้นต่ำ...</span>",
-        template:
-          "<input class='form-control input_conf text4' value='#=not_stable_min#' onkeypress='return event.charCode >= 48 && event.charCode <= 57'>",
-      };
-
-      title_new4 = {
-        title: "หนี้ต่อรายได้ขั้นต่ำ...",
-        field: "not_stable_percent",
-        width: 50,
-        headerTemplate:
-          "<span style='cursor: pointer' data-bs-toggle='tooltip' title='หนี้ต่อรายได้ขั้นต่ำ (เกณฑ์ของผู้มีรายได้ไม่สม่ำเสมอ)'>หนี้ต่อรายได้ขั้นต่ำ...</span>",
-        template:
-          "<input class='form-control input_conf text5' value='#=not_stable_percent#' onkeypress='return event.charCode >= 48 && event.charCode <= 57'>",
-      };
-
-      title_new5 = {
-        title: "ผู้บันทึก",
-        field: "first_name",
-        width: 100,
-      };
-
-      url_table = "{% url 'configurations:Masterscoringinfo' %}";
-      data_type = "scoring";
-      init = {
-        id: { type: "int" },
-        score_name: { type: "string" },
-        status: { type: "string" },
-        stable_min: { type: "string" },
-        stable_percent: { type: "string" },
-        not_stable_min: { type: "string" },
-        not_stable_percent: { type: "string" },
-      };
-      btn = function (dataItem) {
-        let btnHTML = `
-            <a href="detail/${dataItem.id}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" title="รายละเอียด">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </a>
-        `;
-    
-        if (authEdit == "True") {
-            btnHTML += `
-                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" 
-                    onclick="submitData(this, '${dataItem.id}', 'save', '${data_type}')">
-                    <i class="fas fa-save"></i>
-                </button>
-                <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" type="button" title="ลบ" 
-                    onclick="submitData(this, '${dataItem.id}', 'delete', '${data_type}')">
-                    <i class="fas fa-trash"></i>
-                </button> 
-            `;
-        }
-    
-        return btnHTML;
-      };
-    
-    }
-
-    var type = "{{ type }}";
-
-    if (type === "not null" && !url_create) {
-      $("#form_data").html(`<div id="grid" class="grid_font_size"></div>`);
-    } else if (type === "null" && !url_create) {
-      $("#form_data").html(
-        `<div class="row text-center" id="empty-state">
-                  <div class="w-100">
-                      <i class="fas fa-box-open"></i>
-                      <p class="mt-3" id="empty-state-text">
-                          ${type_text}
-                          <a href="${href}/add" id="select-link" style="color: #03A9F3; text-decoration: underline;">
-                              เพิ่มข้อมูล
-                          </a>
-                      </p>
-                  </div>
-              </div>`
-      );
-      $(".card").addClass("card").css("height", "680px");
-    } else if (url_create && (url_grade_income || url_grade_unstable)) {
-      $("#form_data").html("sss");
-    } else if (url_create && url_scoring) {
-      $("#form_data").html("aaa");
-    }
-
-    var columns = [
-      { title: "<b>ลำดับ</b>", template: "#= index #", width: 5 },
-      {
-        title: `<b>${title_name}</b>`,
-        field: `${field_name}`,
-        width: 120,
-        template: `<input style='width:${width_name}' class='form-control input_conf text1' value='#=${field_name}#'>`,
-      },
-    ];
-
-    if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
-      columns.push( title_new1,title_new2, title_new3, title_new4);
-    }
-    if(authEdit == "True"){
-      columns.push({
-        title: "<b>สถานะ</b>",
-        width: 100,
-        field: "status",
-        template: function (dataItem) {
-          return `
-          <div class="d-flex justify-content-between border-0" id="status-${
-            dataItem.id
-          }">
-              <ul class="nav nav-tabs dzm-tabs" role="tablist" style="background-color: #ebebeb;">
-                  <li class="nav-item" role="presentation" onclick="changStatus('active', '${dataItem.id}','${data_type}','A','${typeUrl}')">
-                      <button class="nav-link btn btn-success btn-sm" type="button" role="tab" aria-selected="false"
-                          ${
-                            dataItem.status == "A"
-                              ? ' style="background-color: #3AC977;" '
-                              : ""
-                          } id="status-active-${dataItem.id}">ใช้งาน
-                      </button>
-                  </li>
-                  <li class="nav-item" role="presentation" onclick="changStatus('inActive', '${dataItem.id}','${data_type}','C','${typeUrl}')">
-                      <button class="nav-link btn btn-danger btn-sm" type="button" role="tab" aria-selected="true"
-                          ${
-                            dataItem.status == "C"
-                              ? ' style="background-color: #E46A76;" '
-                              : ""
-                          } id="status-inactive-${dataItem.id}">ไม่ใช้งาน
-                      </button>
-                  </li>
-              </ul>
-          </div>`;
-        },
-      });
-
-    
-      if (url_grade_income || url_grade_unstable) {
-        columns.push({
-          title: "<b>Action</b>",
-          width: 100,
-          template: function (dataItem) {
-            return `
-              <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" onclick="submitData(this,'${dataItem.id}','save','${data_type}','A','${typeUrl}')"><i class="fas fa-save"></i></button>
-              <button class="btn btn-danger btn-sm" data-bs-toggle="tooltip" type="button" title="ลบ" onclick="submitData(this,${dataItem.id},'delete','${data_type}','C','${typeUrl}')"><i class="fas fa-trash"></i></button>
-            `;
-          },
-          attributes: { style: "text-align: left;" },
-        });
-      }
-    }
-   
-
-    if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
-      columns.push(title_new5);
-    }
-
-      if (url_scoring && (!url_grade_income || !url_grade_unstable)) {
-        columns.push({
-          title: "<b>Action</b>",
-          width: 100,
-          template: function (dataItem) {
-            return btn(dataItem);
-          },
-          attributes: { style: "text-align: left;" },
-        });
-      }
-    
-
-    initKendoGrid(
-      "#grid",
-      url_table,
-      columns,
-      {
-        stable_min: { type: "number", defaultValue: 0 },
-        stable_percent: { type: "number", defaultValue: 0 },
-        not_stable_min: { type: "number", defaultValue: 0 },
-        not_stable_percent: { type: "number", defaultValue: 0 },
-      },
-      "id",
-      "desc"
-    );
+// ใช้ JavaScript ในการเปิดใช้งาน tooltip
+var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
 
   });
 
-  urlupdateStatus = "{% url 'configurations:updateStatus' %}";
-
-
-
+  var urlupdateStatus = "{% url 'configurations:updateStatus' %}";
   var urlupdateData = "{% url 'configurations:updateData' %}";
 
-  function submitData(btn, id, statusBtn, dataType) {
-    let typeUrl = "";
+  function submitData(btn, id, statusBtn,status_type,status,dataType) {
     var selectedRow = $(btn).closest("tr");
+
+    console.log(id, statusBtn, status_type,dataType,typeUrl)
 
     var formData = new FormData();
     formData.append("id", id);
     formData.append("type_button", statusBtn);
     formData.append("data_type", dataType);
 
-    if (window.location.pathname.includes("grade-income")) {
-      typeUrl = "statusIncome";
-      var input_text1 =
-        selectedRow.find("input.form-control.text1").val() || "";
+    if (typeUrl == "grade-income" || typeUrl == "grade-unstable") {
+      var input_text1 = selectedRow.find("input.form-control.text1").val() || "";
 
       formData.append("grade_code", input_text1);
-    } else if (window.location.pathname.includes("grade-unstable")) {
-      typeUrl = "statusNotIncome";
-      var input_text1 =
-        selectedRow.find("input.form-control.text1").val() || "";
-
-      formData.append("grade_code", input_text1);
-    } else if (window.location.pathname.includes("scoring")) {
-      typeUrl = "statusScoring";
-      var input_text1 =
-        selectedRow.find("input.form-control.text1").val() || "";
-      var input_text2 =
-        selectedRow.find("input.form-control.text2").val() || "";
-      var input_text3 =
-        selectedRow.find("input.form-control.text3").val() || "";
-      var input_text4 =
-        selectedRow.find("input.form-control.text4").val() || "";
-      var input_text5 =
-        selectedRow.find("input.form-control.text5").val() || "";
+    } else {
+      var input_text1 = selectedRow.find("input.form-control.text1").val() || "";
+      var input_text2 = selectedRow.find("input.form-control.text2").val() || "";
+      var input_text3 = selectedRow.find("input.form-control.text3").val() || "";
+      var input_text4 = selectedRow.find("input.form-control.text4").val() || "";
+      var input_text5 = selectedRow.find("input.form-control.text5").val() || "";
 
       formData.append("score_name", input_text1);
       formData.append("stable_min", input_text2);
@@ -393,7 +162,9 @@
       formData.append("not_stable_percent", input_text5);
     }
 
-    formData.append("type", typeUrl);
+    formData.append("type", status_type);
+
+    console.log(input_text1)
 
     $.ajax({
       url: urlupdateData,
@@ -412,7 +183,7 @@
           var grid = $("#grid").data("kendoGrid");
           var dataItem = grid.dataItem(selectedRow);
           grid.dataSource.remove(dataItem);
-        }else if (response.status == "can't delete"){
+        } else if (response.status == "can't delete") {
           notification("แจ้งเตือน", "ไม่สามารถลบข้อมูลหลักได้", "warnning", "ปิด");
         }
       },
@@ -424,25 +195,72 @@
 
   $("#openDialogButton").on("click", function (e) {
     e.preventDefault();
-   
-      var grid = $("#grid").data("kendoGrid");
-      var dataSource = grid.dataSource;
-      var newIndex = dataSource.total() + 1;
-  
-      var newRow = {
-        id: newIndex,
-        grade_code: "",
-        score_name: "",
-        status: "A",
-        stable_min: 0,
-        stable_percent: 0,
-        not_stable_min: 0,
-        not_stable_percent: 0,
-      };
-  
-  
-      dataSource.add(newRow);
 
-  });
+    $("#example tbody tr:contains('ไม่พบข้อมูล')").remove();
+
+    let dataType = "{{ data_type }}"; 
+    let rowCount = $("#example tbody tr").length + 1; 
+    let newRow = "<tr>";
+
+    newRow += `<td>${rowCount}</td>`; 
+
+    if (dataType === "grade") {
+        newRow += "<td><input class='form-control input_conf text1' value=''></td>";
+    } else {
+        newRow += "<td><input class='form-control input_conf text1' style='width: 120px;' value=''></td>";
+        newRow += "<td><input class='form-control input_conf text2' value=''></td>";
+        newRow += "<td><input class='form-control input_conf text3' value=''></td>";
+        newRow += "<td><input class='form-control input_conf text4' value=''></td>";
+        newRow += "<td><input class='form-control input_conf text5' value=''></td>";
+        newRow += "<td>ยังไม่ได้บันทึก</td>";
+    }
+
+    newRow += `
+    <td>
+        <div class="d-flex justify-content-between border-0">
+            <ul class="nav nav-tabs dzm-tabs" role="tablist" style="background-color: #ebebeb;">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link btn btn-success btn-sm" type="button">
+                        ใช้งาน
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link btn btn-danger btn-sm" type="button">
+                        ไม่ใช้งาน
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </td>`;
+
+    newRow += `
+    <td>
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" onclick="submitData(this,${rowCount},'save','{{status_type}}','A','{{data_type}}')">
+            <i class="fas fa-save"></i>
+        </button>
+        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" title="ลบ" onclick="removeRow(this)">
+            <i class="fas fa-trash"></i>
+        </button>
+    </td>`;
+
+    newRow += "</tr>";
+
+    $("#example tbody").append(newRow);
+    updateRowNumbers();
+});
+
+// ฟังก์ชันลบแถว และอัปเดตลำดับใหม่
+function removeRow(button) {
+    $(button).closest("tr").remove();
+    updateRowNumbers();
+}
+
+// ฟังก์ชันอัปเดตลำดับของแต่ละแถว
+function updateRowNumbers() {
+    $("#example tbody tr").each(function (index) {
+        $(this).find("td:first").text(index + 1); 
+    });
+}
+
 </script>
 {% endblock %}

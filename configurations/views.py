@@ -285,14 +285,13 @@ class updateStatus(BaseListAPIView):
         status_id = post_data.get('id')
         status = post_data.get('status')
         status_type = post_data.get('type')
-        data_type = post_data.get('data_type')
         
         
-        if status_type == "statusIncome" and data_type == "grade":
+        if status_type == "statusIncome" :
             Masterincomestable.objects.filter(id=status_id).update(status=status)
-        elif status_type== "statusNotIncome" and data_type == "grade":
+        elif status_type== "statusNotIncome" :
             Masterincomenotstable.objects.filter(id=status_id).update(status=status)
-        elif status_type == "statusScoring" and data_type == "scoring":
+        elif status_type == "statusScoring" :
             Masterscoringinfo.objects.filter(id=status_id).update(status=status)
         elif status_type == "statusUserauth":
             UserAuth.objects.filter(id=status_id).update(status=status)

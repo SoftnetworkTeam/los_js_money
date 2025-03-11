@@ -20,11 +20,10 @@ from utilis.function import BaseListAPIView
 from rest_framework.generics import ListAPIView
 from configurations.views import Mastercountry
 
-
 from theme.models import MasterProvince, MasterAmphoe, MasterTambon, \
     MasterCifDigit, \
     MasterCustomerPrename, MasterOccupation, apmast, MasterNCB,Masterincomestable,Masterincomenotstable,Masterscoringinfo,Mastercustomerage,Mastermaritalstatus,Masterminorchildren,Mastereducationlevel,Masterbusinesstype,Mastermonthlyprofit,Masterbusinessage,Mastercontractreason,MasterNumberOfInstallment,Mastershoptypes,Masterrentalage,MasterBank,Masterbranch,MasterContractDocument,LogUserLogin,Masterbranch, MasterCompany, UserBranch
-from django.db.models import Q 
+from django.db.models import Q,OuterRef, Subquery
 from userauth.models import UserAuth,AuthUser
 from configurations.models import AuthUser
 from .models import CustomerInfo, InstallmentDetail, CustomerLoanDetail, CustomerAddressDetail, \
@@ -71,35 +70,50 @@ def nameList(request):
 
 # @login_required(login_url='/user_login')
 # @check_permission
+
 def configurations(request, grade_type=None):
     type_obj = []
+    status_type = None
+    data_type = None
 
     if grade_type == 'grade-income':
-        type_obj = list(Masterincomestable.objects.all().values())
+        type_obj = Masterincomestable.objects.all().order_by('id') 
+        status_type = 'statusIncome'
+        data_type = 'grade'
     elif grade_type == 'grade-unstable':
-        type_obj = list(Masterincomenotstable.objects.all().values())
+        type_obj = Masterincomenotstable.objects.all().order_by('id')
+        status_type = 'statusNotIncome'
+        data_type = 'grade'
     elif grade_type == 'scoring':
-        type_obj = list(Masterscoringinfo.objects.all().values())
+        type_obj = Masterscoringinfo.objects.all().annotate(
+            first_name=Subquery(
+                AuthUser.objects.filter(id=OuterRef('user_id')).values('first_name')[:1]
+            )
+        ).order_by("id")
+        status_type = 'statusScoring'
+        data_type = 'scoring'
 
-    user_admin = list(AuthUser.objects.all().values())
+    # โหลดข้อมูล user_admin ก่อนใช้
+    user_admin = AuthUser.objects.all().order_by('id')
 
-    type_status = 'not null' if type_obj else 'null'
-
-    # ถ้า grade_type เป็น 'scoring' ให้แมป user_id -> username
     if grade_type == 'scoring':
-        user_dict = {user["id"]: user["username"] for user in user_admin}
+        # สร้าง dictionary ของ user_id -> username
+        user_dict = {user.id: user.username for user in user_admin}
 
-        # เพิ่ม username เข้าไปในแต่ละ object ของ type_obj
+        # แปลง QuerySet เป็น list ของ dictionary
+        type_obj = list(type_obj.values())
+
+        # เพิ่ม username ให้แต่ละ item
         for item in type_obj:
             item["username"] = user_dict.get(item["user_id"], "ไม่พบข้อมูล")
 
     return render(request, 'configurations.html', {
         'grade_type': grade_type,
-        'type': type_status,
         'type_obj': type_obj, 
+        'status_type' : status_type,
+        'data_type' : data_type,
     })
-
-    
+       
 @login_required(login_url='/user_login')
 @check_permission
 def configurationsDetail(request, id  ):

@@ -17,20 +17,14 @@ urlpatterns = [
     path("name-list/create", views.createCustomer, name='name-list_create'),
     re_path(r"^edit/$", views.createCustomer, name="editoldcar"),
     path("detaildelete/<int:file_id>/", views.DetailDeleteFile, name='detaildelete_file'),
-  
     path("configurations/<str:grade_type>",views.configurations,  name='configurations'),
     path("configurations/<str:grade_type>/create", views.configurations, name='grade-low'),
-    
-    
     path('name-list', views.nameList, name='nameList'),
     path('customer-api/', CustomerLoanDetailApiView.as_view(), name='customer_loan_d_api'),
-    
     path("notfound/<id>", views.notfound, name='notfound'),
     path("user_login", views.user_login),
     path('save_branch/', views.save_branch),
     path("logout", views.logout_view, name="logout"),
-
-
 ]
 
 if settings.DEBUG:
