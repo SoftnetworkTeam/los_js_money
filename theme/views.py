@@ -60,16 +60,23 @@ def notfound():
 
 @login_required(login_url='/user_login')
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    company_id = request.session.get('company_id')
 
-
+    installment_all = InstallmentDetail.objects.filter(company_id=company_id).count()
+    installment_approve = InstallmentDetail.objects.filter(status_approve=1, company_id=company_id).count()
+    installment_waiting = InstallmentDetail.objects.filter(status_approve__isnull=True, company_id=company_id).count()
+    
+    return render(request, 'dashboard.html', {
+        'installment_all': installment_all,
+        'installment_approve': installment_approve,
+        'installment_waiting': installment_waiting,
+    })
+    
 @login_required(login_url='/user_login')
 def nameList(request):
     customer_loan_detail = CustomerLoanDetail.objects.all()
     return render(request, 'nameList.html', {'customer_loan_detail': customer_loan_detail})
 
-# @login_required(login_url='/user_login')
-# @check_permission
 
 def configurations(request, grade_type=None):
     type_obj = []

@@ -60,7 +60,7 @@ $(document).ready(function () {
                     let buttons = '';
 
                         buttons += `<a href="${editUrl}">
-                            <button class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="แก้ไขข้อมูล">
+                            <button class="btn btn-outline-warning btn-sm" data-bs-toggle="tooltip" title="แก้ไขข้อมูล">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                         </a>`;

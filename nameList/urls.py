@@ -23,10 +23,8 @@ urlpatterns = [
     path('MasterBank/',MasterBankAPIView.as_view(), name='MasterBank'),
     path('MasterContractDocument/',MasterContractDocumentAPIView.as_view(), name='MasterContractDocument'),
     path("insertInstallment", views.insertInstallment, name='insertInstallment'),
-    path('customer-api/', CustomerLoanDetailApiView.as_view(), name='customer-api'),
     path("hireContractApi/", HireContractApiView.as_view(), name='hireContractApi' ),
     path('MasterBrandRef/', MasterBrandAPIView.as_view(), name='MasterBrandRef'),
-    
     path('Mastercustomerage/', MastercustomerageApiView.as_view(), name='Mastercustomerage'),
     path('Mastereducationlevel/', MastereducationlevelApiView.as_view(), name='Mastereducationlevel'),
     path('Masterminorchildren/', MasterminorchildrenApiView.as_view(), name='Masterminorchildren'),

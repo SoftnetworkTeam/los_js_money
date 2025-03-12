@@ -23,7 +23,7 @@
     <!-- FAVICONS ICON -->
     <link rel="stylesheet" href="{% static 'vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=81">
-    <link rel="stylesheet" href="{% static 'css/css_all/css_all.css' %}?v=7">
+    <link rel="stylesheet" href="{% static 'css/css_all/css_all.css' %}?v=9">
     
     <link rel="stylesheet" href="{% static 'css/button.css' %}">
     
@@ -139,13 +139,13 @@
 	</div> 
 	<div id="main-wrapper" style="max-height: 100vh;overflow-y: auto;">
 		<div class="nav-header" style="position:fixed;">
-			<div class="nav-control">
+			{% comment %} <div class="nav-control">
 				<div class="hamburger" id="hamburger">
 					<span class="line"></span>
 					<span class="line"></span>
 					<span class="line"></span>
 				</div>
-			</div>
+			</div> {% endcomment %}
 			<a href="/" class="brand-logo">
 				<img src="{% static 'img/logo_login03.png' %}" width="50%">
 				<span class="k-ml-2" id="titleBase"> ระบบขออนุมัติสินเชื่อ</span>

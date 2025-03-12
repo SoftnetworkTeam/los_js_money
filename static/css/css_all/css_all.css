@@ -8,15 +8,14 @@
 
 body {
   font-family: "Noto Sans Thai";
-  src: url("/static/fonts/NotoSansThai-Bold.woff") format("woff"),
-    url("/static/fonts/NotoSansThai-Bold.woff2") format("woff2");
+  src: url("/static/fonts/NotoSansThai-Bold.woff") format("woff"), url("/static/fonts/NotoSansThai-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 .card-header {
-  background-color: #03A9F3;
+  background-color: #03a9f3;
   color: white;
   text-align: center;
   font-size: 14px;
@@ -30,7 +29,7 @@ body {
 }
 
 .toast-success {
-  background-color: #03A9F3 !important;
+  background-color: #03a9f3 !important;
   color: #fff !important;
 }
 
@@ -125,16 +124,12 @@ body {
   height: 40px !important;
 }
 
-.select2-container--default
-  .select2-selection--single
-  .select2-selection__rendered {
+.select2-container--default .select2-selection--single .select2-selection__rendered {
   line-height: 35px !important;
   color: #6e6e6e !important;
 }
 
-.select2-container--default
-  .select2-selection--single
-  .select2-selection__arrow {
+.select2-container--default .select2-selection--single .select2-selection__arrow {
   /* background-color: #ccc !important; */
   height: 38.5px !important;
   border-radius: 0 1px 1px 0px;
@@ -145,7 +140,7 @@ body {
 }
 
 .table thead th {
-  background: #03A9F3;
+  background: #03a9f3;
   color: #fff;
   border: 0;
 }
@@ -187,12 +182,12 @@ body {
 }
 
 #openDialogButton.k-button {
-  background-color: #03A9F3;
+  background-color: #03a9f3;
   color: white;
 }
 
 .k-dialog-titlebar {
-  background-color: #03A9F3 !important;
+  background-color: #03a9f3 !important;
 }
 
 .k-prompt-container,
@@ -242,28 +237,20 @@ body {
 }
 
 :root {
- --bs-emphasis-color: rgb(20, 63, 85);
+  --bs-emphasis-color: rgb(20, 63, 85);
 }
-
 
 .tooltip-inner {
   border-radius: 0;
   border-color: var(--bs-emphasis-color);
   color: #fff;
   background-color: var(--bs-emphasis-color);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2); 
-  font-size: 14px; 
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
+  font-size: 14px;
 }
 
 .tooltip-arrow {
   border-top-color: var(--bs-emphasis-color) !important;
-
-}
-
-.k-grid td,
-.k-grid th {
-  border: 0.5px solid  rgb(20, 63, 85) !important;
-  border-bottom: 0.5px solid #dfdfdf !important;
 }
 
 .input_conf {

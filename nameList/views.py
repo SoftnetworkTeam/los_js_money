@@ -38,17 +38,21 @@ def safe_decimal(value, default=Decimal('0')):
         return default
 
 class CustomerLoanDetailApiView(BaseListAPIView):
-    queryset = CustomerLoanDetail.objects.all()
     serializer_class = CustomerLoanDetailSerializer
-    
-# class CustomerDetailApiView(BaseListAPIView):
-#     queryset = CustomerLoanDetail.objects.all()
-#     serializer_class = CustomerLoanDetailSerializer
-    
-#     customer_info = CustomerInfo.objects.all()
-#     Installment_detail = InstallmentDetail.objects.all()
-#     def post(request):
-#         branch = Masterbranch.objects.filter(id=request.session['branch_id'])
+
+    def get_queryset(self):
+        status = self.kwargs.get('status')
+        company_id = self.request.session.get('company_id')
+        
+        if(status == 'approve') :
+            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,status_approve=1)
+        elif(status == 'waiting') :
+            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,status_approve__isnull=True)
+        else :
+            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id)
+        
+        return customer_detail
+
 
 class NoLimitPagination(PageNumberPagination):
     page_size = 1000  

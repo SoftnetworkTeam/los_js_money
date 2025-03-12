@@ -1099,6 +1099,7 @@ class CustomerLoanDetail(models.Model):
     occup_code = models.CharField(max_length=20)
     cont_no = models.CharField(max_length=20)
     cont_status = models.CharField(max_length=1)
+    company_id =  models.IntegerField()
     class Meta:
         db_table = 'view_installmentdetail'
 
