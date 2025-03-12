@@ -303,9 +303,8 @@ def editFormcommon(request,id):
         
         file_objects = InstallmentFile.objects.filter(installment_id=installment.id).select_related('doc')
 
-        for file_type in file_objects:
-            print(vars(file_type) )
-
+        # for file_type in file_objects:
+        #     print(vars(file_type) )
     
     return render(request, 'form_common.html', { 
         'installment_detail': installment ,

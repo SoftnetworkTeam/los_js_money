@@ -248,17 +248,21 @@ $(document).ready(function () {
   // เมื่อเลือก "บันทึกเหมือนที่อยู่ตามทะเบียนบ้าน"
   $("#same_card").on("click", function () {
 
+    let isChecked = $(this).prop("checked");
+
     $('#address_current').val($('#address').val());
 
     $('#soi_current').val($('#soi').val());
 
     $('#road_current').val($('#road').val());
 
-    $('#living_rental_current').val($('#living_rental').val());
+    // $('#living_rental_current').val($('#living_rental').val());
 
     if (!isSameCardActive) {
+      
+
       // บันทึกค่าเดิมก่อนเปลี่ยน
-      originalValues = {
+        originalValues = {
         province_id: $(".js-data-province_current-ajax").val(),
         province_text: $(".js-data-province_current-ajax option:selected").text(),
         amphoe_id: $(".js-data-amphoe_current-ajax").val(),
@@ -267,17 +271,17 @@ $(document).ready(function () {
         tambon_text: $(".js-data-tambon_current-ajax option:selected").text(),
         postcode: $("#postcode_current").val(),
 
-        residence: $(".js-data-residence_current-ajax").val(),
-        residence_text: $(".js-data-residence_current-ajax option:selected").text(),
+        // residence: $(".js-data-residence_current-ajax").val(),
+        // residence_text: $(".js-data-residence_current-ajax option:selected").text(),
 
-        living_owner: $(".js-data-living_owner_current-ajax").val(),
-        living_owner_text: $(".js-data-living_owner_current-ajax option:selected").text(),
+        // living_owner: $(".js-data-living_owner_current-ajax").val(),
+        // living_owner_text: $(".js-data-living_owner_current-ajax option:selected").text(),
 
-        living_type: $(".js-data-living_type_current-ajax").val(),
-        living_type_text: $(".js-data-living_type_current-ajax option:selected").text(),
+        // living_type: $(".js-data-living_type_current-ajax").val(),
+        // living_type_text: $(".js-data-living_type_current-ajax option:selected").text(),
       };
 
-      // ดึงค่าจากฟอร์มหลัก
+      // ดึงค่าจากที่อยู่ตามบัตร
       let province_id = $(".js-data-province-ajax").val();
       let province_text = $(".js-data-province-ajax option:selected").text();
       let amphoe_id = $(".js-data-amphoe-ajax").val();
@@ -286,13 +290,13 @@ $(document).ready(function () {
       let tambon_text = $(".js-data-tambon-ajax option:selected").text();
       let postcode = $("#postcode").val();
 
-      let residence = $(".js-data-residence-ajax").val();
-      let residence_text = $(".js-data-residence-ajax option:selected").text();
-      let living_owner = $(".js-data-living_owner-ajax").val();
-      let living_owner_text = $(".js-data-living_owner-ajax option:selected").text();
+      // let residence = $(".js-data-residence-ajax").val();
+      // let residence_text = $(".js-data-residence-ajax option:selected").text();
+      // let living_owner = $(".js-data-living_owner-ajax").val();
+      // let living_owner_text = $(".js-data-living_owner-ajax option:selected").text();
 
-      let living_type = $(".js-data-living_type-ajax").val();
-      let living_type_text = $(".js-data-living_type-ajax option:selected").text();
+      // let living_type = $(".js-data-living_type-ajax").val();
+      // let living_type_text = $(".js-data-living_type-ajax option:selected").text();
 
       // เซ็ตค่าลงใน dropdown ปัจจุบัน
       $(".js-data-province_current-ajax").html(`<option value="${province_id}">${province_text}</option>`).val(province_id);
@@ -300,9 +304,9 @@ $(document).ready(function () {
       $(".js-data-tambon_current-ajax").html(`<option value="${tambon_id}" data-postcode="${postcode}">${tambon_text}</option>`).val(tambon_id);
       $("#postcode_current").val(postcode);
 
-      $(".js-data-residence_current-ajax").html(`<option value="${residence}">${residence_text}</option>`).val(residence);
-      $(".js-data-living_owner_current-ajax").html(`<option value="${living_owner}">${living_owner_text}</option>`).val(living_owner);
-      $(".js-data-living_type_current-ajax").html(`<option value="${living_type}">${living_type_text}</option>`).val(living_type);
+      // $(".js-data-residence_current-ajax").html(`<option value="${residence}">${residence_text}</option>`).val(residence);
+      // $(".js-data-living_owner_current-ajax").html(`<option value="${living_owner}">${living_owner_text}</option>`).val(living_owner);
+      // $(".js-data-living_type_current-ajax").html(`<option value="${living_type}">${living_type_text}</option>`).val(living_type);
 
       loadSelect2Data(urlMasterProvincecurrent, ".js-data-province_current-ajax", "results", "id", "province_name");
       loadAmphoe(province_id);
@@ -314,18 +318,20 @@ $(document).ready(function () {
 
 
       isSameCardActive = true;
+      $(this).prop("checked", isChecked);
     } else {
+
       // คืนค่ากลับเป็นค่าเดิม
       $(".js-data-province_current-ajax").html(`<option value="${originalValues.province_id}">${originalValues.province_text}</option>`).val(originalValues.province_id);
       $(".js-data-amphoe_current-ajax").html(`<option value="${originalValues.amphoe_id}">${originalValues.amphoe_text}</option>`).val(originalValues.amphoe_id);
       $(".js-data-tambon_current-ajax").html(`<option value="${originalValues.tambon_id}" data-postcode="${originalValues.postcode}">${originalValues.tambon_text}</option>`).val(originalValues.tambon_id);
       $("#postcode_current").val(originalValues.postcode);
 
-      $(".js-data-residence_current-ajax").html(`<option value="${originalValues.residence}">${originalValues.residence_text}</option>`).val(originalValues.residence);
+      // $(".js-data-residence_current-ajax").html(`<option value="${originalValues.residence}">${originalValues.residence_text}</option>`).val(originalValues.residence);
 
-      $(".js-data-living_owner_current-ajax").html(`<option value="${originalValues.living_owner}">${originalValues.living_owner_text}</option>`).val(originalValues.living_owner);
+      // $(".js-data-living_owner_current-ajax").html(`<option value="${originalValues.living_owner}">${originalValues.living_owner_text}</option>`).val(originalValues.living_owner);
 
-      $(".js-data-living_type_current-ajax").html(`<option value="${originalValues.living_type}">${originalValues.living_type_text}</option>`).val(originalValues.living_type);
+      // $(".js-data-living_type_current-ajax").html(`<option value="${originalValues.living_type}">${originalValues.living_type_text}</option>`).val(originalValues.living_type);
 
       loadSelect2Data(urlMasterProvincecurrent, ".js-data-province_current-ajax", "results", "id", "province_name");
       loadAmphoe(province_id);
@@ -337,6 +343,8 @@ $(document).ready(function () {
 
 
       isSameCardActive = false;
+      $(this).prop("checked", !isChecked);
+
     }
 
   });

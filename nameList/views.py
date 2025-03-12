@@ -267,7 +267,6 @@ class MasterContractDocumentAPIView(BaseListAPIView):
     
 
 def MasterAddress(province_name: str, amphoe_name: str, tambon_name: str):
-    print('mmm',province_name,amphoe_name,tambon_name)
     province = MasterProvince.objects.filter(province_name=province_name).first()
     amphoe = MasterAmphoe.objects.filter(amphoe_name=amphoe_name, province_id=province.id).first()
     tambon = MasterTambon.objects.filter(tambon_name=tambon_name, amphoe_id=amphoe.id).first()
@@ -448,10 +447,7 @@ def insertInstallment(request):
         
         # return JsonResponse({"status": "success", "message": "Received data", "data": request.POST}, status=200)
         id = request.POST.get('id', None)
-        # print('ssss id',id)
         post_data = request.POST.dict()
-        
-        print('post_data',post_data)
 
         if post_data['send_doc'] == 'card':
             card_send_doc = 'Y'
@@ -472,7 +468,6 @@ def insertInstallment(request):
         formatted_current_date = current_date.strftime("APP-%Y%m")
         if not id:
             app_id = running_app(formatted_current_date)
-            print(app_id)
         # ข้อมูลลูกค้า
         try:
             with (transaction.atomic()):
@@ -655,7 +650,7 @@ def insertInstallment(request):
                         amphoe_customer = post_data['amphoe']
                         tambon_customer = post_data['tambon']
 
-                    postcode = post_data.get('company_postcode', '') 
+                    postcode = post_data.get('postcode', '') 
                     if postcode == '' or not postcode.isdigit():
                         postcode = 0 
 
@@ -700,7 +695,7 @@ def insertInstallment(request):
                         amphoe_customer = post_data['amphoe']
                         tambon_customer = post_data['tambon']
                         
-                    postcode = post_data.get('company_postcode', '') 
+                    postcode = post_data.get('postcode_current', '') 
                     if postcode == '' or not postcode.isdigit():
                         postcode = 0 
 
@@ -741,6 +736,10 @@ def insertInstallment(request):
                         province_customer =  post_data['province']
                         amphoe_customer = post_data['amphoe']
                         tambon_customer = post_data['tambon']
+                        
+                    postcode = post_data.get('postcode_current', '') 
+                    if postcode == '' or not postcode.isdigit():
+                        postcode = 0 
 
                     customerAddress = CustomerAddress.objects.create(
                         send_doc=current_send_doc,
@@ -748,7 +747,7 @@ def insertInstallment(request):
                         village=post_data['village_current'],
                         soi=post_data['soi_current'],
                         road=post_data['road_current'],
-                        postcode=post_data['postcode_current'],
+                        postcode=postcode,
                         status='A',
                         slug=auto_slug(),
                         created_at=current_date,
@@ -798,7 +797,6 @@ def insertInstallment(request):
                     tambon_customer = post_data.get('company_tambon', '')
                     postcode = post_data.get('company_postcode', '') 
                         
-                    postcode = post_data.get('company_postcode', '') 
                     if postcode == '' or not postcode.isdigit():
                         postcode = 0 
 
@@ -955,7 +953,6 @@ def insertInstallment(request):
                                 
                                 if installmentFileFilter:
                                     file_path = installmentFileFilter.name.path
-                                    print('Deleting old file:', file_path)
                                     FileSystemStorage().delete(file_path)
 
                                     fs.save(new_filename, file)

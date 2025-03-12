@@ -50,7 +50,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="first_name" name="first_name" placeholder="ชื่อ"
-                      value="{% if customer_info.first_name %}{{ customer_info.first_name }}{% endif %}" required />
+                      value="{{ customer_info.first_name }}" required />
                     <div class="invalid-feedback">กรุณากรอกชื่อ</div>
                   </div>
                 </div>
@@ -63,7 +63,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="last_name" name="last_name" placeholder="นามสกุล"
-                      value="{% if customer_info.last_name %}{{ customer_info.last_name }}{% endif %}" required />
+                      value="{{ customer_info.last_name }}" required />
                     <div class="invalid-feedback">กรุณากรอกนามสกุล</div>
                   </div>
                 </div>
@@ -154,7 +154,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="issue_date" name="issue_date" placeholder="วันออกบัตร"
-                      value="{% if formatted_date_time_issue_date %}{{ formatted_date_time_issue_date }}{% endif %}" required  />
+                      value="{{ formatted_date_time_issue_date }}" required  />
                     <div class="invalid-feedback">กรุณากรอกวันออกบัตร</div>
                   </div>
                 </div>
@@ -167,7 +167,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="expire_date" name="expire_date" placeholder="วันบัตรหมดอายุ"
-                      value="{% if formatted_date_time_expire_date %}{{ formatted_date_time_expire_date }}{% endif %}" required  />
+                      value="{{ formatted_date_time_expire_date }}" required  />
                     <div class="invalid-feedback">กรุณากรอกวันบัตรหมดอายุ</div>
                   </div>
                 </div>
@@ -180,7 +180,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="read_card" name="read_card" placeholder="วันที่อ่านบัตร"
-                      value="{% if formatted_date_time_date_read_card %}{{ formatted_date_time_date_read_card }}{% endif %}" required  />
+                      value="{{ formatted_date_time_date_read_card }}" required  />
                     <div class="invalid-feedback">กรุณากรอกวันที่อ่านบัตร</div>
                   </div>
                 </div>
@@ -211,7 +211,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="mobile" name="mobile" placeholder="โทรศัพท์มือถือ"
-                      value="{% if customer_info.mobile %}{{ customer_info.mobile }}{% endif %}"  oninput="validateInput(this, 10, 'กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก')"
+                      value="{{ customer_info.mobile }}"  oninput="validateInput(this, 10, 'กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก')"
                       maxlength="10"  required />
                     <div class="invalid-feedback">กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก</div>
                   </div>
@@ -225,7 +225,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="telephone" name="telephone" placeholder="เบอร์สำรอง" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')"
-                      value="{% if customer_info.telephone %}{{ customer_info.telephone }}{% endif %}"  />
+                      value="{{ customer_info.telephone }}"  />
                       <div class="invalid-feedback">กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก</div>
                   </div>
                 </div>
@@ -237,7 +237,7 @@
                     Email
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="email" name="email" placeholder="Email" value="{% if customer_info.email %}{{ customer_info.email }}{% endif %}"  />
+                    <input class="form-control" id="email" name="email" placeholder="Email" value="{{ customer_info.email }}"  />
                   </div>
                 </div>
               </div>
@@ -248,7 +248,7 @@
                     Line ID
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="line_id" name="line_id" placeholder="Line ID" value="{% if customer_info.line_id %}{{ customer_info.line_id }}{% endif %}" >
+                    <input class="form-control" id="line_id" name="line_id" placeholder="Line ID" value="{{ customer_info.line_id }}" >
                   </div>
                 </div>
               </div><hr>
@@ -420,7 +420,7 @@
                     <span class="text-danger">* </span>รายได้ (บาท/เดือน)
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="base_income" name="base_income" placeholder="รายได้ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{% if installment_detail.base_income %}{{ installment_detail.base_income }}{% endif %}"  required/>
+                    <input class="form-control" id="base_income" name="base_income" placeholder="รายได้ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{{ installment_detail.base_income }}"  required/>
                   </div>
                   <div class="invalid-feedback">กรุณากรอกรายได้</div>
                 </div>
@@ -432,7 +432,6 @@
                     ยอดขอกู้ (บาท)
                   </label>
                   <div class="col-xl-8">
-                    {% comment %} <input class="form-control" id="price" name="price" value="{{installment_detail.price}}" onchange="mathInstallment()" placeholder="ยอดขอกู้ (บาท)" onkeypress="return onlyNumberKey(event)" /> {% endcomment %}
                     <input class="form-control" id="price" name="price" value="{{installment_detail.price}}"  placeholder="ยอดขอกู้ (บาท)" onkeypress="return onlyNumberKey(event)" required/>
                   </div>
                   <div class="invalid-feedback">กรุณากรอกยอดขอกู้</div>
@@ -512,7 +511,6 @@
                   <div class="col-xl-8">
                     <select class="js-data-installment-ajax w-100" id="installment" name="installment" required>
                       {% if installment_detail.installment %}
-                      {% comment %} <option value="{{ installment_detail.installment }}" onchange="mathInstallment()">{{ installment_detail.installment }}</option> {% endcomment %}
                       <option value="{{ installment_detail.installment }}">{{ installment_detail.installment }}</option>
                       {% endif %}
                     </select>
@@ -539,7 +537,7 @@
                     หนี้ในระบบ (บาท/เดือน)
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="debt_in" name="debt_in" placeholder="หนี้ในระบบ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{% if installment_detail.debt_in %}{{ installment_detail.debt_in }}{% endif %}"  />
+                    <input class="form-control" id="debt_in" name="debt_in" placeholder="หนี้ในระบบ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{{ installment_detail.debt_in }}"  />
                   </div>
                 </div>
               </div>
@@ -550,7 +548,7 @@
                     หนี้นอกระบบ (บาท/เดือน)
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="debt_informal" name="debt_informal" placeholder="หนี้นอกระบบ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{% if installment_detail.debt_informal %}{{ installment_detail.debt_informal }}{% endif %}"  />
+                    <input class="form-control" id="debt_informal" name="debt_informal" placeholder="หนี้นอกระบบ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{{ installment_detail.debt_informal }}"  />
                   </div>
                 </div>
               </div>
@@ -572,7 +570,7 @@
                     <span class="text-danger">* </span>เลขบัตรประชาชน
                   </label>
                   <div class="col-lg-8">
-                    <input type="text" class="form-control" id="card_id" name="card_id" placeholder="เลขบัตรประชาชน" value="{% if customer_info.card_no %}{{ customer_info.card_no }}{% endif %}"  oninput="validateInput(this, 13, 'กรุณากรอกเลขบัตรประชาชนด้วยตัวเลข 13 หลัก')" maxlength="13" required />
+                    <input type="text" class="form-control" id="card_id" name="card_id" placeholder="เลขบัตรประชาชน" value="{{ customer_info.card_no }}"  oninput="validateInput(this, 13, 'กรุณากรอกเลขบัตรประชาชนด้วยตัวเลข 13 หลัก')" maxlength="13" required />
                   <div class="invalid-feedback">กรุณากรอกเลขบัตรประชาชนด้วยตัวเลข 13 หลัก</div>
                   </div>
                 </div>
@@ -614,7 +612,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="book_no" name="book_no" placeholder="เลขบัญชี"
-                      value="{% if customer_info.book_no %}{{ customer_info.book_no }}{% endif %}" oninput="validateInput(this, 10, 'กรุณากรอกเลขบัญชี 10 หลัก')"
+                      value="{{ customer_info.book_no }}" oninput="validateInput(this, 10, 'กรุณากรอกเลขบัญชี 10 หลัก')"
                       maxlength="10" required  />
                     <div class="invalid-feedback">กรุณากรอกเลขบัญชี</div>
                   </div>
@@ -628,7 +626,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="book_name" name="book_name" placeholder="ชื่อบัญชี"
-                      value="{% if customer_info.book_name %}{{ customer_info.book_name }}{% endif %}" required  />
+                      value="{{ customer_info.book_name }}" required  />
                     <div class="invalid-feedback">กรุณากรอกชื่อบัญชี</div>
                   </div>
                 </div>
@@ -657,7 +655,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี"
-                    value="{% if customer_info.guarantor_name %}{{ customer_info.guarantor_name }}{% endif %}" required  />
+                    value="{{ customer_info.guarantor_name }}" required  />
                     <div class="invalid-feedback">กรุณากรอกผู้ค้ำประกัน / หลักประกัน</div>
                   </div>
                 </div>
@@ -687,7 +685,7 @@
                   <div class="col-lg-8">
                       <div class="input-group">
                         <input class="form-control" type="text" id="salary_day" name="salary_day"
-                          value="{% if installment_detail.salary_day %}{{ installment_detail.salary_day }}{% endif %}" placeholder="วันที่เงินเดือนออก" />
+                          value="{{ installment_detail.salary_day }}" placeholder="วันที่เงินเดือนออก" />
                         <span class="input-group-text">
                           <i class="fa fa-calendar"></i>
                         </span>
@@ -717,8 +715,9 @@
                 <div class="mb-3 row">
                   <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
                      <h4>ที่อยู่ตามบัตรประชาชน </h4>
-                    <input type="radio" id="card_doc" value="card" name="send_doc" class="custom-radio"/>
+                    <input type="radio" id="card_doc" value="card" name="send_doc" class="custom-radio" {% if customer_address_detail.send_doc == 'Y' %}checked{% endif %} required/>
                     <span>ใช้จัดส่งเอกสาร</span>
+                    <div class="invalid-feedback">กรุณาเลือกที่อยู่ใช้จัดส่งเอกสาร</div>
                   </label>
                 </div>
               </div>
@@ -833,7 +832,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="postcode" name="postcode" placeholder="รหัสไปรษณีย์"
-                      value="{% if customer_address_detail %}{{ customer_address_detail.postcode }}{% endif %}"  />
+                      value="{{ customer_address_detail.postcode }}"  />
                     <div class="invalid-feedback">กรุณากรอกรหัสไปรษณีย์</div>
                   </div>
                 </div>
@@ -846,7 +845,7 @@
                   </label>
                   <div class="col-xl-11">
                     <input class="form-control" id="relate" name="relate" placeholder="รายละเอียดที่อยู่"
-                    value="{% if customer_address_detail.relate %}{{ customer_address_detail.relate }}{% endif %}"  />
+                    value="{{ customer_address_detail.relate }}"  />
                   </div>
                 </div>
               </div>
@@ -856,10 +855,11 @@
                 <div class="mb-3 row">
                   <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
                      <h4>ที่อยู่ปัจจุบัน </h4>
-                    <input type="radio" id="same_doc" value="current" name="send_doc" class="custom-radio"/>
+                    <input type="radio" id="same_doc" value="current" name="send_doc" class="custom-radio" {% if customer_address2_detail.send_doc == 'Y' %}checked{% endif %} required/>
                     <span>ใช้จัดส่งเอกสาร</span>
                     <input type="radio" id="same_card" name="same_card" class="custom-radio"/>
                     <span>บันทึกเหมือนที่อยู่ตามทะเบียนบ้าน</span>
+                    <div class="invalid-feedback">กรุณาเลือกที่อยู่ใช้จัดส่งเอกสาร</div>
                   </label>
                 </div>
               </div>
@@ -884,7 +884,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="village_current" name="village_current" placeholder="หมู่บ้าน/หอพัก"
-                      value="{% if customer_address2_detail %}{{ customer_address2_detail.village }}{% endif %}"  />
+                      value="{{ customer_address2_detail.village }}"  />
                   </div>
                 </div>
               </div>
@@ -896,7 +896,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="soi_current" name="soi_current" placeholder="ซอย"
-                      value="{% if customer_address2_detail %}{{ customer_address2_detail.soi }}{% endif %}"  />
+                      value="{{ customer_address2_detail.soi }}"  />
                   </div>
                 </div>
               </div>
@@ -908,7 +908,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="road_current" name="road_current" placeholder="ถนน"
-                      value="{% if customer_address2_detail %}{{ customer_address2_detail.road }}{% endif %}"  />
+                      value="{{ customer_address2_detail.road }}"  />
                   </div>
                 </div>
               </div>
@@ -974,7 +974,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="postcode_current" name="postcode_current" placeholder="รหัสไปรษณีย์"
-                      value="{% if customer_address2_detail %}{{ customer_address2_detail.postcode }}{% endif %}"  />
+                      value="{{ customer_address2_detail.postcode }}"  />
                     <div class="invalid-feedback">กรุณากรอกรหัสไปรษณีย์</div>
                   </div>
                 </div>
@@ -1049,8 +1049,9 @@
                 <div class="mb-3 row">
                   <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
                      <h4>ที่อยู่ที่ทำงาน </h4>
-                    <input type="radio" id="company_doc" value="company" name="send_doc" class="custom-radio"  checked/>
+                    <input type="radio" id="company_doc" value="company" name="send_doc" class="custom-radio"   {% if customer_address3_detail.send_doc == 'Y' %}checked{% endif %} required/>
                     <span>ใช้จัดส่งเอกสาร</span>
+                    <div class="invalid-feedback">กรุณาเลือกที่อยู่ใช้จัดส่งเอกสาร</div>
                   </label>
                 </div>
               </div>
@@ -1062,7 +1063,7 @@
                   </label>
                   <div class="col-xl-10">
                     <input class="form-control" id="office" name="office" placeholder="ชื่อบริษัท/ซับคอนแทรค"
-                    value="{% if customer_address3_detail %}{{ customer_address3_detail.house_no }}{% endif %}"  />
+                    value="{{ installment_detail.office }}"  />
                   </div>
                 </div>
               </div>
@@ -1073,9 +1074,9 @@
                     เบอร์โทรศัพท์
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="company_tel" name="company_tel" placeholder="ชื่อบริษัท/ซับคอนแทรค" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')"
+                    <input class="form-control" id="company_tel" name="company_tel" placeholder="เบอร์โทรศัพท์" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')"
                       maxlength="10" 
-                    value="{% if customer_address3_detail.company_tel %}{{ customer_address3_detail.company_tel }}{% endif %}"  />
+                    value="{{ customer_address3_detail.company_tel }}"  />
                   </div>
                 </div>
               </div>
@@ -1086,8 +1087,8 @@
                    ประจำบริษัท
                   </label>
                   <div class="col-xl-10">
-                    <input class="form-control" id="place_of_work" name="place_of_work" placeholder="ชื่อบริษัท/ซับคอนแทรค"
-                    value="{% if installment_detail.place_of_work %}{{ installment_detail.place_of_work }}{% endif %}"  />
+                    <input class="form-control" id="place_of_work" name="place_of_work" placeholder="ประจำบริษัท"
+                    value="{{ installment_detail.place_of_work }}"  />
                   </div>
                 </div>
               </div>
@@ -1098,8 +1099,8 @@
                     เบอร์โทรศัพท์
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="place_work_tel" name="place_work_tel" placeholder="ชื่อบริษัท/ซับคอนแทรค"
-                    value="{% if installment_detail.company_tel %}{{ installment_detail.company_tel }}{% endif %}"  />
+                    <input class="form-control" id="place_work_tel" name="place_work_tel" placeholder="เบอร์โทรศัพท์"
+                    value="{{ installment_detail.company_tel }}"  />
                   </div>
                 </div>
               </div>
@@ -1111,7 +1112,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="company_address" name="company_address" placeholder="ที่อยู่"
-                      value="{% if customer_address3_detail %}{{ customer_address3_detail.house_no }}{% endif %}"  required/>
+                      value="{{ customer_address3_detail.house_no }}"  required/>
                       <div class="invalid-feedback">กรุณากรอกที่อยู่</div>
                   </div>
                 </div>
@@ -1124,7 +1125,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="company_village" name="company_village" placeholder="ที่อยู่"
-                      value="{% if customer_address3_detail.village %}{{ customer_address3_detail.village }}{% endif %}"  />
+                      value="{{ customer_address3_detail.village }}"  />
                   </div>
                 </div>
               </div>
@@ -1136,7 +1137,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="company_soi" name="company_soi" placeholder="ซอย"
-                      value="{% if customer_address3_detail.soi %}{{ customer_address3_detail.soi }}{% endif %}"  />
+                      value="{{ customer_address3_detail.soi }}"  />
                   </div>
                 </div>
               </div>
@@ -1148,7 +1149,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="company_road" name="company_road" placeholder="ถนน"
-                      value="{% if customer_address3_detail %}{{ customer_address3_detail.road }}{% endif %}"  />
+                      value="{{ customer_address3_detail.road }}"  />
                   </div>
                 </div>
               </div>
@@ -1214,7 +1215,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="company_postcode" name="company_postcode" placeholder="รหัสไปรษณีย์"
-                      value="{% if customer_address3_detail.postcode %}{{ customer_address3_detail.postcode }}{% endif %}"  />
+                      value="{{ customer_address3_detail.postcode }}"  />
                   </div>
                 </div>
               </div>
@@ -1226,7 +1227,7 @@
                   </label>
                   <div class="col-xl-11">
                     <input class="form-control" id="company_relate" name="company_relate" placeholder="รายละเอียดที่อยู่"
-                    value="{% if customer_address3_detail.relate %}{{ customer_address3_detail.relate }}{% endif %}"  />
+                    value="{{ customer_address3_detail.relate }}"  />
                   </div>
                 </div>
               </div>
@@ -1600,6 +1601,6 @@
 
 
 </script>
-<script src="{% static 'js/form_common_script.js' %}?v=101"></script>
+<script src="{% static 'js/form_common_script.js' %}?v=104"></script>
 <link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 
 {% endblock %}
