@@ -31,3 +31,10 @@ nav {
 table {
     width: 100% !important;
 }
+#status {
+    position: relative;
+    z-index: 9999; 
+}
+.modal {
+    z-index: 1050;
+}

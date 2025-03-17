@@ -1074,9 +1074,8 @@
                     เบอร์โทรศัพท์
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="company_tel" name="company_tel" placeholder="เบอร์โทรศัพท์" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')"
-                      maxlength="10" 
-                    value="{{ customer_address3_detail.company_tel }}"  />
+                    <input class="form-control" id="company_tel" name="company_tel" placeholder="เบอร์โทรศัพท์" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')" maxlength="10" value="{{ installment_detail.company_tel }}"  />
+                    <div class="invalid-feedback">กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก</div>
                   </div>
                 </div>
               </div>
@@ -1099,8 +1098,7 @@
                     เบอร์โทรศัพท์
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="place_work_tel" name="place_work_tel" placeholder="เบอร์โทรศัพท์"
-                    value="{{ installment_detail.company_tel }}"  />
+                    <input class="form-control" id="place_work_tel" name="place_work_tel" placeholder="เบอร์โทรศัพท์" value="{{ installment_detail.place_work_tel }}"  />
                   </div>
                 </div>
               </div>
@@ -1371,6 +1369,7 @@
             <button type="button" id="btnSubmit" class="btn btn-outline-primary" >บันทึก</button>
             <a type="button"name="btncancel"id="btncancel"class="btn btn-outline-danger"href="/name-list">ยกเลิก</a>
           </div>
+          
         </div>
       </form>
 

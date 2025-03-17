@@ -1,5 +1,5 @@
 from userauth.models import UserAuth
-
+from django.utils.deprecation import MiddlewareMixin
 
 class AuthUserMiddleware:
     def __init__(self, get_response):
@@ -27,3 +27,9 @@ class AuthUserMiddleware:
                     elif foo.auth.auth_code == 'A004':
                         response.context_data["auth_report_menu"] = foo.status
         return response
+
+class DisableCSRFForNgrok(MiddlewareMixin):
+    def process_request(self, request):
+        if request.META.get('HTTP_ORIGIN', '').startswith('https://'):
+            if 'ngrok-free.app' in request.META['HTTP_ORIGIN']:
+                setattr(request, '_dont_enforce_csrf_checks', True)

@@ -79,7 +79,7 @@
     --primary: #0D99FF;
     --secondary: #2C2C2C;
     --secondary-dark: #131313;
-    --primary-hover: #007ed9;
+    --primary-hover: #03A9F3;
     --primary-dark: #004373;
     --rgba-primary-1: rgba(13, 153, 255, 0.1);
     --rgba-primary-2: rgba(13, 153, 255, 0.2);
@@ -54110,7 +54110,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     --primary: #0D99FF;
     --secondary: #2C2C2C;
     --secondary-dark: #131313;
-    --primary-hover: #007ed9;
+    --primary-hover: #03A9F3;
     --primary-dark: #004373;
     --rgba-primary-1: rgba(13, 153, 255, 0.1);
     --rgba-primary-2: rgba(13, 153, 255, 0.2);

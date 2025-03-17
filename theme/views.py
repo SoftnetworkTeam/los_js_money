@@ -366,10 +366,11 @@ def user_login(request):
 
         user = authenticate(username=name, password=password)
         auth_user = AuthUser.objects.filter(username=name).first()
-        full_name = auth_user.first_name + ' ' + auth_user.last_name
 
         if user is not None:
             auth_login(request, user)
+            full_name = auth_user.first_name + ' ' + auth_user.last_name
+            
             request.session['username'] = user.username
             request.session['alert_login'] = 'success'
             request.session['user_id'] = user.id

@@ -22,6 +22,6 @@ urlpatterns = [
     path("", include("theme.urls")),
     path("", include('userauth.urls')),
     path("", include('configurations.urls')),
-    path("nameList", include('nameList.urls')),
-    path("configurations", include('configurations.urls'))
+    path("", include('nameList.urls')),
+    path("", include('exports.urls'))
 ]

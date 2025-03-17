@@ -1,0 +1,57 @@
+{% extends "base.html" %} {% load static %} {% block title %}
+<title id="title"></title>
+{% endblock %} {% block content %}
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card">
+          <div class="card-header">
+            <span id="exportName">sdsdsd </span>
+          </div>
+          <div class="card-body px-4">
+            <div class="row" id="content">
+              <div class="col-xl-6">
+                <div class="mb-2 row">
+                  <label class="col-lg-2 col-form-label"> ช่วงเวลา </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" type="text" id="rangDate" name="rangDate" value="" placeholder="ช่วงเวลา" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-6">
+                <div class="mb-3 row">
+                  <label class="col-lg-2 col-form-label"> สถานะ </label>
+                  <div class="col-lg-8">
+                    <select class="form-control select2" for="status" id="status">
+                      <option value="0">ทั้งหมด</option>
+                      <option value="1">Approve</option>
+                      <option value="2">Created Contract</option>
+                      <option value="5">Cancel</option>
+                      <option value="9">Reject</option>
+                      <option value="">Waiting</option>
+                    </select>
+                  </div>
+                </div>
+                <input class="form-control" type="hidden" id="startDateInput" name="startDateInput" />
+                <input class="form-control" type="hidden" id="endDateInput" name="endDateInput" />
+              </div>
+            </div>
+            <hr />
+            <div class="col-xl-12 text-start">
+              <button type="button" class="btn btn-outline-primary btn-sm" onclick="exports('requestLoan')"><i class="k-icon k-i-file-excel k-button-icon" style="font-size: 25px"></i> Export data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block script %}
+<script>
+  var authEdit = "{{ auth_edit_delete }}";
+</script>
+<script src="{% static 'js/export.js' %}"></script>
+{% endblock %}
