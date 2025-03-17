@@ -43,13 +43,16 @@ class CustomerLoanDetailApiView(BaseListAPIView):
     def get_queryset(self):
         status = self.kwargs.get('status')
         company_id = self.request.session.get('company_id')
+        create_to_branch_id = self.request.session.get('branch_id')
+        print('company_id : ',company_id)
+        print('create_to_branch_id : ',create_to_branch_id)
         
         if(status == 'approve') :
-            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,status_approve=1)
+            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,create_to_branch_id=create_to_branch_id,status_approve=1)
         elif(status == 'waiting') :
-            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,status_approve__isnull=True)
+            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,create_to_branch_id=create_to_branch_id,status_approve__isnull=True)
         else :
-            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id)
+            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,create_to_branch_id=create_to_branch_id)
         
         return customer_detail
 

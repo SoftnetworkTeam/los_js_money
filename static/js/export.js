@@ -64,33 +64,31 @@ function exports(type) {
     var status = $('#status').val();
 
     var formData = new FormData();
-    formData.append('start_date', startDate); 
-    formData.append('end_date', endDate);    
+    formData.append('start_date', startDate);
+    formData.append('end_date', endDate);
     formData.append('status_approve', status);
 
     if (type === 'requestLoan') {
-        $.ajax({
-            url: '/exports/',
-            type: 'POST',
-            dataType: 'json',
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
-            },
-            data: formData,
-            processData: false, 
-            contentType: false,  
-            success: function (response) {
-                var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/exports/', true);
+        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+        xhr.responseType = 'blob'; // 🟢 กำหนด response เป็นไฟล์ binary
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var blob = new Blob([xhr.response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                 var link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'รายงานการขออนุมัติสินเชื่อ.xlsx'; 
-                link.click(); 
-            },
-            error: function (xhr, status, error,response) {
-                console.error('Export error57755:');
-               
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'รายงานการขออนุมัติสินเชื่อ.xlsx';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                console.error('Export error:', xhr.statusText);
             }
-        });
+        };
+        
+        xhr.send(formData);
     }
 }
 

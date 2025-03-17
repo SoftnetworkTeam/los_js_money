@@ -8,7 +8,7 @@
       <div class="col-xl-12">
         <div class="card">
           <div class="card-header">
-            <span id="exportName">sdsdsd </span>
+            <span id="exportName">Export รายงานผู้ขอสินเชื่อ </span>
           </div>
           <div class="card-body px-4">
             <div class="row" id="content">
@@ -25,7 +25,7 @@
                   <label class="col-lg-2 col-form-label"> สถานะ </label>
                   <div class="col-lg-8">
                     <select class="form-control select2" for="status" id="status">
-                      <option value="0">ทั้งหมด</option>
+                      <option value="all">ทั้งหมด</option>
                       <option value="1">Approve</option>
                       <option value="2">Created Contract</option>
                       <option value="5">Cancel</option>
@@ -39,7 +39,7 @@
               </div>
             </div>
             <hr />
-            <div class="col-xl-12 text-start">
+            <div class="col-xl-12 text-center">
               <button type="button" class="btn btn-outline-primary btn-sm" onclick="exports('requestLoan')"><i class="k-icon k-i-file-excel k-button-icon" style="font-size: 25px"></i> Export data</button>
             </div>
           </div>
@@ -53,5 +53,5 @@
 <script>
   var authEdit = "{{ auth_edit_delete }}";
 </script>
-<script src="{% static 'js/export.js' %}"></script>
+<script src="{% static 'js/export.js' %}?v=3"></script>
 {% endblock %}

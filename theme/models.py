@@ -1100,6 +1100,9 @@ class CustomerLoanDetail(models.Model):
     cont_no = models.CharField(max_length=20)
     cont_status = models.CharField(max_length=1)
     company_id =  models.IntegerField()
+    create_to_branch_id =  models.IntegerField()
+    guarantor_name = models.CharField(max_length=200)
+    category_occupation = models.IntegerField()
     class Meta:
         db_table = 'view_installmentdetail'
 
