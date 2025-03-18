@@ -310,7 +310,7 @@
             </li>
 
             {% if auth_report_menu == True %}
-                <li>
+                {% comment %} <li>
                     <a class="has-arrow" href="#" aria-expanded="false">
                         <div class="menu-icon"><i class="ti-printer" style="font-size:18px"></i></div>
                         <span class="nav-text font14" style="margin-left: 10px;">Report</span>
@@ -318,7 +318,7 @@
                     <ul aria-expanded="false">
                         <li><a class="sub-menu-item font14" href="/report/request-loan">รายงานขออนุมัติสินเชื่อ</a></li>
                     </ul>
-                </li>
+                </li> {% endcomment %}
                 <li>
                     <a class="has-arrow" href="#" aria-expanded="false">
                         <div class="menu-icon"><i class="ti-server" style="font-size:18px"></i></div>
