@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Count, Case, When, Value, IntegerField
 from django.http import  JsonResponse,HttpResponseRedirect
+from django.db import transaction
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -307,15 +308,13 @@ class updateData(BaseListAPIView):
     def post(self, request, *args, **kwargs):
         post_data = request.POST.dict()
         
-        # print('request ssss',request.session['user_id'])
-        
         data_type = post_data.get('data_type')
         type_button = post_data.get("type_button")
         
         now = datetime.now()
         
         if data_type == "grade" :
-            grade_id = post_data.get("id")
+            grade_id = post_data.get("id",None)
             grade_code = post_data.get("grade_code")
             grade_type = post_data.get("type")
             
@@ -325,13 +324,13 @@ class updateData(BaseListAPIView):
                 model_class = Masterincomenotstable
                 
             if type_button == "save":
-                updated = model_class.objects.filter(id=grade_id).update(
-                    grade_code=grade_code,
-                    updated_at=now
-                )
-                if updated == 0:
+                if grade_id :
+                    model_class.objects.filter(id=grade_id).update(
+                        grade_code=grade_code,
+                        updated_at=now
+                    )
+                else :
                     grade = model_class(
-                        id=grade_id,
                         grade_code=grade_code,
                         status="A",
                         slug=auto_slug(),
@@ -348,26 +347,26 @@ class updateData(BaseListAPIView):
                     
         elif data_type == "scoring" :
             from decimal import Decimal
-            score_id = post_data.get("id")
+            score_id = post_data.get("id",None)
             score_name = post_data.get('score_name')
-            # แปลงค่าเป็น Decimal ถ้าไม่สามารถแปลงได้ให้ใช้ค่า default เป็น 0
             stable_min = Decimal(post_data.get('stable_min', "0") or "0")
             stable_percent = Decimal(post_data.get('stable_percent', "0") or "0")
             not_stable_min = Decimal(post_data.get('not_stable_min', "0") or "0")
             not_stable_percent = Decimal(post_data.get('not_stable_percent', "0") or "0")
             
             if type_button == "save":
-                updated = Masterscoringinfo.objects.filter(id=score_id).update(
-                    score_name=score_name,
-                    stable_min=stable_min,
-                    stable_percent=stable_percent,
-                    not_stable_min=not_stable_min,
-                    not_stable_percent=not_stable_percent,
-                    updated_at=now
-                )
-                if updated == 0:
-                    grade = Masterscoringinfo(
-                        id=score_id,
+                if score_id:
+                    Masterscoringinfo.objects.filter(id=score_id).update(
+                        score_name=score_name,
+                        stable_min=stable_min,
+                        stable_percent=stable_percent,
+                        not_stable_min=not_stable_min,
+                        not_stable_percent=not_stable_percent,
+                        updated_at=now
+                    )
+                    response_status = "save success"
+                else:
+                    score = Masterscoringinfo(
                         user_id=request.session['user_id'],
                         score_name=score_name,
                         stable_min=stable_min,
@@ -379,50 +378,58 @@ class updateData(BaseListAPIView):
                         created_at=now,
                         updated_at=now
                     )
-                    grade.save()
-                    
-                scoring_type_mapping = {
-                    'A': (MasterOccupation, 'occup_name'),
-                    'B': (Mastermonthlysalary, 'salary_name'),
-                    'C': (Mastereducationlevel, 'education_name'),
-                    'D': (Masterminorchildren, 'children_name'),
-                    'E': (Masterworkingage, 'age_name'),
-                    'F': (Mastercontractreason, 'reason_name'),
-                    'G': (MasterResidence, 'residence_name'),
-                    'H': (MasterLivingType, 'type_name'),
-                    'I': (Mastermaritalstatus, 'status_name'),
-                    'J': (Mastercustomerage, 'age_name'),
-                    'K': (Mastershoptypes, 'shop_name'),
-                    'L': (Masterrentalage, 'age_name'),
-                    'M': (Masterbusinesstype, 'business_type_name'),
-                    'N': (Mastermonthlyprofit, 'profit_name'),
-                    'O': (Masterbusinessage, 'age_name'),
-                    'Y': (Masterincomestable, 'grade_code'),
-                    'Z': (Masterincomenotstable, 'grade_code'),
-                }
+                    score.save()  
 
-                for scoring_type, (model, field) in scoring_type_mapping.items():
-                    existing_ids = set(Masterscoringdetail.objects.filter(score_id=score_id).values_list('type_id', flat=True))
-                    new_ids = model.objects.filter(Q(status="A") & ~Q(**{field: ''})).exclude(id__in=existing_ids).values_list('id', flat=True)
+                    score_id = score.id 
 
-                    for type_id in new_ids:
-                        Masterscoringdetail.objects.create(
-                            score_type=scoring_type,  
-                            type_id=type_id,             
-                            score=0.00,               
-                            score_id=score_id,       
-                            created_at=now,           
-                            updated_at=now           
-                        )
-                    
-                response_status = "save success"
+                    scoring_type_mapping = {
+                        'A': (MasterOccupation, 'occup_name'),
+                        'B': (Mastermonthlysalary, 'salary_name'),
+                        'C': (Mastereducationlevel, 'education_name'),
+                        'D': (Masterminorchildren, 'children_name'),
+                        'E': (Masterworkingage, 'age_name'),
+                        'F': (Mastercontractreason, 'reason_name'),
+                        'G': (MasterResidence, 'residence_name'),
+                        'H': (MasterLivingType, 'type_name'),
+                        'I': (Mastermaritalstatus, 'status_name'),
+                        'J': (Mastercustomerage, 'age_name'),
+                        'K': (Mastershoptypes, 'shop_name'),
+                        'L': (Masterrentalage, 'age_name'),
+                        'M': (Masterbusinesstype, 'business_type_name'),
+                        'N': (Mastermonthlyprofit, 'profit_name'),
+                        'O': (Masterbusinessage, 'age_name'),
+                        'Y': (Masterincomestable, 'grade_code'),
+                        'Z': (Masterincomenotstable, 'grade_code'),
+                    }
+
+                    with transaction.atomic():  # transaction เป็นคำสั่งที่เอาไว้เช็คว่าข้อมูลที่ต้องการจะบันทึกได้บันทึกลงดาต้าเบสถูกต้องแล้วหรือไม่ ถ้าไม่ถูกต้องจะยกเลิกการบันทึกและ rollback กลับมา
+                        new_scoringdetail = []  # เก็บข้อมูลลงอาเรย์เพื่อเตรียมบันทึกลงดาต้าเบส
+
+                        for scoring_type, (model, field) in scoring_type_mapping.items():
+                            new_ids = model.objects.filter(Q(status="A") & ~Q(**{field: ''})).values_list('id', flat=True)
+
+                            for type_id in new_ids:
+                                new_scoringdetail.append(Masterscoringdetail(
+                                    score_type=scoring_type,
+                                    type_id=type_id,
+                                    score=0.00,
+                                    score_id=score_id,
+                                    created_at=now,
+                                    updated_at=now
+                                ))
+
+                        # ใช้ bulk_create เพื่อเพิ่มข้อมูลทีเดียว
+                        if new_scoringdetail:
+                            Masterscoringdetail.objects.bulk_create(new_scoringdetail)
+                            response_status = "save success"
+ 
 
             elif type_button == "delete":
                 count_row = Masterscoringinfo.objects.count()  
 
                 if count_row > 1:
-                    grade = Masterscoringinfo.objects.get(id=score_id)
-                    grade.delete()
+                    Masterscoringinfo.objects.get(id=score_id).delete()
+                    Masterscoringdetail.objects.filter(score_id=score_id).delete()
                     response_status = "delete success"
                 else:
                     response_status = "can't delete"

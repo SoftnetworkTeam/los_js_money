@@ -14,7 +14,7 @@ function exports(type) {
 
     if (type === 'requestLoan') {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/exports/', true);
+        xhr.open('POST', '/report/', true);
         xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
         xhr.responseType = 'blob'; 
 

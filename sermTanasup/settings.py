@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'configurations',
     'rest_framework',
     'exports',
+    'report',
 ]
 
 REST_FRAMEWORK = {

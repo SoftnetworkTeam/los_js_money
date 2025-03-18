@@ -19,7 +19,7 @@
     {% comment %} <title>SN | HOME</title> {% endcomment %}
 
     <!-- dataTables -->
-    <link rel="stylesheet" href="{% static 'vendor/datatables/css/jquery.dataTables.min.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'vendor/datatables/css/jquery.dataTables.min.css' %}"> {% endcomment %}
     <!-- FAVICONS ICON -->
     <link rel="stylesheet" href="{% static 'vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}">
     
@@ -33,6 +33,7 @@
     <!-- select2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/css/select2.min.css' %}?v=2"> {% endcomment %}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
@@ -44,13 +45,12 @@
     <link href="{% static 'kendo/styles/kendo.metro.min.css' %}?v=10" rel="stylesheet">
     <link href="{% static 'kendo/styles/kendo.common.min.css' %}" rel="stylesheet">
     <link href="{% static 'kendo/styles/kendo.metro.mobile.min.css' %}" rel="stylesheet">
-
     <link rel="stylesheet" href="{% static 'css/custom.css' %}?v=3">
 
-    <!-- Required vendors -->
+    <!-- โหลด jQuery ก่อน -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 
-    <!-- โหลด jQuery ก่อน -->
+    <!-- Required vendors -->
     <script src="{% static 'vendor/global/global.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap-select/dist/js/bootstrap-select.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
@@ -61,15 +61,15 @@
     <script src="{% static 'vendor/apexchart/apexchart.js' %}"></script>
 
     <!-- theme -->
-    <script src="{% static 'js/function_all/function_all.js' %}?v=151"></script>
+    <script src="{% static 'js/function_all/function_all.js' %}?v=152"></script>
 
     <!-- Toastr -->
     <script src="{% static 'vendor/toastr/js/toastr.min.js' %}"></script>
     <script src="{% static 'js/plugins-init/toastr-init.js' %}"></script>
 
     <!-- dataTables -->
-    <script src="{% static 'vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'js/plugins-init/datatables.init.js' %}"></script>
+    {% comment %} <script src="{% static 'vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/plugins-init/datatables.init.js' %}"></script> {% endcomment %}
 
     <!-- sweetalert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -80,17 +80,13 @@
     <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.7/dist/autoNumeric.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"></script>
-
         
-
     <!-- Kendo JS -->
     <script src="{% static 'kendo/js/kendo.all.min.js' %}"></script>
     <script src="{% static 'kendo/js/messages/kendo.messages.en-US.min.js' %}"></script>
     <script src="{% static 'kendo/js/jszip.min.js' %}"></script>
     <script src="{% static 'kendo/js/cultures/kendo.culture.th-TH.min.js' %}"></script>
     <script src="{% static 'kendo/js/kendo.validator.min.js' %}"></script>
-
-
 
 
     {% block title %}
@@ -131,6 +127,10 @@
 
           .footer .copyright a {
             color: #03A9F3 !important;
+        }
+
+        .nav-text {
+
         }
         
     </style>
@@ -283,22 +283,9 @@
 
                 <a class="has-arrow" href="#" aria-expanded="false">
                     <div class="menu-icon">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M9.59151 15.2068C13.2805 15.2068 16.4335 15.7658 16.4335 17.9988C16.4335 20.2318 13.3015 20.8068 9.59151 20.8068C5.90151 20.8068 2.74951 20.2528 2.74951 18.0188C2.74951 15.7848 5.88051 15.2068 9.59151 15.2068Z"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M9.59157 12.0198C7.16957 12.0198 5.20557 10.0568 5.20557 7.63482C5.20557 5.21282 7.16957 3.24982 9.59157 3.24982C12.0126 3.24982 13.9766 5.21282 13.9766 7.63482C13.9856 10.0478 12.0356 12.0108 9.62257 12.0198H9.59157Z"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M16.4829 10.8816C18.0839 10.6566 19.3169 9.28265 19.3199 7.61965C19.3199 5.98065 18.1249 4.62065 16.5579 4.36365"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M18.5952 14.7322C20.1462 14.9632 21.2292 15.5072 21.2292 16.6272C21.2292 17.3982 20.7192 17.8982 19.8952 18.2112"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                       <i class="ti-folder" style="font-size:18px"></i>
                     </div>
-                    <span class="nav-text font14">กำหนดข้อมูล</span>
+                    <span class="nav-text font14" style="margin-left: 10px;">กำหนดข้อมูล</span>
                 </a>
                 <ul aria-expanded="false">
                     <li>
@@ -323,58 +310,35 @@
             </li>
 
             {% if auth_report_menu == True %}
-            <li>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="menu-icon">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M9.59151 15.2068C13.2805 15.2068 16.4335 15.7658 16.4335 17.9988C16.4335 20.2318 13.3015 20.8068 9.59151 20.8068C5.90151 20.8068 2.74951 20.2528 2.74951 18.0188C2.74951 15.7848 5.88051 15.2068 9.59151 15.2068Z"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M9.59157 12.0198C7.16957 12.0198 5.20557 10.0568 5.20557 7.63482C5.20557 5.21282 7.16957 3.24982 9.59157 3.24982C12.0126 3.24982 13.9766 5.21282 13.9766 7.63482C13.9856 10.0478 12.0356 12.0108 9.62257 12.0198H9.59157Z"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M16.4829 10.8816C18.0839 10.6566 19.3169 9.28265 19.3199 7.61965C19.3199 5.98065 18.1249 4.62065 16.5579 4.36365"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M18.5952 14.7322C20.1462 14.9632 21.2292 15.5072 21.2292 16.6272C21.2292 17.3982 20.7192 17.8982 19.8952 18.2112"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <span class="nav-text font14">Export</span>
-                </a>
-                <ul aria-expanded="false">
-                    <li id="exportRequestLoan">
-                        <a class="sub-menu-item font14 " href="/export/request-loan">รายงานผู้ขอสินเชื่อ</a>
-                    </li>
-                </ul>
-            </li>
+                <li>
+                    <a class="has-arrow" href="#" aria-expanded="false">
+                        <div class="menu-icon"><i class="ti-printer" style="font-size:18px"></i></div>
+                        <span class="nav-text font14" style="margin-left: 10px;">Report</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a class="sub-menu-item font14" href="/report/request-loan">รายงานขออนุมัติสินเชื่อ</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="has-arrow" href="#" aria-expanded="false">
+                        <div class="menu-icon"><i class="ti-server" style="font-size:18px"></i></div>
+                        <span class="nav-text font14" style="margin-left: 10px;">Export</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a class="sub-menu-item font14" href="/export/request-loan">รายงานผู้ขอสินเชื่อ</a></li>
+                    </ul>
+                </li>
             {% endif %}
 
             {% if auth_permission_menu == True %}
             <li {% if request.path == '/userauth/' %} class="mm-active" {% endif %}>
-
                 <a href="/userauth/" aria-expanded="false">
-                    <div class="menu-icon">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M9.59151 15.2068C13.2805 15.2068 16.4335 15.7658 16.4335 17.9988C16.4335 20.2318 13.3015 20.8068 9.59151 20.8068C5.90151 20.8068 2.74951 20.2528 2.74951 18.0188C2.74951 15.7848 5.88051 15.2068 9.59151 15.2068Z"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M9.59157 12.0198C7.16957 12.0198 5.20557 10.0568 5.20557 7.63482C5.20557 5.21282 7.16957 3.24982 9.59157 3.24982C12.0126 3.24982 13.9766 5.21282 13.9766 7.63482C13.9856 10.0478 12.0356 12.0108 9.62257 12.0198H9.59157Z"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M16.4829 10.8816C18.0839 10.6566 19.3169 9.28265 19.3199 7.61965C19.3199 5.98065 18.1249 4.62065 16.5579 4.36365"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M18.5952 14.7322C20.1462 14.9632 21.2292 15.5072 21.2292 16.6272C21.2292 17.3982 20.7192 17.8982 19.8952 18.2112"
-                                stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <span class="nav-text font14">สิทธิ์การใช้งาน</span>
+                    <div class="menu-icon"><i class="ti-lock" style="font-size:18px"></i></div>
+                    <span class="nav-text font14" style="margin-left: 10px;">สิทธิ์การใช้งาน</span>
                 </a>
             </li>
             {% endif %}
+
         </ul>
         <p id="noMenuMessage" style="display: none;text-align: center;">-- ไม่พบเมนูที่ต้องการ --</p>
     </div>

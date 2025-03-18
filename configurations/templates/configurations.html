@@ -137,8 +137,6 @@ var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.
   function submitData(btn, id, statusBtn,status_type,status,dataType) {
     var selectedRow = $(btn).closest("tr");
 
-    console.log(id, statusBtn, status_type,dataType,typeUrl)
-
     var formData = new FormData();
     formData.append("id", id);
     formData.append("type_button", statusBtn);
@@ -164,8 +162,6 @@ var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.
 
     formData.append("type", status_type);
 
-    console.log(input_text1)
-
     $.ajax({
       url: urlupdateData,
       type: "POST",
@@ -180,9 +176,7 @@ var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.
           notification("success", "บันทึกสำเร็จ", "success", "ปิด");
         } else if (response.status == "delete success") {
           notification("success", "ลบสำเร็จ", "success", "ปิด");
-          var grid = $("#grid").data("kendoGrid");
-          var dataItem = grid.dataItem(selectedRow);
-          grid.dataSource.remove(dataItem);
+          selectedRow.remove();
         } else if (response.status == "can't delete") {
           notification("แจ้งเตือน", "ไม่สามารถลบข้อมูลหลักได้", "warnning", "ปิด");
         }
@@ -220,7 +214,7 @@ var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.
         <div class="d-flex justify-content-between border-0">
             <ul class="nav nav-tabs dzm-tabs" role="tablist" style="background-color: #ebebeb;">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link btn btn-success btn-sm" type="button">
+                    <button class="nav-link btn btn-success btn-sm" type="button" style="background-color: #3AC977;" >
                         ใช้งาน
                     </button>
                 </li>
@@ -235,7 +229,7 @@ var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.
 
     newRow += `
     <td>
-        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" onclick="submitData(this,${rowCount},'save','{{status_type}}','A','{{data_type}}')">
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="tooltip" title="บันทึก" onclick="submitData(this,'','save','{{status_type}}','A','{{data_type}}')">
             <i class="fas fa-save"></i>
         </button>
         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" title="ลบ" onclick="removeRow(this)">

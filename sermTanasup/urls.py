@@ -23,5 +23,6 @@ urlpatterns = [
     path("", include('userauth.urls')),
     path("", include('configurations.urls')),
     path("", include('nameList.urls')),
-    path("", include('exports.urls'))
+    path("", include('exports.urls')),
+    path("", include('report.urls')),
 ]
