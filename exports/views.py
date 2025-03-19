@@ -11,8 +11,10 @@ from urllib.parse import quote
 from django.views import View
 from django.template.response import TemplateResponse as render
 
+
 def export(request, type):
     return render(request, "export.html")
+
 
 class exports(View):
     def post(self, request):
@@ -37,7 +39,7 @@ class exports(View):
                         WHEN a.category_occupation = '1' THEN 'รายได้คงที่'
                         WHEN a.category_occupation = '2' THEN 'รายได้ไม่สม่ำเสมอ'
                     END AS "หมวดอาชีพ",
-                    COALESCE(a.base_income, 0) AS "ฐานเงินเดือน",
+                    COALESCE(a.base_income, 0) AS "หมวดอาชีพ",
                     CASE 
                         WHEN a.status_approve = '1' THEN 'ผ่าน'
                         WHEN a.status_approve = '2' THEN 'ทำสัญญาแล้ว'
@@ -52,12 +54,12 @@ class exports(View):
                 LEFT JOIN Tb_MasterNCB d ON d.id = a.ncb_id
                 LEFT JOIN tb_masteroccupation e ON e.id = c.occupation_id
                 LEFT JOIN auth_user f ON f.username = a.user_id
-                WHERE a.created_at BETWEEN %s AND %s
+                WHERE CAST(a.created_at AS DATE) BETWEEN %s AND %s
                 AND a.create_to_branch_id = %s 
                 AND a.company_id = %s
             """
 
-            params = [start_date, end_date, branch_id,company_id]
+            params = [start_date, end_date, branch_id, company_id]
 
             if status_approve.lower() != "all":
                 query += " AND COALESCE(a.status_approve, 0) = %s"
@@ -90,18 +92,23 @@ def export_xlsx(filename, data, rename_column=None):
                     "index": index,
                 }
             )
-    
+
     if get_col_type:
         for foo in get_col_type:
             if foo["type"] == Decimal:
                 df[foo["key"]] = pd.to_numeric(df[foo["key"]])
-    
+
     if rename_column:
         df.rename(columns=rename_column, inplace=True)
 
     output = io.BytesIO()
 
-    with pd.ExcelWriter(output, engine="xlsxwriter", date_format="dd/mm/yyyy", datetime_format="dd/mm/yyyy") as writer:
+    with pd.ExcelWriter(
+        output,
+        engine="xlsxwriter",
+        date_format="dd/mm/yyyy",
+        datetime_format="dd/mm/yyyy",
+    ) as writer:
         df.to_excel(writer, sheet_name="Sheet1", index=False)
 
         workbook = writer.book
@@ -112,13 +119,15 @@ def export_xlsx(filename, data, rename_column=None):
         for foo in get_col_type:
             if foo["type"] == Decimal:
                 worksheet.set_column(foo["index"], foo["index"], 20, currency_format)
-    
+
     output.seek(0)
 
     response = HttpResponse(
         output.getvalue(),
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
-    response["Content-Disposition"] = "attachment; filename*=UTF-8''%s" % quote(filename)
+    response["Content-Disposition"] = "attachment; filename*=UTF-8''%s" % quote(
+        filename
+    )
 
     return response

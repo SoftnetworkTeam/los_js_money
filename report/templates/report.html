@@ -11,6 +11,8 @@
             <div class="card-header">
               <span id="reportName">Report รายงานขออนุมัติสินเชื่อ </span>
                 <input type="hidden" id="reportnm" name="report" value="rp_installmentDetail.fr3">
+                <input type="hidden" id="company_id" name="i_company_id" value="{{request.session.company_id}}">
+                <input type="hidden" id="branch_id" name="i_branch_id" value="{{request.session.branch_id}}">
                 <input type="hidden" name="format" value="PDF">
             </div>
               <div class="card-body px-4">

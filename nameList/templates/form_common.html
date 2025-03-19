@@ -118,7 +118,7 @@
                     จำนวนบุตรไม่บรรลุนิติภาวะ
                   </label>
                   <div class="col-lg-8">
-                    <select class="js-data-minorchildren-ajax w-100 select2-lg" id="minorchildren" name="minorchildren" >
+                    <select class="js-data-minorchildren-ajax w-100 select2-lg" id="minorchildren" name="minorchildren" required>
                     {% if minorchildren.id %}
                     <option value="{{ minorchildren.id }}">
                       {{ minorchildren.children_name }}
@@ -1059,7 +1059,7 @@
               <div class="col-xl-8">
                 <div class="mb-3 row">
                   <label class="col-xl-2 col-form-label" style="width: 12.66667%;">
-                    ชื่อบริษัท/ซับคอนแทรค
+                    ชื่อบริษัท
                   </label>
                   <div class="col-xl-10">
                     <input class="form-control" id="office" name="office" placeholder="ชื่อบริษัท/ซับคอนแทรค"
