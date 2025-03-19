@@ -1,57 +1,77 @@
 {% extends "base.html" %} {% load static %} {% block title %}
-<title id="title"></title>
+<title id="title">Report | รายงานขออนุมัติสินเชื่อ</title>
 {% endblock %} {% block content %}
 
-<div class="content-body">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xl-12">
-        <div class="card">
-          <div class="card-header">
-            <span id="reportName">Report รายงานขออนุมัติสินเชื่อ </span>
-          </div>
-          <div class="card-body px-4">
-            <div class="row" id="content">
-              <div class="col-xl-6">
-                <div class="mb-2 row">
-                  <label class="col-lg-2 col-form-label"> ช่วงเวลา </label>
-                  <div class="col-lg-8">
-                    <input class="form-control" type="text" id="rangDate" name="rangDate" value="" placeholder="ช่วงเวลา" />
+<form action="{% url 'report:print_report' %}" autocomplete="off" method="GET" target="_blank" id="reportForm">
+  <div class="content-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header">
+              <span id="reportName">Report รายงานขออนุมัติสินเชื่อ </span>
+                <input type="hidden" id="reportnm" name="report" value="rp_installmentDetail.fr3">
+                <input type="hidden" name="format" value="PDF">
+            </div>
+              <div class="card-body px-4">
+                <div class="row" id="content">
+                  <div class="col-xl-6">
+                    <div class="mb-2 row">
+                      <label class="col-lg-2 col-form-label"> ช่วงเวลา </label>
+                      <div class="col-lg-8">
+                        <input class="form-control" type="text" id="rangDate" value="" placeholder="ช่วงเวลา" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-6">
+                    <div class="mb-3 row">
+                      <label class="col-lg-2 col-form-label"> สถานะ </label>
+                      <div class="col-lg-8">
+                        <select class="form-control select2" for="s_status_approve" id="s_status_approve" name="s_status_approve">
+                          <option value="A">ทั้งหมด</option>
+                          <option value="0">Waiting</option>
+                          <option value="1">Approve</option>
+                          <option value="2">Reject</option>
+                          <option value="9">Created Contract</option>
+                        </select>
+                      </div>
+                    </div>
+                    <input class="form-control" type="hidden" id="d_start_date" name="d_start_date"/>
+                    <input class="form-control" type="hidden" id="d_end_date" name="d_end_date" />
                   </div>
                 </div>
-              </div>
-              <div class="col-xl-6">
-                <div class="mb-3 row">
-                  <label class="col-lg-2 col-form-label"> สถานะ </label>
-                  <div class="col-lg-8">
-                    <select class="form-control select2" for="status" id="status">
-                      <option value="all">ทั้งหมด</option>
-                      <option value="1">Approve</option>
-                      <option value="2">Created Contract</option>
-                      <option value="5">Cancel</option>
-                      <option value="9">Reject</option>
-                      <option value="">Waiting</option>
-                    </select>
-                  </div>
+                <hr />
+                <div class="col-xl-12 text-center">
+                  <button class="btn btn-outline-primary btn-sm"><i class="k-icon k-i-printer k-button-icon" style="font-size: 25px"></i><span style="margin-left: 5;font-size: 14;">Preview<span></button>
                 </div>
-                <input class="form-control" type="hidden" id="startDateInput" name="startDateInput" />
-                <input class="form-control" type="hidden" id="endDateInput" name="endDateInput" />
               </div>
-            </div>
-            <hr />
-            <div class="col-xl-12 text-center">
-              <button type="button" class="btn btn-outline-primary btn-sm" onclick="exports('requestLoan')"><i class="k-icon k-i-file-excel k-button-icon" style="font-size: 25px"></i> Export data</button>
-            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</form>
+
 
 {% endblock %} {% block script %}
 <script>
+  datepickerRange("#rangDate");
   var authEdit = "{{ auth_edit_delete }}";
+
+  $("#reportForm").submit(function(event) {
+    let startDate = $("#d_start_date").val();
+    let endDate = $("#d_end_date").val();
+
+    let startDateObj = new Date(startDate.split("/").reverse().join("-")); 
+    let endDateObj = new Date(endDate.split("/").reverse().join("-")); 
+
+    let startDateFormatted = startDateObj.toISOString().split('T')[0];
+    let endDateFormatted = endDateObj.toISOString().split('T')[0];
+
+    $("#d_start_date").val(startDateFormatted);
+    $("#d_end_date").val(endDateFormatted);
+  });
+
 </script>
-<script src="{% static 'js/report.js' %}"></script>
+{% comment %} <script src="{% static 'js/report.js' %}"></script> {% endcomment %}
 {% endblock %}

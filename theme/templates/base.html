@@ -16,7 +16,9 @@
     <meta name="format-detection" content="telephone=no">
 
     <!-- PAGE TITLE HERE -->
-    {% comment %} <title>SN | HOME</title> {% endcomment %}
+    {% if request.path == '/dashboard' or request.path == '' %}     
+        <title>SN | HOME</title>
+    {% endif %}
 
     <!-- dataTables -->
     {% comment %} <link rel="stylesheet" href="{% static 'vendor/datatables/css/jquery.dataTables.min.css' %}"> {% endcomment %}
@@ -33,7 +35,6 @@
     <!-- select2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/css/select2.min.css' %}?v=2"> {% endcomment %}
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
@@ -61,7 +62,7 @@
     <script src="{% static 'vendor/apexchart/apexchart.js' %}"></script>
 
     <!-- theme -->
-    <script src="{% static 'js/function_all/function_all.js' %}?v=152"></script>
+    <script src="{% static 'js/function_all/function_all.js' %}?v=153"></script>
 
     <!-- Toastr -->
     <script src="{% static 'vendor/toastr/js/toastr.min.js' %}"></script>
@@ -280,37 +281,22 @@
             </li>
 
             <li {% if  'configurations' in request.path or '/detail/' in request.path  or  'grade-income' in request.path or 'grade-unstable' in request.path or 'scoring' in request.path %} {% if 'name-list' not in request.path %} class="mm-active" {% endif %} {% endif %}>
-
                 <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="menu-icon">
-                       <i class="ti-folder" style="font-size:18px"></i>
-                    </div>
+                    <div class="menu-icon"><i class="ti-folder" style="font-size:18px"></i></div>
                     <span class="nav-text font14" style="margin-left: 10px;">กำหนดข้อมูล</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li>
-                        <a class="sub-menu-item font14 {% if request.path == 'configurations' or  'grade-income' in request.path  %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/grade-income">
-                            เกรดผู้มีรายได้ประจำ
-                        </a>
+                    <li><a class="sub-menu-item font14 {% if request.path == 'configurations' or  'grade-income' in request.path  %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/grade-income">เกรดผู้มีรายได้ประจำ</a></li>
+
+                    <li><a class="sub-menu-item font14 {% if request.path == 'configurations' or 'grade-unstable' in request.path  %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/grade-unstable">เกรดผู้มีรายได้ไม่สม่ำเสมอ</a>
                     </li>
 
-                    <li>
-                        <a class="sub-menu-item font14 {% if request.path == 'configurations' or 'grade-unstable' in request.path  %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/grade-unstable">
-                            เกรดผู้มีรายได้ไม่สม่ำเสมอ
-                        </a>
-                    </li>
-
-                    <li>
-                        <a class="sub-menu-item font14 {% if request.path == 'configurations' or 'scoring' in request.path %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/scoring">
-                            เกณฑ์การให้คะแนนผู้กู้
-                        </a>
-                    </li>
+                    <li><a class="sub-menu-item font14 {% if request.path == 'configurations' or 'scoring' in request.path %} mm-active left mm-collapse mm-show{% endif %}" href="/configurations/scoring">เกณฑ์การให้คะแนนผู้กู้</a></li>
                 </ul>
-              
             </li>
 
             {% if auth_report_menu == True %}
-                {% comment %} <li>
+                <li>
                     <a class="has-arrow" href="#" aria-expanded="false">
                         <div class="menu-icon"><i class="ti-printer" style="font-size:18px"></i></div>
                         <span class="nav-text font14" style="margin-left: 10px;">Report</span>
@@ -318,7 +304,7 @@
                     <ul aria-expanded="false">
                         <li><a class="sub-menu-item font14" href="/report/request-loan">รายงานขออนุมัติสินเชื่อ</a></li>
                     </ul>
-                </li> {% endcomment %}
+                </li> 
                 <li>
                     <a class="has-arrow" href="#" aria-expanded="false">
                         <div class="menu-icon"><i class="ti-server" style="font-size:18px"></i></div>

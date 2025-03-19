@@ -676,6 +676,8 @@ function datepickerRange(inputSelector) {
 
           $('#startDateInput').val(startDate);
           $('#endDateInput').val(endDate);
+          $('#d_start_date').val(startDate);
+          $('#d_end_date').val(endDate);
       },
       onReady: function (selectedDates, dateStr, instance) {
           if (dateStr.indexOf(" to ") !== -1) {
@@ -692,6 +694,8 @@ function datepickerRange(inputSelector) {
 
           $('#startDateInput').val(startFormatted);
           $('#endDateInput').val(endFormatted);
+          $('#d_start_date').val(startFormatted);
+          $('#d_end_date').val(endFormatted);
       }
   });
 }

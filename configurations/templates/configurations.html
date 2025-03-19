@@ -134,58 +134,56 @@ var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.
   var urlupdateStatus = "{% url 'configurations:updateStatus' %}";
   var urlupdateData = "{% url 'configurations:updateData' %}";
 
-  function submitData(btn, id, statusBtn,status_type,status,dataType) {
-    var selectedRow = $(btn).closest("tr");
+async function submitData(btn, id, statusBtn, status_type, status, dataType) {
+  var selectedRow = $(btn).closest("tr");
 
-    var formData = new FormData();
-    formData.append("id", id);
-    formData.append("type_button", statusBtn);
-    formData.append("data_type", dataType);
+  var formData = new FormData();
+  formData.append("id", id);
+  formData.append("type_button", statusBtn);
+  formData.append("data_type", dataType);
 
-    if (typeUrl == "grade-income" || typeUrl == "grade-unstable") {
-      var input_text1 = selectedRow.find("input.form-control.text1").val() || "";
+  if (typeUrl == "grade-income" || typeUrl == "grade-unstable") {
+    var input_text1 = selectedRow.find("input.form-control.text1").val() || "";
+    formData.append("grade_code", input_text1);
+  } else {
+    var input_text1 = selectedRow.find("input.form-control.text1").val() || "";
+    var input_text2 = selectedRow.find("input.form-control.text2").val() || "";
+    var input_text3 = selectedRow.find("input.form-control.text3").val() || "";
+    var input_text4 = selectedRow.find("input.form-control.text4").val() || "";
+    var input_text5 = selectedRow.find("input.form-control.text5").val() || "";
 
-      formData.append("grade_code", input_text1);
-    } else {
-      var input_text1 = selectedRow.find("input.form-control.text1").val() || "";
-      var input_text2 = selectedRow.find("input.form-control.text2").val() || "";
-      var input_text3 = selectedRow.find("input.form-control.text3").val() || "";
-      var input_text4 = selectedRow.find("input.form-control.text4").val() || "";
-      var input_text5 = selectedRow.find("input.form-control.text5").val() || "";
+    formData.append("score_name", input_text1);
+    formData.append("stable_min", input_text2);
+    formData.append("stable_percent", input_text3);
+    formData.append("not_stable_min", input_text4);
+    formData.append("not_stable_percent", input_text5);
+  }
 
-      formData.append("score_name", input_text1);
-      formData.append("stable_min", input_text2);
-      formData.append("stable_percent", input_text3);
-      formData.append("not_stable_min", input_text4);
-      formData.append("not_stable_percent", input_text5);
-    }
+  formData.append("type", status_type);
 
-    formData.append("type", status_type);
-
-    $.ajax({
-      url: urlupdateData,
-      type: "POST",
-      data: formData,
+  try {
+    const response = await fetch(urlupdateData, {
+      method: 'POST',
       headers: {
         "X-CSRFToken": getCookie("csrftoken"),
       },
-      contentType: false,
-      processData: false,
-      success: function (response) {
-        if (response.status == "save success") {
-          notification("success", "บันทึกสำเร็จ", "success", "ปิด");
-        } else if (response.status == "delete success") {
-          notification("success", "ลบสำเร็จ", "success", "ปิด");
-          selectedRow.remove();
-        } else if (response.status == "can't delete") {
-          notification("แจ้งเตือน", "ไม่สามารถลบข้อมูลหลักได้", "warnning", "ปิด");
-        }
-      },
-      error: function (error) {
-        console.error("เกิดข้อผิดพลาด", error);
-      },
+      body: formData,
     });
+
+    const data = await response.json();
+
+    if (data.status == "save success") {
+      notification("success", "บันทึกสำเร็จ", "success", "ปิด");
+    } else if (data.status == "delete success") {
+      notification("success", "ลบสำเร็จ", "success", "ปิด");
+      selectedRow.remove();
+    } else if (data.status == "can't delete") {
+      notification("แจ้งเตือน", "ไม่สามารถลบข้อมูลหลักได้", "warnning", "ปิด");
+    }
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาด", error);
   }
+}
 
   $("#openDialogButton").on("click", function (e) {
     e.preventDefault();
