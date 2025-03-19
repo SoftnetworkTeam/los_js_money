@@ -526,7 +526,7 @@ class scoringListApiView(ListAPIView):
     serializer_class = MasterscoringdetailSerializer
 
     def get_queryset(self):
-        scoring_id = self.request.query_params.get('id', None)
+        scoring_id = self.request.query_params.get("id", None)
 
         if not scoring_id:
             return []
@@ -548,7 +548,7 @@ class scoringListApiView(ListAPIView):
             "N": "กำไรต่อเดือน",
             "O": "อายุธุรกิจ",
             "Y": "เกรดผู้มีรายได้ประจำ",
-            "Z": "เกรดผู้มีรายได้ไม่สม่ำเสมอ"
+            "Z": "เกรดผู้มีรายได้ไม่สม่ำเสมอ",
         }
 
         scoring_details = Masterscoringdetail.objects.filter(score_id=scoring_id)
@@ -558,18 +558,26 @@ class scoringListApiView(ListAPIView):
             for item in scoring_details.values("score_type").annotate(count=Count("id"))
         }
 
+        query_param = self.request.query_params.get("q", None)
+
+        filtered_scoringMap = {
+            k: v
+            for k, v in scoringMap.items()
+            if query_param is None or query_param.lower() in v.lower()
+        }
+
         result = [
             {
                 "id": index + 1,
                 "score_type": score_type,
                 "score_name": score_name,
-                "count": scoring_summary.get(score_type, 0) 
+                "count": scoring_summary.get(score_type, 0),
             }
-            for index, (score_type, score_name) in enumerate(sorted(scoringMap.items()))
+            for index, (score_type, score_name) in enumerate(sorted(filtered_scoringMap.items()))
         ]
 
         return result
-    
+
 
 class ViewScoringDetailApiView(ListAPIView):
     pagination_class = NoLimitPagination

@@ -181,14 +181,11 @@
 
     loadSelectScore(urlMasterscoringList, ".js-data-scoringList-ajax", "results", "score_type", "score_name", {"id": getId});
 
-    
-
     });
 
     function loadSelectScore(url, selector, responseKey = null, idKey = null, textKey = null, additionalParams = {}, selectedValue = null, placeholder = '-- เลือกข้อมูล --') {
 
-        $(".js-data-scoringList-ajax").html('(`<option value="A" selected>ประเภทอาชีพ</option>`)')
-        // โหลดข้อมูลประเภทอาชีพก่อน
+         $(".js-data-scoringList-ajax").html('(`<option selected>ประเภทอาชีพ</option>`)')
         $.ajax({
             url: urlMasterScoringView + "?id=" + getId + "&scoring_type=A",
             type: 'GET',
