@@ -51,10 +51,10 @@
                         <td><input class='form-control input_conf text1' value='{{ grade.grade_code }}'></td>
                     {% else %}
                         <td><input class='form-control input_conf text1' style="width: 120;" value='{{ grade.score_name }}'></td>
-                        <td><input class='form-control input_conf text2' value='{{ grade.stable_min }}'></td>
-                        <td><input class='form-control input_conf text3' value='{{ grade.stable_percent }}'></td>
-                        <td><input class='form-control input_conf text4' value='{{ grade.not_stable_min }}'></td>
-                        <td><input class='form-control input_conf text5' value='{{ grade.not_stable_percent }}'></td>
+                        <td><input class='form-control input_conf text2' value='{{ grade.stable_min }}' onkeypress="return onlyNumberKey(event)"></td>
+                        <td><input class='form-control input_conf text3' value='{{ grade.stable_percent }}' onkeypress="return onlyNumberKey(event)"></td>
+                        <td><input class='form-control input_conf text4' value='{{ grade.not_stable_min }}' onkeypress="return onlyNumberKey(event)"></td>
+                        <td><input class='form-control input_conf text5' value='{{ grade.not_stable_percent }}' onkeypress="return onlyNumberKey(event)"></td>
                         <td>{{ grade.first_name }}</td>
                     {% endif %}
 
