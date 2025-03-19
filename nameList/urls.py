@@ -1,11 +1,21 @@
 from django.urls import path,re_path
+from django.conf.urls.static import static
 from nameList import views
-from .views import MasterBranchAPAPIView, apmastAPIView, MasterOfficerAPIView, MasterBrandAPIView, MasterModelAPIView, MasterSubModelAPIView,MasterColorAPIView,interestAPIView, MasterNumberOfInstallmentAPIView, MasterCustomerPrenameAPIView, MasterOccupationAPIView, MasterProvinceAPIView, MasterAmphoeAPIView, MasterTambonAPIView, MasterResidenceAPIView, MasterLivingOwnerAPIView, MasterLivingTypeAPIView, MasterBankAPIView, MasterContractDocumentAPIView, HireContractApiView,CustomerLoanDetailApiView,branchAPAPIView,CalScoring,updateStatus
+from .views import  MasterOfficerAPIView, MasterBrandAPIView, MasterModelAPIView, MasterSubModelAPIView,MasterColorAPIView,interestAPIView, MasterNumberOfInstallmentAPIView, MasterCustomerPrenameAPIView, MasterOccupationAPIView, MasterProvinceAPIView, MasterAmphoeAPIView, MasterTambonAPIView, MasterResidenceAPIView, MasterLivingOwnerAPIView, MasterLivingTypeAPIView, MasterBankAPIView, MasterContractDocumentAPIView, HireContractApiView,CustomerLoanDetailApiView,branchAPAPIView,CalScoring,updateStatus,CustomerLoanDetailApiView
 
 from configurations.views import MastercustomerageApiView,MasterminorchildrenApiView,MastereducationlevelApiView,businesstypeApiView,MastershoptypesApiView,MasterrentalageApiView,MastermonthlyprofitApiView,MasterbusinessageApiView,MastercontractreasonApiView,MastercountryApiView,MasterscoringinfoApiView,rangeAge
 app_name = 'nameList'
 
 urlpatterns = [
+    path('name-list', views.nameList, name='name-list'),
+    path('customer-api/<str:status>/', CustomerLoanDetailApiView.as_view(), name='customer-api-status'),
+    path('name-list/approve', views.nameList, name='name-list-approve'),
+    path('name-list/waiting', views.nameList, name='name-list-waiting'),
+    path("name-list/detail/<id>", views.detail, name='detail'),
+    path("name-list/edit/<id>", views.editFormcommon, name='edit'),
+    path("name-list/create", views.createCustomer, name='name-list_create'),
+    re_path(r"^edit/$", views.createCustomer, name="editloan"),
+    path("detaildelete/<int:file_id>/", views.DetailDeleteFile, name='detaildelete_file'),  
     path('MasterOfficer/', MasterOfficerAPIView.as_view(), name='MasterOfficer'),
     path('MasterModel/', MasterModelAPIView.as_view(), name='MasterModel'),
     path('MasterSubModel/', MasterSubModelAPIView.as_view(), name='MasterSubModel'),
@@ -40,5 +50,6 @@ urlpatterns = [
     path('cal-scoring/', CalScoring.as_view(), name='cal-scoring'),
     path('updateStatus/', updateStatus.as_view(), name='updateStatus'),
     path('rangeAge/', rangeAge.as_view(), name='rangeAge'),
-    
 ]
+
+urlpatterns += static('/nameList/js/', document_root='nameList/js/')

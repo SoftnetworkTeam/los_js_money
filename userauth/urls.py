@@ -1,5 +1,5 @@
 from django.urls import path
-
+from django.conf.urls.static import static
 from userauth import views
 from .views import MasterAuthList, AuthList, editAuth, UserList,UserList
 
@@ -16,3 +16,5 @@ urlpatterns = [
     path("authlist-api/", AuthList.as_view(), name='authlist-api'),
     path('edit-auth-api/<int:id_auth>/', editAuth.as_view(), name='edit-auth-api'),
 ]
+urlpatterns += static('/userauth/js/', document_root='userauth/js/')
+

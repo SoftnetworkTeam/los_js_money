@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf.urls.static import static
 from configurations import views
 from .views import MasterincomestableApiView,MasterincomenotstableApiView,MasterscoringinfoApiView,MasterscoringinfoApiView,ViewScoringDetailApiView,MasterscoringdetailApiView,scoringListApiView,updateStatus,updateData,AdminscoringinfoApiView,updateConfig
 from nameList.views import MasterOccupationAPIView
@@ -6,6 +7,8 @@ from nameList.views import MasterOccupationAPIView
 app_name = 'configurations'
 
 urlpatterns = [
+    path("configurations/<str:grade_type>",views.configurations,  name='configurations'),
+    path("configurations/<str:grade_type>/create", views.configurations, name='grade-low'),
     path('/Masterincomestable/', MasterincomestableApiView.as_view(), name='Masterincomestable'),
     path('/Masterincomenotstable/', MasterincomenotstableApiView.as_view(), name='Masterincomenotstable'),
     path('/Masterscoringinfo/', AdminscoringinfoApiView.as_view(), name='Masterscoringinfo'),
@@ -19,3 +22,5 @@ urlpatterns = [
     path('updateData/', updateData.as_view(), name='updateData'),
     path('updateConfig/', updateConfig.as_view(), name='updateConfig'),
 ]
+
+urlpatterns += static('/configurations/js/', document_root='configurations/js/')

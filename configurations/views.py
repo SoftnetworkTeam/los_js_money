@@ -42,6 +42,51 @@ def check_permission(view_func):
 
 # @login_required(login_url='/user_login')
 # @check_permission
+
+def configurations(request, grade_type=None):
+    type_obj = []
+    status_type = None
+    data_type = None
+
+    if grade_type == 'grade-income':
+        type_obj = Masterincomestable.objects.all().order_by('id') 
+        status_type = 'statusIncome'
+        data_type = 'grade'
+    elif grade_type == 'grade-unstable':
+        type_obj = Masterincomenotstable.objects.all().order_by('id')
+        status_type = 'statusNotIncome'
+        data_type = 'grade'
+    elif grade_type == 'scoring':
+        type_obj = Masterscoringinfo.objects.all().annotate(
+            first_name=Subquery(
+                AuthUser.objects.filter(id=OuterRef('user_id')).values('first_name')[:1]
+            )
+        ).order_by("id")
+        status_type = 'statusScoring'
+        data_type = 'scoring'
+
+    # โหลดข้อมูล user_admin ก่อนใช้
+    user_admin = AuthUser.objects.all().order_by('id')
+
+    if grade_type == 'scoring':
+        # สร้าง dictionary ของ user_id -> username
+        user_dict = {user.id: user.username for user in user_admin}
+
+        # แปลง QuerySet เป็น list ของ dictionary
+        type_obj = list(type_obj.values())
+
+        # เพิ่ม username ให้แต่ละ item
+        for item in type_obj:
+            item["username"] = user_dict.get(item["user_id"], "ไม่พบข้อมูล")
+
+    return render(request, 'configurations.html', {
+        'grade_type': grade_type,
+        'type_obj': type_obj, 
+        'status_type' : status_type,
+        'data_type' : data_type,
+    })
+       
+
 def configurationsDetail(request, id):
     scoringinfo = Masterscoringinfo.objects.filter(id=id).first()
     

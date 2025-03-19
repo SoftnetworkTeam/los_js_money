@@ -8,8 +8,10 @@ from decimal import Decimal, InvalidOperation
 from django.urls import reverse
 from django.http import  JsonResponse,HttpResponseRedirect
 from theme.models import MasterBranchAP, apmast, MasterBrand, MasterModel, MasterSubModel, MasterColor, MasterInterestRate, MasterNumberOfInstallment, MasterCustomerPrename, MasterOccupation, MasterNCB, MasterProvince, MasterAmphoe, MasterTambon, MasterResidence, MasterLivingType, MasterLivingOwner, MasterBank, MasterContractDocument,InstallmentDetail,InstallmentFile,CustomerLoanDetail, CustomerAddressDetail,CustomerInfo,CustomerAddress,MasterCifDigit,CustomerIncome,Distributor,Masterbranch,\
-    Masterscoringinfo,Masterincomestable,Masterincomenotstable
+Masterscoringinfo,Masterincomestable,Masterincomenotstable,Mastercustomerage,Mastermaritalstatus,Masterminorchildren,Mastereducationlevel,Masterbusinesstype,Mastermonthlyprofit,Masterbusinessage,Mastercontractreason,MasterNumberOfInstallment,Mastershoptypes,Masterrentalage,MasterBank,Masterbranch,MasterContractDocument,LogUserLogin,Masterbranch, MasterCompany, UserBranch
 from configurations.models import Masterscoringdetail
+from configurations.views import Mastercountry
+
 
 from .serializers import MasterBranchAPSerializer, apmastSerializer, MasterOfficer, MasterOfficerSerializer, MasterBrandSerializer, MasterModelSerializer, MasterSubModelSerializer, MasterColorSerializer, interestSerializer, MasterNumberOfInstallmentSerializer, MasterCustomerPrenameSerializer, MasterOccupationSerializer, MasterNCBSerializer , MasterProvinceSerializer, MasterAmphoeSerializer, MasterTambonSerializer, MasterResidenceSerializer, MasterLivingTypeSerializer, MasterLivingOwnerSerializer, MasterBankSerializer, MasterContractDocumentSerializer,HireContactSerializer ,HireContract,CustomerLoanDetailSerializer,MasterBrandSerializer,MasterbranchSerializer
 from theme.serializers import InstallmentFileSerializers
@@ -29,6 +31,254 @@ import os
 import time
 import re
 
+def check_permission(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated:
+            user_auth = UserAuth.objects.filter(user=user, auth__auth_code='A002').first()
+            if user_auth and not user_auth.status:
+                return redirect('dashboard')
+
+        return view_func(request, *args, **kwargs)
+
+    return _wrapped_view
+
+@login_required(login_url='/user_login')
+def nameList(request):
+    customer_loan_detail = CustomerLoanDetail.objects.all()
+    return render(request, 'nameList.html', {'customer_loan_detail': customer_loan_detail})
+
+@login_required(login_url='/user_login')
+def detail(request, id):
+    installment_obj = InstallmentDetail.objects.filter(id=id).first()
+    installment_id = CustomerLoanDetail.objects.filter(id=id).first()
+    customerid = installment_id.customer_id
+    
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        status = request.POST.get('status')
+        issue_cancel = request.POST.get('issue_cancel', '')
+        
+        current_date = datetime.now()
+        installment_detail = InstallmentDetail.objects.get(id=id)
+        installment_detail.status_approve = status
+        installment_detail.approve_date = current_date
+        installment_detail.user_approve = request.session['username']
+        installment_detail.user_id = request.session['username']
+        installment_detail.issue_cancel = issue_cancel
+        installment_detail.save()
+
+        return JsonResponse({'success': True, 'message': 'บันทึกข้อมูลสำเร็จ', 'detail': issue_cancel})
+
+    customer_loan_detail = CustomerLoanDetail.objects.filter(id=id).first()
+    customer_info = CustomerInfo.objects.filter(id=customerid).first()
+    prename = MasterCustomerPrename.objects.filter(id=customer_info.pre_name_id).first()
+    
+    installment = InstallmentDetail.objects.get(id=id)
+    customer_range_age = Mastercustomerage.objects.filter(id=customer_info.customer_age_id).first()
+    marital_status = Mastermaritalstatus.objects.filter(id=customer_info.marital_status).first()
+    minorchildren = Masterminorchildren.objects.filter(id=customer_info.minorchildren_id).first()
+    education = Mastereducationlevel.objects.filter(id=customer_info.education_level_id).first()
+    occupation = MasterOccupation.objects.filter(id=customer_info.occupation_id).first()
+    business_type = Masterbusinesstype.objects.filter(id=customer_info.business_type_id).first()
+    monthly_profit = Mastermonthlyprofit .objects.filter(id=customer_info.monthlyprofit_id).first()
+    business_age = Masterbusinessage.objects.filter(id=customer_info.businessage_id).first()
+    contract_reason = Mastercontractreason.objects.filter(id=customer_info.contract_reason_id).first()
+    number_Installment = MasterNumberOfInstallment.objects.filter(id=installment.installment).first()
+    shop_type = Mastershoptypes.objects.filter(id=customer_info.shop_type_id).first()
+    rentalage = Masterrentalage.objects.filter(id=customer_info.rentalage_id).first()
+    
+    customer_address_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=1).first()
+    customer_address2_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=2).first()
+    customer_address3_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=3).first()
+    customer = CustomerLoanDetail.objects.filter(id=id).first()
+    
+
+    file = InstallmentFile.objects.filter(installment_id=installment_obj.id)
+
+    badge_status = ""
+    loan_status = ""
+    if customer_loan_detail.status_approve == 1:
+        badge_status = 'success' 
+        loan_status = 'Approve'
+    elif customer_loan_detail.status_approve == 2:
+        badge_status = 'info'
+        loan_status = 'Created Contract'
+    elif customer_loan_detail.status_approve == 5:
+        badge_status = 'danger' 
+        loan_status = 'Cancel'
+    elif customer_loan_detail.status_approve == 9:
+        badge_status = 'danger' 
+        loan_status = 'Reject'
+    else: 
+        badge_status = 'warning' 
+        loan_status = 'Waiting'
+        
+    return render(request, 'detail.html', {
+        'installment_detail': installment ,
+        'business_type': business_type,
+        'customer_info': customer_info ,
+        'prename': prename,
+        'customer_range_age':customer_range_age,
+        'marital_status': marital_status,
+        'minorchildren': minorchildren,
+        'education': education,
+        'occupation': occupation,
+        'monthly_profit': monthly_profit,
+        'business_age': business_age,
+        'contract_reason': contract_reason,
+        'number_Installment': number_Installment,
+        'shop_type': shop_type,
+        'rentalage': rentalage,
+        'customer_address_detail': customer_address_detail,
+        'customer_address2_detail': customer_address2_detail,
+        'customer_address3_detail': customer_address3_detail,
+        "id": id,
+        'file': file,
+        'customer': customer,
+        'badge_status': badge_status ,
+        'loan_status': loan_status
+    })
+
+def format_date_time(date_time):
+    if date_time is not None:
+        return date_time.strftime('%d/%m/%Y')
+    else:
+        return None
+
+@login_required(login_url='/user_login')
+@check_permission
+def editFormcommon(request,id):
+    installment = InstallmentDetail.objects.filter(id=id).first()   
+    customerid = installment.customer_id
+    if request.method == 'POST':    
+        if request.POST['type'] == 'file':
+            file = InstallmentFile.objects.filter(id=request.POST['file_id'])
+            file.delete()
+        else:
+            current_date = datetime.now()
+            customer_loan_detail_id = request.POST['id']
+
+        return HttpResponseRedirect(reverse('edit', args=[id]))
+    else:
+        customer_info = CustomerInfo.objects.filter(id=customerid).first()
+        prename = MasterCustomerPrename.objects.filter(id=customer_info.pre_name_id).first()
+        customer_range_age = Mastercustomerage.objects.filter(id=customer_info.customer_age_id).first()
+        marital_status = Mastermaritalstatus.objects.filter(id=customer_info.marital_status).first()
+        minorchildren = Masterminorchildren.objects.filter(id=customer_info.minorchildren_id).first()
+        education = Mastereducationlevel.objects.filter(id=customer_info.education_level_id).first()
+        occupation = MasterOccupation.objects.filter(id=customer_info.occupation_id).first()
+        business_type = Masterbusinesstype.objects.filter(id=customer_info.business_type_id).first()
+        monthly_profit = Mastermonthlyprofit .objects.filter(id=customer_info.monthlyprofit_id).first()
+        business_age = Masterbusinessage.objects.filter(id=customer_info.businessage_id).first()
+        contract_reason = Mastercontractreason.objects.filter(id=customer_info.contract_reason_id).first()
+        number_Installment = MasterNumberOfInstallment.objects.filter(id=installment.installment).first()
+        shop_type = Mastershoptypes.objects.filter(id=customer_info.shop_type_id).first()
+        rentalage = Masterrentalage.objects.filter(id=customer_info.rentalage_id).first()
+        
+        customer_address_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=1).first()
+        customer_address2_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=2).first()
+        customer_address3_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=3).first()
+        customer = CustomerLoanDetail.objects.filter(id=id).first(),
+        formatted_date_time_birth_date = format_date_time(customer_info.birth_date),
+        formatted_date_time_issue_date = format_date_time(customer_info.issue_date),
+        formatted_date_time_expire_date = format_date_time(customer_info.expire_date)
+        formatted_date_time_date_read_card = format_date_time(installment.date_read_card)
+        formatted_date_time_start_payment = format_date_time(installment.start_payment)
+        
+        country = Mastercountry.objects.filter(id=customer_info.country_id).first()
+        bank = MasterBank.objects.filter(id=installment.bank_id).first()
+        province_branch = MasterProvince.objects.filter(id=installment.create_to_province_id).first()
+        branch = Masterbranch.objects.filter(id=installment.create_to_branch_id).first()
+        
+        file_objects = InstallmentFile.objects.filter(installment_id=installment.id).select_related('doc')
+
+        # for file_type in file_objects:
+        #     print(vars(file_type) )
+    
+    return render(request, 'form_common.html', { 
+        'installment_detail': installment ,
+        'business_type': business_type,
+        'customer_info': customer_info ,
+        'prename': prename,
+        'customer_range_age':customer_range_age,
+        'marital_status': marital_status,
+        'minorchildren': minorchildren,
+        'education': education,
+        'occupation': occupation,
+        'monthly_profit': monthly_profit,
+        'business_age': business_age,
+        'contract_reason': contract_reason,
+        'number_Installment': number_Installment,
+        'shop_type': shop_type,
+        'rentalage': rentalage,
+        'customer_address_detail': customer_address_detail,
+        'customer_address2_detail': customer_address2_detail,
+        'customer_address3_detail': customer_address3_detail,
+        "id": id,
+        'file': file_objects,
+        'formatted_date_time_issue_date' : formatted_date_time_issue_date,
+        'formatted_date_time_expire_date' : formatted_date_time_expire_date,
+        'formatted_date_time_date_read_card' : formatted_date_time_date_read_card,
+        'formatted_date_time_start_payment' : formatted_date_time_start_payment,
+        'formatted_date_time_birth_date' : formatted_date_time_birth_date,
+        'country' : country,
+        'bank' : bank,
+        'province_branch' : province_branch,
+        'branch' : branch,
+        'customer': customer,       "married_status_options": [
+            {
+                "id": "1",
+                "text": "โสด",
+                "value": "1"
+            },
+            {
+                "id": "2",
+                "text": "สมรส",
+                "value": "2"
+            },
+            {
+                "id": "3",
+                "text": "หย่าร้าง",
+                "value": "3"
+            },
+            {
+                "id": "4",
+                "text": "หม้าย",
+            }
+        ],
+    }) 
+
+@login_required(login_url='/user_login')
+@check_permission
+def createCustomer(request):
+    return render(request, 'form_common.html', {
+                "guarantee_type_options": ["เดือน", "ปี"] ,
+                "married_status_options": [
+                    {
+                        "id": "1",
+                        "text": "โสด",
+                        "value": "1"
+                    },
+                    {
+                        "id": "2",
+                        "text": "สมรส",
+                        "value": "2"
+                    },
+                    {
+                        "id": "3",
+                        "text": "หย่าร้าง",
+                        "value": "3"
+                    },
+                    {
+                        "id": "4",
+                        "text": "หม้าย",
+                        "value": "4",
+                    }
+                ],
+                
+        })
+    
 def safe_decimal(value, default=Decimal('0')):
     try:
         # Try to remove commas and convert to Decimal
@@ -1040,3 +1290,13 @@ class updateStatus(BaseListAPIView):
         installment_detail.save()
 
         return JsonResponse({'success': True, 'message': 'บันทึกข้อมูลสำเร็จ', 'detail': issue_cancel})
+    
+def DetailDeleteFile(request, file_id):
+    if request.method == "GET":
+        try:
+            file = InstallmentFile.objects.get(id=file_id)
+            file.delete()
+            return JsonResponse({"success": True})
+        except InstallmentFile.DoesNotExist:
+            return JsonResponse({"success": False, "message": "File not found"})
+    return JsonResponse({"success": True, "message": "File deleted successfully"})
