@@ -560,10 +560,10 @@ class scoringListApiView(ListAPIView):
 
         query_param = self.request.query_params.get("q", None)
 
-        filtered_scoringMap = {
-            k: v
-            for k, v in scoringMap.items()
-            if query_param is None or query_param.lower() in v.lower()
+        filter_scoringMap = {
+            type : score_type
+            for type, score_type in scoringMap.items()
+            if query_param is None or query_param.lower() in score_type.lower()
         }
 
         result = [
@@ -573,7 +573,7 @@ class scoringListApiView(ListAPIView):
                 "score_name": score_name,
                 "count": scoring_summary.get(score_type, 0),
             }
-            for index, (score_type, score_name) in enumerate(sorted(filtered_scoringMap.items()))
+            for index, (score_type, score_name) in enumerate(sorted(filter_scoringMap.items()))
         ]
 
         return result
