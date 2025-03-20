@@ -185,7 +185,7 @@
 
     function loadSelectScore(url, selector, responseKey = null, idKey = null, textKey = null, additionalParams = {}, selectedValue = null, placeholder = '-- เลือกข้อมูล --') {
 
-         $(".js-data-scoringList-ajax").html('(`<option selected>ประเภทอาชีพ</option>`)')
+         $(".js-data-scoringList-ajax").html('(`<option value="A" selected>ประเภทอาชีพ</option>`)')
         $.ajax({
             url: urlMasterScoringView + "?id=" + getId + "&scoring_type=A",
             type: 'GET',

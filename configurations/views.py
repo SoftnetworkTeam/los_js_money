@@ -636,6 +636,7 @@ class ViewScoringDetailApiView(ListAPIView):
         return master_queryset
 
 
+
 class updateConfig(APIView):
     def post(self, request, *args, **kwargs):
         post_data = request.data  
@@ -661,7 +662,7 @@ class updateConfig(APIView):
                 updated_at=now
             )
         
-        for s, t in zip(scores, type_id): #zip หรือจับคู่ไว้จับคู่
+        for s, t in zip(scores, type_id): #zip จับคู่
             scoring_detail = Masterscoringdetail.objects.filter(score_id=score_id, score_type=scoring_type, type_id=t).first()
             
             if scoring_detail:

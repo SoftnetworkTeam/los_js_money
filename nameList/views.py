@@ -175,13 +175,12 @@ def editFormcommon(request,id):
         number_Installment = MasterNumberOfInstallment.objects.filter(id=installment.installment).first()
         shop_type = Mastershoptypes.objects.filter(id=customer_info.shop_type_id).first()
         rentalage = Masterrentalage.objects.filter(id=customer_info.rentalage_id).first()
-        
         customer_address_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=1).first()
         customer_address2_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=2).first()
         customer_address3_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=3).first()
-        customer = CustomerLoanDetail.objects.filter(id=id).first(),
-        formatted_date_time_birth_date = format_date_time(customer_info.birth_date),
-        formatted_date_time_issue_date = format_date_time(customer_info.issue_date),
+        customer = CustomerLoanDetail.objects.filter(id=id).first()
+        formatted_date_time_birth_date = format_date_time(customer_info.birth_date)
+        formatted_date_time_issue_date = format_date_time(customer_info.issue_date)
         formatted_date_time_expire_date = format_date_time(customer_info.expire_date)
         formatted_date_time_date_read_card = format_date_time(installment.date_read_card)
         formatted_date_time_start_payment = format_date_time(installment.start_payment)
@@ -460,24 +459,30 @@ class MasterProvinceAPIView(BaseListAPIView):
 
 class MasterAmphoeAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
-    queryset = MasterAmphoe.objects.all()
     serializer_class = MasterAmphoeSerializer        
+    
+    def get_queryset(self):
+        province_id = self.request.GET.get('province_id', None)
+        queryset = MasterAmphoe.objects.filter(province_id=province_id)
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(amphoe_name__icontains=query_param))
+        return queryset
 
 
 class MasterTambonAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
-    queryset = MasterTambon.objects.all()
     serializer_class = MasterTambonSerializer
 
-    # def get_queryset(self):
-    #     queryset = MasterTambon.objects.all()
+    def get_queryset(self):
+        amphoe_id = self.request.GET.get('amphoe_id', None)
+        queryset = MasterTambon.objects.filter(amphoe_id=amphoe_id)
+        query_param = self.request.query_params.get('q', None)
         
-    #     tambon_name = self.request.GET.get('tambon_name')
-    #     if tambon_name:
-    #         queryset = queryset.filter(tambon_name=tambon_name)
-            
-
-    #     return queryset
+        if query_param:
+            queryset = queryset.filter(Q(tambon_name=query_param))
+        return queryset
 
         
 class MasterResidenceAPIView(BaseListAPIView):
@@ -942,9 +947,9 @@ def insertInstallment(request):
                         amphoe_customer = address[1] 
                         tambon_customer = address[2] 
                     else :
-                        province_customer =  post_data['province']
-                        amphoe_customer = post_data['amphoe']
-                        tambon_customer = post_data['tambon']
+                        province_customer =  post_data['province_current']
+                        amphoe_customer = post_data['amphoe_current']
+                        tambon_customer = post_data['tambon_current']
                         
                     postcode = post_data.get('postcode_current', '') 
                     if postcode == '' or not postcode.isdigit():
@@ -984,9 +989,9 @@ def insertInstallment(request):
                         amphoe_customer = address[1] 
                         tambon_customer = address[2] 
                     else :
-                        province_customer =  post_data['province']
-                        amphoe_customer = post_data['amphoe']
-                        tambon_customer = post_data['tambon']
+                        province_customer =  post_data['province_current']
+                        amphoe_customer = post_data['province_current']
+                        tambon_customer = post_data['province_current']
                         
                     postcode = post_data.get('postcode_current', '') 
                     if postcode == '' or not postcode.isdigit():
@@ -1110,7 +1115,7 @@ def insertInstallment(request):
                     installment.updated_at = current_date
                     installment.company_tel = post_data.get('company_tel', '')
                     installment.place_work_tel = post_data.get('place_work_tel', '')
-                   
+                    installment.price_installment = post_data.get('price_installment', '')
                     installment.base_income = safe_decimal(base_income_raw)
                     installment.office = post_data.get('office', '')
                     installment.debt_in = safe_decimal(post_data.get('debt_in', '0'))
@@ -1143,6 +1148,7 @@ def insertInstallment(request):
                         updated_at=current_date,
                         company_tel=post_data.get('company_tel', ''),
                         place_work_tel=post_data.get('place_work_tel', ''),
+                        price_installment=post_data.get('price_installment', ''),
                         base_income=safe_decimal(base_income_raw),  
                         office=post_data.get('office', ''),
                         debt_in=safe_decimal(post_data.get('debt_in', '0')),  

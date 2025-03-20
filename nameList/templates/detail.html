@@ -35,21 +35,21 @@
                     <div class="card-body d-flex flex-row justify-content-center align-items-center gap-4" style="gap: 9.5rem !important;font-size: 18px;">
                         <!-- ชื่อผู้ใช้ -->
                         <div>
-                            <strong>ชื่อผู้ใช้:</strong> 
+                            <strong>ชื่อผู้ขอสินเชื่อ : </strong> 
                             {% comment %} {{ prename.pre_name }}  {% endcomment %}
                             {{ customer_info.first_name }} 
-                            {{ customer_info.first_name }}
+                            {{ customer_info.last_name }}
                         </div>
                 
                         <!-- เลขที่ขอสินเชื่อ -->
                         <div>
-                            <strong>เลขที่ขอสินเชื่อ:</strong> 
+                            <strong>เลขที่ขอสินเชื่อ : </strong> 
                             {{ installment_detail.app_id }}
                         </div>
                 
                         <!-- วันที่ขอสินเชื่อ -->
                         <div>
-                            <strong>วันที่ขอสินเชื่อ:</strong> 
+                            <strong>วันที่ขอสินเชื่อ : </strong> 
                             {% with customer.created_at|date:"d/m/Y" as formatted_date %}
                                 {{ formatted_date }}
                             {% endwith %}
