@@ -254,7 +254,7 @@
         }
       
         $(selector).on('change', function (e) {
-            const scoreType = $(this).find('option:selected').attr('title'); 
+            let scoreType = $(this).find('option:selected').attr('title') || $(this).val();
             const url = urlMasterScoringView + "?id=" + getId + "&scoring_type=" + scoreType;
           
           $.ajax({
