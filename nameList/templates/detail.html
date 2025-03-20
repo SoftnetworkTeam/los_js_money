@@ -449,15 +449,15 @@
                         <div class="row">
                             <div class="col justify-content-end my-3" style="text-align: left">
                                 {% if customer_loan_detail.status_approve == 1 %}
-                                    <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')">
+                                    <button type="button" class="btn btn-outline-danger " onclick="approve('5')">
                                         ยกเลิก
                                     </button>
                                 {% elif customer_loan_detail.status_approve == 9 %}
-                                    <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')">
+                                    <button type="button" class="btn btn-outline-danger " onclick="approve('5')">
                                         ยกเลิก
                                     </button>
                                 {% elif customer_loan_detail.status_approve == 5 %}
-                                    <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')" style="display: none">
+                                    <button type="button" class="btn btn-outline-danger " onclick="approve('5')" style="display: none">
                                         ยกเลิก
                                     </button>
                                 {% elif customer_loan_detail.status_approve == 2 %}
@@ -465,11 +465,11 @@
                                 {% else %}
                     
                                     {% if auth_reject_approve == False %}
-                                        <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')">
+                                        <button type="button" class="btn btn-outline-danger " onclick="approve('5')">
                                             ยกเลิก
                                         </button>
                                     {% elif auth_reject_approve == True %}
-                                        <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('5')">
+                                        <button type="button" class="btn btn-outline-danger " onclick="approve('5')">
                                             ยกเลิก
                                         </button>
                                     {% endif %}
@@ -479,16 +479,16 @@
                             <div class="col justify-content-start my-3 " style="text-align: right">
                                 {% if customer_loan_detail.status_approve == 1 %}
                                     <a href="/name-list">
-                                        <button type="button" class="btn btn-outline-primary mx-2">ย้อนกลับ</button>
+                                        <button type="button" class="btn btn-outline-primary ">ย้อนกลับ</button>
                                     </a>
-                                    <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('9')">
+                                    <button type="button" class="btn btn-outline-danger not-approve" onclick="approve('9')">
                                         ไม่อนุมัติ
                                     </button>
                                 {% elif customer_loan_detail.status_approve == 9 %}
                                     <a href="/name-list">
-                                        <button type="button" class="btn btn-outline-primary mx-2">ย้อนกลับ</button>
+                                        <button type="button" class="btn btn-outline-primary ">ย้อนกลับ</button>
                                     </a>
-                                    <button type="button" class="btn btn-outline-success" onclick="approve('1')">
+                                    <button type="button" class="btn btn-outline-success approve" onclick="approve('1')">
                                         อนุมัติ
                                     </button>
                                 {% elif customer_loan_detail.status_approve == 2 %}
@@ -505,17 +505,17 @@
                                     </a >
                     
                                     {% if auth_reject_approve == False %}
-                                        <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('9')" style="display: none">
+                                        <button type="button" class="btn btn-outline-danger not-approve" onclick="approve('9')" style="display: none">
                                             ไม่อนุมัติ
                                         </button>
-                                        <button type="button" class="btn btn-outline-success" onclick="approve('1')" style="display: none">
+                                        <button type="button" class="btn btn-outline-success approve" onclick="approve('1')" style="display: none">
                                             อนุมัติ
                                         </button>
                                     {% elif auth_reject_approve == True %}
-                                        <button type="button" class="btn btn-outline-danger mx-2" onclick="approve('9')">
+                                        <button type="button" class="btn btn-outline-danger not-approve" onclick="approve('9')">
                                             ไม่อนุมัติ
                                         </button>
-                                        <button type="button" class="btn btn-outline-success" onclick="approve('1')">
+                                        <button type="button" class="btn btn-outline-success approve" onclick="approve('1')">
                                             อนุมัติ
                                         </button>
                                     {% endif %}
@@ -540,13 +540,10 @@
 {% block script %}
 <script defer>
     var authEdit = "{{ auth_edit_delete }}";
-
     var urlMasterscoringinfo = "{% url 'nameList:Masterscoringinfo' %}";
-
     var urlCalScoring = "{% url 'nameList:cal-scoring' %}";
-
+    var urlupdateStatus = "{% url 'nameList:updateStatus' %}";
     const score_set = $(".js-data-scoringinfo-ajax").val() || 1;
-    
     const customer_age = $(".col-5[data-customer-age]").data("customer-age");
     const occupation = $(".col-5[data-occupation]").data("occupation");
     const education = $(".col-5[data-education]").data("education");
@@ -560,180 +557,7 @@
     const category_occupation = $(".col-5[data-category-occupation]").data("category-occupation");
     const shop_type = $(".col-5[data-shop-type]").data("shop-type");
     const rentalage = $(".col-5[data-rentalage]").data("rentalage");
-
-    $(document).ready(function () {
-    loadSelect2Data(urlMasterscoringinfo, ".js-data-scoringinfo-ajax", "results", "id", "score_name");
-       
-        
-        var form_data = {
-            "score_set": score_set,
-            "customer_age": customer_age,
-            "occupation": occupation,
-            "education": education, 
-            "minorchildren": minorchildren,
-            "business_age": business_age,
-            "reason": reason,
-            "residence": residence,
-            "living_type": living_type,
-            "business_type": business_type,
-            "profit": profit,
-            "category_occupation": category_occupation,
-            "shop_type": shop_type,
-            "rentalage": rentalage
-        };
-    
-        $.ajax({
-            url: urlCalScoring,
-            data: form_data,
-            type: 'POST', 
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken')  
-            },
-            success: function (response) {
-                if (response.status === 'success') {
-                    $('#score_1').text(response.score_1);
-                    $('#score_2').text(response.score_2);
-                    $('#score_3').text(response.score_3);
-                    $('#grade').text(response.grade);
-
-                    if (response.message === 'แนะนำให้อนุมัติ') {
-                        $('#guide').html(`<br>
-                            <div style="background-color: #03A9F3; color: white; padding: 10px; text-align: center; font-weight: bold;">
-                                คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ผ่านเกณฑ์ แนะนำให้อนุมัติ
-                            </div>
-                        `);
-                    }else{
-                        $('#guide').html(`
-                        <div style="background-color:rgb(218, 57, 70); color: white; padding: 10px; text-align: center; font-weight: bold;">
-                            คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ไม่ผ่านเกณฑ์ แนะนำ ไม่ให้อนุมัติ
-                        </div>
-                    `);
-                    }
-                }
-            }
-        });
-    
-       
-    
-        // กดที่ .js-data-scoringinfo-ajax ส่ง AJAX
-        $(document).on("change", ".js-data-scoringinfo-ajax", function () {
-    
-            var form_data = {
-                "score_set": $('.js-data-scoringinfo-ajax').val(),
-                "customer_age": customer_age,
-                "occupation": occupation,
-                "education": education, 
-                "minorchildren": minorchildren,
-                "business_age": business_age,
-                "reason": reason,
-                "residence": residence,
-                "living_type": living_type,
-                "business_type": business_type,
-                "profit": profit,
-                "category_occupation": category_occupation,
-                "shop_type": shop_type,
-                "rentalage": rentalage
-            };
-    
-            $.ajax({
-                url: urlCalScoring,
-                data: form_data,
-                type: 'POST', 
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken')  
-                },
-                success: function (response) {
-                    console.log('Success:', response);
-                    if (response.status === 'success') {
-                        $('#score_1').text(response.score_1);
-                        $('#score_2').text(response.score_2);
-                        $('#score_3').text(response.score_3);
-                        $('#grade').text(response.grade);
-
-                        if (response.message === 'แนะนำให้อนุมัติ') {
-                            $('#guide').html(`
-                                <div style="background-color: #03A9F3; color: white; padding: 10px; text-align: center; font-weight: bold;">
-                                    คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ผ่านเกณฑ์ แนะนำให้อนุมัติ
-                                </div>
-                            `);
-                        }else{
-                            $('#guide').html(`
-                            <div style="background-color:rgb(218, 57, 70); color: white; padding: 10px; text-align: center; font-weight: bold;">
-                                คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ไม่ผ่านเกณฑ์ แนะนำ ไม่ให้อนุมัติ
-                            </div>
-                        `);
-                        }
-                    }
-                }
-            });
-        });
-    });
-    
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    document.querySelectorAll(".fileLink").forEach(link => {
-        link.addEventListener("click", function (event) {
-            event.preventDefault(); // ป้องกันการเปิดลิงก์ทันที
-            let fileLink = this.getAttribute("href"); 
-
-            fetch(fileLink, { method: 'HEAD' })
-                .then(response => {
-                    if (response.ok) {
-                        window.open(fileLink, '_blank');
-                    } else {
-                        window.open('https://www.google.com', '_blank');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error checking file link:', error);
-                    window.open('https://www.google.com', '_blank'); 
-                });
-        });
-    });
-
-  var urlupdateStatus = "{% url 'nameList:updateStatus' %}";
-
-
-    {% comment %} function approve(id) {
-        var formData = new FormData();
-        formData.append("status", id);
-        formData.append("id", {{id}});
-        var csrf_token = getCookie('csrftoken'); 
-        console.log('csrf_token',csrf_token,'formData',formData)
-        $.ajax({
-            url: urlupdateStatus,
-            data: form_data,
-            type: 'POST', 
-            headers: {
-                'X-CSRFToken': csrf_token
-            },
-            processData: false,  
-            contentType: false,  
-            success: function (response) {
-                console.log(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
-        
-    } {% endcomment %}
-    
-    
 </script>
-<script src="/detail/js/detail.js"></script>
+<script src="/nameList/js/detail.js"></script>
 <link rel="stylesheet" href="{% static 'css/detail.css' %}?v=9" >
 {% endblock %}
