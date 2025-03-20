@@ -39,7 +39,7 @@ class exports(View):
                         WHEN a.category_occupation = '1' THEN 'รายได้คงที่'
                         WHEN a.category_occupation = '2' THEN 'รายได้ไม่สม่ำเสมอ'
                     END AS "หมวดอาชีพ",
-                    COALESCE(a.base_income, 0) AS "หมวดอาชีพ",
+                    COALESCE(a.price, 0) AS "รายได้",
                     CASE 
                         WHEN a.status_approve = '1' THEN 'ผ่าน'
                         WHEN a.status_approve = '2' THEN 'ทำสัญญาแล้ว'
