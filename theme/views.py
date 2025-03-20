@@ -86,23 +86,9 @@ def user_login(request):
             request.session['alert_login'] = 'success'
             request.session['user_id'] = user.id
             
-            mid_user_auth = UserAuth.objects.filter(user=user)
-            if mid_user_auth.exists():
-                for foo in mid_user_auth:
-                    if foo.auth.auth_code == 'A007':
-                        if not foo.status:
-                            return render(request, "login.html",
-                                          {'msg': 'คุณไม่มีสิทธิ์ใช้งานระบบนี้', 'show_alert': True})
-
             user_branch = UserBranch.objects.filter(user_id=user.id, status=True)
-            master_branch = Masterbranch.objects.filter(
-                id__in=[ub.branch_id for ub in user_branch]
-            )
-            # print("Masterbranch:", [ub.branch_id for ub in user_branch])
-            master_company = MasterCompany.objects.filter(
-                id__in=[mb.company_id for mb in master_branch]
-            )
-            # print("Companies:", [mb.company_id for mb in master_branch])
+            master_branch = Masterbranch.objects.filter(id__in=[ub.branch_id for ub in user_branch])
+            master_company = MasterCompany.objects.filter(id__in=[mb.company_id for mb in master_branch])
             
             request.session['master_company'] = [company.id for company in master_company]
             request.session['master_branch'] = [branch.id for branch in master_branch]
@@ -111,9 +97,9 @@ def user_login(request):
                 'show_branch_modal': True,
                 'master_company': master_company,
                 'master_branch': master_branch,
-                'user_id' : user.id,
-                'username' : user.username,
-                'name' : full_name
+                'user_id': user.id,
+                'username': user.username,
+                'name': full_name
             })
 
         else:
@@ -121,6 +107,18 @@ def user_login(request):
     else:
         return render(request, "login.html")
 
+def select_branch(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        company_id = request.POST.get('company_id')
+
+        if company_id:
+            master_branch = request.session.get('master_branch', [])
+            branch = Masterbranch.objects.filter(company_id=company_id, id__in=master_branch)
+            branch_list = [{'id': branch.id, 'branch_name': branch.branch_name} for branch in branch]
+
+            return JsonResponse({'branch': branch_list})
+
+    
 def save_branch(request):
     if request.method == 'POST':
         try:
