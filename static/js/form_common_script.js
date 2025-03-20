@@ -358,7 +358,6 @@ function selectImg(id) {
 }
 
 function attachFile(id, editImg = null) {
-  console.log('File id = ', id);
 
   var file = $("#" + id)[0].files[0];
   if (!file) return;
