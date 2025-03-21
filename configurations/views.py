@@ -65,17 +65,13 @@ def configurations(request, grade_type=None):
         status_type = 'statusScoring'
         data_type = 'scoring'
 
-    # โหลดข้อมูล user_admin ก่อนใช้
     user_admin = AuthUser.objects.all().order_by('id')
 
     if grade_type == 'scoring':
-        # สร้าง dictionary ของ user_id -> username
         user_dict = {user.id: user.username for user in user_admin}
 
-        # แปลง QuerySet เป็น list ของ dictionary
         type_obj = list(type_obj.values())
 
-        # เพิ่ม username ให้แต่ละ item
         for item in type_obj:
             item["username"] = user_dict.get(item["user_id"], "ไม่พบข้อมูล")
 
@@ -632,6 +628,9 @@ class ViewScoringDetailApiView(ListAPIView):
         ).values(
             'id', 'score_id', 'score_type', 'name', 'score'
         )
+        
+        if scoring_type in ['Y', 'Z']:
+            master_queryset = master_queryset.order_by('name')
 
         return master_queryset
 
