@@ -316,7 +316,16 @@ class MastercountryApiView(BaseListAPIView):
 class businesstypeApiView(BaseListAPIView):    
     pagination_class = NoLimitPagination
     serializer_class = MasterbusinesstypeSerializer
-    queryset = Masterbusinesstype.objects.filter(status="A")
+    
+    def get_queryset(self):
+        queryset = Masterbusinesstype.objects.filter(status='A')
+
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(business_type_name__icontains=query_param))
+
+        return queryset
     
 
 @method_decorator(csrf_exempt, name='dispatch')

@@ -410,8 +410,16 @@ class interestAPIView(BaseListAPIView):
 
 
 class MasterNumberOfInstallmentAPIView(BaseListAPIView):
-    queryset = MasterNumberOfInstallment.objects.filter(status='A')
     serializer_class = MasterNumberOfInstallmentSerializer
+    
+    def get_queryset(self):
+        queryset = MasterNumberOfInstallment.objects.filter(status='A')
+        query_param = self.request.query_params.get('q', None)
+        
+        if query_param:
+            queryset = queryset.filter(Q(installment_amount__icontains=query_param))
+            
+        return queryset
 
     
 class MasterCustomerPrenameAPIView(BaseListAPIView):

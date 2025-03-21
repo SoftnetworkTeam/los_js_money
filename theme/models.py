@@ -1179,6 +1179,7 @@ class Masterscoringinfo(models.Model):
     updated_at = models.DateTimeField()
     
     class Meta:
+        ordering = ['id']
         db_table = 'tb_masterscoringinfo'
         
 class Masterbranch(models.Model):

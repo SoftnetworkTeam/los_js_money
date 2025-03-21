@@ -430,7 +430,11 @@ function viewPDF(id, viewEditId = null) {
     var ext = fileName.split('.').pop().toLowerCase();
 
     if (ext === "pdf") {
-      $("#pdfViewer").attr("src", filePath + "#toolbar=0").css('display', 'block');
+      $("#pdfBlank").replaceWith(`
+        <object id="pdfBlank" data="${filePath}" type="application/pdf" style="width: 100%; height: 800px; display:block;">
+            <p style="font-size: 16;color: #fff;">เบราว์เซอร์ของคุณไม่รองรับการแสดงผล PDF กรุณา <a href="${filePath}" target="_blank">ดาวน์โหลดที่นี่</a></p>
+        </object>
+    `);
       $("#imageViewer").css('display', 'none');
       new bootstrap.Modal($("#previewFile")).show();
     }
@@ -606,3 +610,43 @@ function calculateAgeFromBirthday(dateStr, outputSelector) {
 
 }
 
+function validateThaiID(input) {
+  let id = input.value;
+  let feedback = input.nextElementSibling; 
+
+  if (id.length === 13) {
+      if (checkID(id)) {
+          input.classList.remove("is-invalid");
+          feedback.textContent = "";
+      } else {
+          input.classList.add("is-invalid");
+          feedback.textContent = "กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง";
+      }
+  } else {
+      input.classList.add("is-invalid");
+      feedback.textContent = "กรุณากรอกเลขบัตรประชาชนด้วยตัวเลข 13 หลัก";
+  }
+}
+
+function checkID(id) {
+  if (!/^\d{13}$/.test(id)) return false; 
+  let sum = 0;
+  for (let i = 0; i < 12; i++) {
+      sum += parseInt(id.charAt(i)) * (13 - i);
+  }
+  return (11 - (sum % 11)) % 10 === parseInt(id.charAt(12));
+}
+
+function validateEmail(input) {
+  let email = input.value.trim();
+  let feedback = input.nextElementSibling; 
+  let regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  if (email === "" || regex.test(email)) {
+      input.classList.remove("is-invalid");
+      feedback.textContent = "";
+  } else {
+      input.classList.add("is-invalid");
+      feedback.textContent = "กรุณากรอกอีเมลให้ถูกต้อง (เช่น example@email.com)";
+  }
+}
