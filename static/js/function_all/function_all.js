@@ -484,7 +484,8 @@ function calculateWorkAge(dateStr, yearSelector, monthSelector, daySelector) {
   $(daySelector).val(days);  // จำนวนวัน
 }
 
-function confirmDelete(fileId) {
+function confirmDelete(fileId,type=null) {
+  console.log('fileId',fileId)
   notification_v2(
     'แจ้งเตือน',
     'กดตกลงเพื่อยืนยันการลบไฟล์',
@@ -502,6 +503,9 @@ function confirmDelete(fileId) {
             icon: "success"
           }).then(() => {
             $('#confirmDelete-' + fileId).remove();
+            if(type == 'edit'){
+              $('#editFile-' + fileId).remove();
+            }
           });
         },
         error: function (jqXHR, textStatus, errorThrown) {

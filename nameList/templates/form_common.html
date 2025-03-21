@@ -1,5 +1,11 @@
 {% extends 'base.html' %} {% load static %} {% block title %}
 <title id="titleHead"></title>
+<style>
+.viewImg:hover{
+  color: #fff; /* เปลี่ยนสีไอคอนเป็นฟ้า */
+    background-color: #03A9F3; /* เพิ่มพื้นหลังสีฟ้าอ่อน */
+}
+</style>
 {% endblock %} {% block content %}
 <div class="content-body">
   <div class="container-fluid">
@@ -1230,7 +1236,7 @@
                 </div>
               </div><hr>
 
-              {% comment %} <div class="col-xl-12">
+              <div class="col-xl-12">
                 <div class="mb-3 row">
                   <label class="col-lg-12 col-form-label d-flex align-items-center gap-3">
                      <h4>บุคคลที่ให้ติดต่อได้ </h4>
@@ -1244,8 +1250,8 @@
                     <span class="text-danger">* </span>ชื่อ-สกุล
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="" name="" placeholder="ชื่อ-สกุล"
-                      value="" required />
+                    <input class="form-control" id="refer_name" name="refer_name" placeholder="ชื่อ-สกุล"
+                      value="{{customer_info.refer_name}}" required />
                     <div class="invalid-feedback">กรุณากรอกชื่อ-สกุล</div>
                   </div>
                 </div>
@@ -1257,8 +1263,8 @@
                     <span class="text-danger">* </span>ความสัมพันธ์
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="" name="" placeholder="ความสัมพันธ์"
-                      value="" required />
+                    <input class="form-control" id="refer_description" name="refer_description" placeholder="ความสัมพันธ์"
+                      value="{{customer_info.refer_description}}" required />
                     <div class="invalid-feedback">กรุณากรอกความสัมพันธ์</div>
                   </div>
                 </div>
@@ -1270,9 +1276,8 @@
                     <span class="text-danger">* </span>เบอร์ติดต่อ
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="" name="" placeholder="เบอร์ติดต่อ"
-                      value=""  oninput="validateInput(this, 10, 'กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก')"
-                      maxlength="10" required />
+                    <input class="form-control" id="refer_telephone" name="refer_telephone" placeholder="เบอร์ติดต่อ"
+                      value="{{ customer_info.refer_telephone }}"  onkeypress="return onlyNumberKey(event)" required />
                     <div class="invalid-feedback"></div>
                   </div>
                 </div>
@@ -1284,13 +1289,12 @@
                     <span class="text-danger">* </span>รายละเอียดการปล่อยสินเชื่อ
                   </label>
                   <div class="col-lg-8">
-                    <textarea class="form-control" rows="4"  id="" name="" placeholder="รายละเอียดการปล่อยสินเชื่อ"
-                      value="" required />
-                      </textarea>
+                    <textarea class="form-control" rows="4"  id="lending_description" name="lending_description"  placeholder="รายละเอียดการปล่อยสินเชื่อ" required />{{installment_detail.lending_description}}
+                    </textarea>
                     <div class="invalid-feedback">กรุณากรอกรายละเอียดการปล่อยสินเชื่อ</div>
                   </div>
                 </div>
-              </div><hr> {% endcomment %}
+              </div><hr>
               <div class="col-xl-12">
                 <div class="mb-3 row">
                   <label class="col-lg-12 col-form-label d-flex align-items-center gap-3"><h4>เอกสาร </h4></label>
@@ -1298,7 +1302,7 @@
               </div>
                     {% if file %}
                         {% for files in file %}
-                        <div class="col-xl-6">
+                        <!--<div class="col-xl-6">
                           <div class="mb-3 row">
                             <div class="col-lg-10">
                               <div class="input-group">
@@ -1307,12 +1311,12 @@
                                 <img id="img-file_{{ files.id }}" style="border-radius: 25px; cursor: pointer; height: 200px; object-fit: cover;" onclick="selectImg('file_{{ files.id }}','true')" src="/media/{{ files.name }}" width="100%">
                               </div>
                             </div>
-                          </div>
+                          </div>-->
                       
                           <!-- ส่วนอัพโหลดเอกสาร -->
-                          <div class="mb-3 row">
+                          <!--<div class="mb-3 row">
                             <label class="col-lg-2 col-form-label">
-                              อัพโหลดเอกสาร {{ files.doc.doc_name }}
+                              เอกสาร {{ files.doc.doc_name }}
                             </label>
                             <div class="col-lg-8">
                               <select class="js-data-file_type-ajax w-100" id="file_type-dropdown-{{ files.id }}" name="file_type_{{ files.id }}" disabled >
@@ -1324,7 +1328,64 @@
                               </select>
                             </div>
                           </div>
+                        </div>-->
+
+                        <div id="editFile-{{ files.id }}" class="row">
+                          <div class="col-xl-6">
+                            <div class="mb-3 row">
+                              <label class="col-lg-2 col-form-label">
+                                เอกสาร
+                              </label>
+                              <div class="col-lg-8">
+                                <select class="js-data-file_type-ajax w-100" id="file_type-dropdown-{{ files.id }}" name="file_type_{{ files.id }}" disabled >
+                                  {% if files %}
+                                  <option value="{{ files.doc.id }}">
+                                    {{ files.doc.doc_name }}
+                                  </option>
+                                  {% endif %}
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-xl-6">
+                            <div class="mb-3 row">
+                              <div class="col-lg-10">
+                                <div class="input-group">
+                                <input class="form-control d-none" type="file" id="file_{{ files.id }}" name="file_{{ files.id }}" multiple onchange="attachFile('file_{{ files.id }}')">
+                                <input type="text" id="file_name_{{ files.id }}" class="form-control" readonly onclick="document.getElementById('file_{{ files.id }}').click()">
+                                  <span class="input-group-text viewImg" id="view_file_{{ files.id }}" onclick="viewPDF('file_{{ files.id }}','{{ files.name }}')" style="cursor:pointer;"> 
+                                    <i class="fa fa-search"></i>
+                                  </span>
+                                  <button onclick="confirmDelete('{{ files.id }}','edit')" type="button" id="delete_file_{{ files.id }}" class="btn btn-outline-danger" >
+                                    <i class="fa fa-trash"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
+                        <script>
+                       document.addEventListener("DOMContentLoaded", function () {
+                            let fileInput = document.getElementById("file_{{ files.id }}");
+                            let fileNameDisplay = document.getElementById("file_name_{{ files.id }}");
+
+                            let fileName = "{{ files.name }}";
+                            
+                                if (fileName) {
+                                fileNameDisplay.value = fileName; 
+                            } else {
+                                fileNameDisplay.placeholder = "เลือกไฟล์...";
+                            }
+
+                            fileInput.addEventListener("change", function () {
+                                if (fileInput.files.length > 0) {
+                                    fileNameDisplay.value = fileInput.files[0].name;
+                                }
+                            });
+               
+                        });
+                        </script>
                         {% endfor %}
                         <input type="hidden" value="{{ file|length }}" id="countFile" readonly>
                       {% else %}
@@ -1602,10 +1663,8 @@
   
     loadSelect2Data(urlMasterContractDocument, `.js-data-file_type-${fileRowCount}-ajax`, "results", "id", "doc_name");
   }
-  
-
 
 </script>
-<script src="{% static 'js/form_common_script.js' %}?v=104"></script>
+<script src="{% static 'js/form_common_script.js' %}?v=105"></script>
 <link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 
 {% endblock %}

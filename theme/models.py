@@ -405,6 +405,7 @@ class InstallmentDetail(models.Model):
     debt_informal = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True, blank=True)
     create_to_province_id = models.IntegerField()
     company_id = models.IntegerField()
+    lending_description = models.CharField(max_length=200, null=True, blank=True)
     class Meta:
         db_table = 'tb_installmentdetail'
 

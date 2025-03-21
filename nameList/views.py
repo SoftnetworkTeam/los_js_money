@@ -792,6 +792,9 @@ def insertInstallment(request):
                     customerInfo.memo = post_data['telephone']
                     customerInfo.pre_name_id = prename_id
                     customerInfo.updated_at = current_date
+                    customerInfo.refer_name = post_data['refer_name']
+                    customerInfo.refer_description = post_data['refer_description']
+                    customerInfo.refer_telephone = post_data['refer_telephone']
                     customerInfo.save()
                 else:
                     first_name = post_data['first_name']
@@ -846,7 +849,9 @@ def insertInstallment(request):
                         slug=auto_slug(),
                         created_at=current_date,
                         updated_at=current_date,
-       
+                        refer_name=post_data['refer_name'],
+                        refer_description=post_data['refer_description'],
+                        refer_telephone=post_data['refer_telephone'],
                     )
                     customerInfo.save()
 
@@ -1123,7 +1128,7 @@ def insertInstallment(request):
                     installment.create_to_branch_id = post_data.get('branch', '')
                     installment.create_to_province_id = post_data.get('province_save', '')
                     installment.company_id = post_data.get('company_id', '')
-
+                    installment.lending_description = post_data.get('lending_description', '')
                     installment.save()
                   
                 else:
@@ -1155,7 +1160,9 @@ def insertInstallment(request):
                         debt_informal=safe_decimal(post_data.get('debt_informal', '0')),  
                         create_to_branch_id=post_data.get('branch', ''),
                         create_to_province_id=post_data.get('province_save', ''),
-                        company_id=post_data.get('company_id', '')
+                        company_id=post_data.get('company_id', ''),
+                        lending_description=post_data.get('lending_description', '')
+                        
                     )
                     installment.save()
 

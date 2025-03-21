@@ -3,18 +3,18 @@ $(document).ready(function () {
   $('#company_id').val(company_id)
   $('#province_save').val(branch_province_id)
 
-  $('#prename').change(function() {
+  $('#prename').change(function () {
     var prename = $(this).val();
     if (prename === '1') {
-      $('#gender').val('M').trigger('change');  
+      $('#gender').val('M').trigger('change');
     }
     else if (prename === '2' || prename === '3') {
-      $('#gender').val('F').trigger('change');  
-    }else {
-      $('#gender').val('').trigger('change');  
+      $('#gender').val('F').trigger('change');
+    } else {
+      $('#gender').val('').trigger('change');
     }
   });
- 
+
   loadSelect2Data(urlMasterCustomerPrename, ".js-data-prename-ajax", "results", "id", "pre_name");
   loadSelect2Data(urlMasterOccupation, ".js-data-occup-ajax", "results", "id", "occup_name");
   loadSelect2Data(urlMasterProvince, ".js-data-province-ajax", "results", "id", "province_name");
@@ -52,7 +52,7 @@ $(document).ready(function () {
   loadTambon(amphoe_id);
   function loadTambon(amphoe_id) {
     const params = amphoe_id ? { amphoe_id: amphoe_id } : {};
-    
+
     $.ajax({
       url: urlMasterTambon && urlMasterTamboncurrent && urlMasterTambonCompany,
       method: "GET",
@@ -126,9 +126,9 @@ $(document).ready(function () {
             id: item.id,
             text: item.bank_name,
           }));
-  
+
           params.page = params.page || 1;
-  
+
           return {
             results: selectData,
             pagination: {
@@ -141,7 +141,7 @@ $(document).ready(function () {
       escapeMarkup: function (markup) { return markup; },
       minimumInputLength: 0
     });
-  
+
     // ถ้ามี customerBankId ให้เลือกธนาคารที่มีอยู่
     if (bank_id) {
       $(".js-data-bank-ajax").val(bank_id).trigger('change');
@@ -181,7 +181,7 @@ $(document).ready(function () {
     $(".js-data-tambon-ajax").append('<option value="" ><p style="color:#A6A6A6 !important">-- เลือกข้อมูล --</p></option>');
     loadTambon(amphoe_id);
   });
-  
+
 
   $(".js-data-amphoe_current-ajax").on("change", function () {
     const amphoe_id = $(this).val();
@@ -214,7 +214,7 @@ $(document).ready(function () {
     const postcode = selectedOption.data("postcode") || "";
     $("#postcode_company").val(postcode);
   });
- 
+
 
   $(".js-data-province_save-ajax").on("change", function () {
     const province_id = $(this).val();
@@ -227,7 +227,7 @@ $(document).ready(function () {
 
   function loadBranches(province_id) {
     const params = province_id ? { province_id: province_id } : {};
-    loadSelect2Data(urlMasterbranch, ".js-data-branch-ajax", "results", "id","", params);
+    loadSelect2Data(urlMasterbranch, ".js-data-branch-ajax", "results", "id", "", params);
   }
 
   // คำนวณค่าต่างๆ
@@ -259,10 +259,10 @@ $(document).ready(function () {
     // $('#living_rental_current').val($('#living_rental').val());
 
     if (!isSameCardActive) {
-      
+
 
       // บันทึกค่าเดิมก่อนเปลี่ยน
-        originalValues = {
+      originalValues = {
         province_id: $(".js-data-province_current-ajax").val(),
         province_text: $(".js-data-province_current-ajax option:selected").text(),
         amphoe_id: $(".js-data-amphoe_current-ajax").val(),
@@ -349,11 +349,11 @@ $(document).ready(function () {
 
   });
 
-  
+
 });
 
 function selectImg(id) {
-  console.log('img id = ',id)
+  console.log('img id = ', id)
   document.getElementById(id).click();
 }
 
@@ -367,14 +367,14 @@ function attachFile(id, editImg = null) {
   var maxSize = 3 * 1024 * 1024; // 3MB
 
   if (!allowedExtensions.includes(ext) || file.size > maxSize) {
-      notification(
-          'แจ้งเตือน', 
-          'รองรับไฟล์ PDF, JPG, JPEG, PNG, GIF เท่านั้น (ขนาดไม่เกิน 3MB)', 
-          'warning', 
-          'ปิด'
-      );  
-      $("#" + id).val(''); 
-      return;
+    notification(
+      'แจ้งเตือน',
+      'รองรับไฟล์ PDF, JPG, JPEG, PNG, GIF เท่านั้น (ขนาดไม่เกิน 3MB)',
+      'warning',
+      'ปิด'
+    );
+    $("#" + id).val('');
+    return;
   }
 
   $(`#view_${id}, #delete_${id}`).prop("disabled", false);
@@ -389,47 +389,66 @@ function attachFile(id, editImg = null) {
 
 
 function deleteFile(id, editImg = null) {
-    $("#" + id).val(''); 
-    $(`#view_${id}, #delete_${id}`).prop("disabled", true); 
+  $("#" + id).val('');
+  $(`#view_${id}, #delete_${id}`).prop("disabled", true);
 
-    if(editImg){
-      document.getElementById("img-" + id).src = "/media/blank-img.jpg";
-      document.getElementById(id).value = "";
-    }
+  if (editImg) {
+    document.getElementById("img-" + id).src = "/media/blank-img.jpg";
+    document.getElementById(id).value = "";
+  }
 }
-
-function viewPDF(id) {
+function viewPDF(id, viewEditId = null) {
   var file = $("#" + id)[0].files[0];
+  var fileName = viewEditId
   if (file) {
-      var ext = file.name.split('.').pop().toLowerCase();
-      var reader = new FileReader();
+    var ext = file.name.split('.').pop().toLowerCase();
+    var reader = new FileReader();
 
-      if (ext === "pdf") {
-          reader.onload = function(e) {
-              var fileData = e.target.result;
-              $("#pdfViewer").attr("src", fileData + "#toolbar=0").css('display','block');
-              $("#imageViewer").css('display','none');
-              new bootstrap.Modal($("#previewFile")).show();
-          }
-          reader.readAsDataURL(file);
+    if (ext === "pdf") {
+      reader.onload = function (e) {
+        var fileData = e.target.result;
+        $("#pdfViewer").attr("src", fileData + "#toolbar=0").css('display', 'block');
+        $("#imageViewer").css('display', 'none');
+        new bootstrap.Modal($("#previewFile")).show();
       }
-      else if (["jpg", "jpeg", "png", "gif"].includes(ext)) {
-          reader.onload = function(e) {
-              var fileData = e.target.result;
-              $("#imageViewer").attr("src", fileData).css('display','block'); 
-              $("#pdfViewer").css('display','none');
-              new bootstrap.Modal($("#previewFile")).show();
-          }
-          reader.readAsDataURL(file);
-      } else {
-          notification('แจ้งเตือน', 'รองรับไฟล์ PDF และรูปภาพเท่านั้น', 'warning', 'ปิด');
+      reader.readAsDataURL(file);
+    }
+    else if (["jpg", "jpeg", "png", "gif"].includes(ext)) {
+      reader.onload = function (e) {
+        var fileData = e.target.result;
+        $("#imageViewer").attr("src", fileData).css('display', 'block');
+        $("#pdfViewer").css('display', 'none');
+        new bootstrap.Modal($("#previewFile")).show();
       }
+      reader.readAsDataURL(file);
+    } else {
+      notification('แจ้งเตือน', 'รองรับไฟล์ PDF และรูปภาพเท่านั้น', 'warning', 'ปิด');
+    }
+  }
+  else if (fileName) {
+    var filePath = "/media/" + fileName;
+    var ext = fileName.split('.').pop().toLowerCase();
+
+    if (ext === "pdf") {
+      $("#pdfViewer").attr("src", filePath + "#toolbar=0").css('display', 'block');
+      $("#imageViewer").css('display', 'none');
+      new bootstrap.Modal($("#previewFile")).show();
+    }
+    else if (["jpg", "jpeg", "png", "gif"].includes(ext)) {
+      $("#imageViewer").attr("src", filePath).css('display', 'block');
+      $("#pdfViewer").css('display', 'none');
+      new bootstrap.Modal($("#previewFile")).show();
+    } else {
+      notification('แจ้งเตือน', 'รองรับไฟล์ PDF และรูปภาพเท่านั้น', 'warning', 'ปิด');
+    }
+  } else {
+    notification('แจ้งเตือน', 'ไม่พบไฟล์', 'warning', 'ปิด');
   }
 }
 
 
 function validateInput(input, length, errorMessage) {
-  let regex = /^\d*$/; 
+  let regex = /^\d*$/;
   let value = input.value;
 
   if (!regex.test(value)) {
@@ -449,67 +468,67 @@ $("#id_dip_chip").click(function () {
   let card_data = JSON.parse('{}');
   // Make a GET request to the API
   $.ajax({
-      url: 'http://127.0.0.1:8080/smartcard/data/',
-      type: 'GET',
-      crossDomain: true,
-      dataType: 'json',
-      beforeSend: function () {
-          kendo.ui.progress($(document.body), true);
-      },
-      success: function (data) {
-          if (JSON.stringify(data) !== '[]') {
-              card_data = data;
-              if (!jQuery.isEmptyObject(card_data)) {
-          
-                $(".js-data-prename-ajax").append('<option value="' + card_data.prename + '" selected>' + card_data.prename + '</option>');
-                $("#first_name").val(card_data.fname);
-                $("#last_name").val(card_data.lname);
-                $("#card_id").val(card_data.cid);
-                $("#birthday").val(formatDate(card_data.dob));
-                $("#issue_date").val(formatDate(card_data.issue_date));
-                $("#expire_date").val(formatDate(card_data.expire_date));
-                $("#read_card").val(engDate());
+    url: 'http://127.0.0.1:8080/smartcard/data/',
+    type: 'GET',
+    crossDomain: true,
+    dataType: 'json',
+    beforeSend: function () {
+      kendo.ui.progress($(document.body), true);
+    },
+    success: function (data) {
+      if (JSON.stringify(data) !== '[]') {
+        card_data = data;
+        if (!jQuery.isEmptyObject(card_data)) {
 
-                datepicker("#birthday", formatDate(card_data.dob));
-                datepicker("#issue_date", formatDate(card_data.issue_date));
-                datepicker("#expire_date", formatDate(card_data.expire_date));
-                datepicker("#read_card", engDate());
-                calculateAgeFromBirthday(formatDate(card_data.dob), "#age");
+          $(".js-data-prename-ajax").append('<option value="' + card_data.prename + '" selected>' + card_data.prename + '</option>');
+          $("#first_name").val(card_data.fname);
+          $("#last_name").val(card_data.lname);
+          $("#card_id").val(card_data.cid);
+          $("#birthday").val(formatDate(card_data.dob));
+          $("#issue_date").val(formatDate(card_data.issue_date));
+          $("#expire_date").val(formatDate(card_data.expire_date));
+          $("#read_card").val(engDate());
 
-                $("#address").val(card_data.address.address1 +' '+ card_data.address.address2);
-                $("#soi").val(card_data.soi);
-                $("#road").val(card_data.road);
-                $(".js-data-province-ajax").append('<option value="' + card_data.address.province + '" selected>' + card_data.address.province + '</option>');
-                $(".js-data-amphoe-ajax").append('<option value="' + card_data.address.amphur + '" selected>' + card_data.address.amphur + '</option>');
-                $(".js-data-tambon-ajax").append('<option value="' + card_data.address.tambon + '" selected>' + card_data.address.tambon + '</option>');
-                $('#gender').select2();
+          datepicker("#birthday", formatDate(card_data.dob));
+          datepicker("#issue_date", formatDate(card_data.issue_date));
+          datepicker("#expire_date", formatDate(card_data.expire_date));
+          datepicker("#read_card", engDate());
+          calculateAgeFromBirthday(formatDate(card_data.dob), "#age");
 
-                if (card_data.prename == 'นาย') {
-                  $('#gender').val('M').trigger('change'); 
-                } else if (card_data.prename == 'นาง' || card_data.prename == 'นางสาว') {
-                  $('#gender').val('F').trigger('change'); 
-                }
+          $("#address").val(card_data.address.address1 + ' ' + card_data.address.address2);
+          $("#soi").val(card_data.soi);
+          $("#road").val(card_data.road);
+          $(".js-data-province-ajax").append('<option value="' + card_data.address.province + '" selected>' + card_data.address.province + '</option>');
+          $(".js-data-amphoe-ajax").append('<option value="' + card_data.address.amphur + '" selected>' + card_data.address.amphur + '</option>');
+          $(".js-data-tambon-ajax").append('<option value="' + card_data.address.tambon + '" selected>' + card_data.address.tambon + '</option>');
+          $('#gender').select2();
 
-                $('#address_diffshift').val('true')
-
-                $.ajax({
-                  url: urlMasterTambon,
-                  type: 'GET',
-                  dataType: 'json',
-                  data: {
-                      "tambon_name": card_data.address.tambon,
-                  },
-                  success: function (data) {
-                     $("#postcode").val(data.results[0].postcode);
-                  }
-              });
-
-
-                
-              }
+          if (card_data.prename == 'นาย') {
+            $('#gender').val('M').trigger('change');
+          } else if (card_data.prename == 'นาง' || card_data.prename == 'นางสาว') {
+            $('#gender').val('F').trigger('change');
           }
-          kendo.ui.progress($(document.body), false);
-      },
+
+          $('#address_diffshift').val('true')
+
+          $.ajax({
+            url: urlMasterTambon,
+            type: 'GET',
+            dataType: 'json',
+            data: {
+              "tambon_name": card_data.address.tambon,
+            },
+            success: function (data) {
+              $("#postcode").val(data.results[0].postcode);
+            }
+          });
+
+
+
+        }
+      }
+      kendo.ui.progress($(document.body), false);
+    },
   });
 });
 
@@ -518,7 +537,7 @@ function handleSubmitForm() {
 
   Array.prototype.slice.call(form.elements).forEach(function (element) {
     element.addEventListener('input', function () {
-      element.classList.remove("is-invalid"); 
+      element.classList.remove("is-invalid");
     });
   });
 
@@ -561,29 +580,29 @@ function calculateAgeFromBirthday(dateStr, outputSelector) {
 
   $(outputSelector).val(age);
   $.ajax({
-    url: urlrangeAge, 
+    url: urlrangeAge,
     type: 'GET',
     dataType: 'json',
     data: {
-      "age": age,  
+      "age": age,
     },
     success: function (response) {
-      
+
       if (response && response.results && response.results.length > 0) {
         var ageData = response.results[0];
 
         if (ageData.age_name) {
-          $('#customer_age').html(''); 
+          $('#customer_age').html('');
           $('#customer_age').append('<option value="' + ageData.id + '" selected>' + ageData.age_name + '</option>');
-          
+
           $('#customer_age').trigger('change');
         }
-      } 
+      }
     },
- 
-});
+
+  });
 
 
-  
+
 }
 
