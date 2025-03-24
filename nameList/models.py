@@ -61,7 +61,7 @@ class IndexHireContract(models.Model):
     class Meta:
         managed = False
         db_table = 'index_hirecontract'
-        ordering = ['id', ]
+        ordering = ['id']
         verbose_name = 'Index - สัญญาเช่าซื้อ'
         verbose_name_plural = 'Index - สัญญาเช่าซื้อ'
 
@@ -102,3 +102,20 @@ class CollateralDetail (models.Model) :
     class Meta:
         managed = False
         db_table = 'view_collateraldetail1'
+        
+class customerscore(models.Model):
+    id = models.AutoField(primary_key=True)
+    installmentdetail_id = models.IntegerField() 
+    score_name = models.CharField(max_length=100)
+    score_1 = models.DecimalField(max_digits=18, decimal_places=2)
+    score_2 = models.DecimalField(max_digits=18, decimal_places=2)
+    score_3 = models.DecimalField(max_digits=18, decimal_places=2)
+    grade = models.CharField(max_length=6)
+    status_approve = models.IntegerField()  
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    user_id = models.IntegerField() 
+
+    class Meta:
+        ordering = ['id']
+        db_table = 'tb_customerscore'

@@ -14138,7 +14138,7 @@ h6,
 .content-body .container-lg,
 .content-body .container-xl,
 .content-body .container-xxl {
-    padding-top: 5%;
+    padding-top: 8%;
     padding-right: 1.875rem;
     padding-left: 1.875rem;
 }
@@ -14983,7 +14983,7 @@ label {
 }
 
 .nav-header {
-    height: 3.125rem;
+    height: 6.125rem;
     width: 15rem;
     display: inline-block;
     text-align: left;
@@ -15229,7 +15229,7 @@ label {
 }
 
 .header {
-    height: 3.125rem;
+    height: 6.125rem;
     z-index: 1;
     position: relative;
     padding: 0rem;
@@ -15242,7 +15242,7 @@ label {
 
 .header .header-content {
     height: 100%;
-    padding-left: 3.1rem;
+    padding-left: 1.1rem;
     padding-right: 1.075rem;
     align-items: center;
     display: flex;
@@ -15766,8 +15766,8 @@ svg.pulse-svg .third-circle {
 }
 
 .header-right .header-media {
-    width: 1.875rem;
-    height: 1.875rem;
+    width: 2.875rem;
+    height: 2.875rem;
     margin-right: 7px;
 }
 
@@ -15784,9 +15784,9 @@ svg.pulse-svg .third-circle {
 
 .header-right .header-info h6,
 .header-right .header-info .h6 {
-    font-size: 0.813rem;
+    font-size: 14;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 0;
     line-height: 1;
 }
 
@@ -16453,7 +16453,7 @@ svg.pulse-svg .third-circle {
     padding-bottom: 10px;
     height: calc(100% - 3.125rem);
     position: absolute;
-    top: 3.125rem;
+    top: 6.125rem;
     padding-top: 1rem;
     z-index: 6;
     background-color: var(--sidebar-bg);
@@ -30840,6 +30840,7 @@ button:focus {
     width: 275px;
     border-radius: 0px 0px 0.375rem 0.375rem;
     margin: 0;
+    margin-top: 20px;
 }
 
 .header-profile2 .dropdown-menu .dropdown-item {

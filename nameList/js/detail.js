@@ -155,6 +155,12 @@ function notification(d_title, d_text, d_icon, d_btn_text) {
 
 function approve(status) {
     var csrf_token = getCookie('csrftoken');
+    var score_name = $('#score_name option:selected').text().trim(); 
+    var score_1 = $('#score_1').text().trim(); 
+    var score_2 = $('#score_2').text().trim(); 
+    var score_3 = $('#score_3').text().trim(); 
+    var grade = $('#grade').text().trim(); 
+
     if (status == 9) {
         Swal.fire({
             title: '<span style="font-size: 18px;">สาเหตุการไม่อนุมัติสินเชื่อ</span>',
@@ -190,6 +196,11 @@ function approve(status) {
                     data: {
                         installment_id: $("#installment_id").val(),
                         status: status,
+                        score_name: score_name,
+                        score_1:score_1,
+                        score_2:score_2,
+                        score_3:score_3,
+                        grade:grade,
                         issue_cancel: issue_cancel,
                         csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
                     },
@@ -244,6 +255,11 @@ function approve(status) {
                     data: {
                         installment_id: $("#installment_id").val(),
                         status: status,
+                        score_name: score_name,
+                        score_1:score_1,
+                        score_2:score_2,
+                        score_3:score_3,
+                        grade:grade,
                         issue_cancel: issue_cancel,
                         csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
                     },
@@ -272,10 +288,26 @@ function approve(status) {
             data: {
                 installment_id: $("#installment_id").val(),
                 status: status,
+                score_name: score_name,
+                score_1:score_1,
+                score_2:score_2,
+                score_3:score_3,
+                grade:grade,
                 csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
             },
             success: function (response) {
-                Swal.fire('<p style="font-size : 20px">อนุมัติเรียบร้อยแล้ว<p>', '', 'success');
+                var textSwl = ''
+                if(response.status_approve == 1){
+                    textSwl = 'อนุมัติสินเชื่อเรียบร้อยแล้ว';
+                }else if(response.status_approve == 5){
+                    textSwl = 'ยกเลิกสินเชื่อเรียบร้อยแล้ว';
+                }else if(response.status_approve == 9){
+                    textSwl = 'ไม่อนุมัติสินเชื่อเรียบร้อยแล้ว';
+                }else if(response.status_approve == 0){
+                    textSwl = 'แก้ไขการอนุมัติเรียบร้อยแล้ว';
+                }
+
+                Swal.fire(`<p style="font-size : 20px">${textSwl}<p>`, '', 'success');
                 updateButtons(status, response.detail);
             },
             error: function (xhr) {
@@ -287,25 +319,32 @@ function approve(status) {
 
 function updateButtons(status, detail) {
     $(".col.justify-content-start.my-3").empty();
-    $(".col.justify-content-start.my-3").append('<a href="/name-list"><button type="button" class="btn btn-outline-primary mx-2">ย้อนกลับ</button></a>');
+    // $(".col.justify-content-start.my-3").append('<a href="/name-list"><button type="button" class="btn btn-outline-primary mx-2">ย้อนกลับ</button></a>');
     $("#notAppoveIssue, #cancelIssue,#statusApprove,#detailIssue").hide();
 
     if (status == 1) {
-        $(".col.justify-content-start.my-3").append('<button type="button" class="btn btn-outline-danger mx-2" onclick="approve(9)">ไม่อนุมัติ</button>');
+        $(".col.justify-content-start.my-3").append(
+            ' <button type="button" class="btn btn-outline-warning" onclick="approve(0)">แก้ไขการอนุมัติ</button>'
+        );
         $("#statusApproveNew").html('<span class="badge badge-success ms-2 badgeStatus">Approve</span>');
         $("#detailCancelIssueNew,#detailNotAppoveIssueNew,#notAppoveIssue,#cancelIssue,#notAppoveIssueNew,#cancelIssueNew").hide();
     } else if (status == 9) {
-        $(".col.justify-content-start.my-3").append('<button type="button" class="btn btn-outline-success" onclick="approve(1)">อนุมัติ</button>');
+        $(".col.justify-content-start.my-3").append('<button type="button" class="btn btn-outline-warning" onclick="approve(0)">แก้ไขการอนุมัติ</button>');
         $("#statusApproveNew").html('<span class="badge badge-danger ms-2 badgeStatus">Reject</span>');
-        $("#notAppoveIssueNew").html('<div>สาเหตุการไม่อนุมัติสินเชื่อ</div>').show();
-        $("#detailNotAppoveIssueNew").html('<b class="text-red text-wrap">' + detail + '</b>').show();
-        $("#detailCancelIssueNew").hide();
+        $("#detailApprove").html('* สาเหตุการไม่อนุมัติ : ' + detail ).show();
     } else if (status == 5) {
         $(".col.justify-content-end.my-3").empty();
+        $(".col.justify-content-start.my-3").append('<a href="/name-list"><button type="button" class="btn btn-outline-primary mx-2">ย้อนกลับ</button></a>');
         $("#statusApproveNew").html('<span class="badge badge-danger ms-2 badgeStatus">Cancel</span>');
-        $("#cancelIssueNew").html('<div>สาเหตุการยกเลิกเอกสารคำขอสินเชื่อ</div>').show();
-        $("#detailCancelIssueNew").html('<b class="text-red text-wrap">' + detail + '</b>').show();
-        $("#detailAppoveIssueNew").hide();
+        $("#detailApprove").html('* สาเหตุการยกเลิก : ' + detail ).show();
+    } else if (status == 0) {
+        $(".col.justify-content-start.my-3").append(
+            '<button type="button" class="btn btn-outline-danger" onclick="approve(5)">ยกเลิก</button> ' +
+            '<button type="button" class="btn btn-outline-danger not-approve" onclick="approve(9)">ไม่อนุมัติ</button> ' + 
+            '<button type="button" class="btn btn-outline-success approve" onclick="approve(1)">อนุมัติ</button> '
+        );
+        $("#statusApproveNew").html('<span class="badge badge-warning ms-2 badgeStatus">Waiting</span>');
+        $("#detailCancelIssueNew,#detailNotAppoveIssueNew,#notAppoveIssue,#cancelIssue,#notAppoveIssueNew,#cancelIssueNew").hide();
     }
 }
 

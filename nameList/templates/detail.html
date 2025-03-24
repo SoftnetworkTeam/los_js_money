@@ -16,10 +16,14 @@
                     <h2>ข้อมูลผู้ขอสินเชื่อ</h2>
                     <span class="badge badge-{{badge_status}} ms-2 badgeStatus" id="statusApprove">{{loan_status}}</span>
                     <span id="statusApproveNew"></span>
+                    {% if installment_detail.status_approve == 9%}
+                        <span style="color:red;margin-left: 10;" id="detailNotApprove">* สาเหตุการไม่อนุมัติ : {{installment_detail.issue_cancel}}</span>
+                    {% elif installment_detail.status_approve == 5 %}
+                        <span style="color:red;margin-left: 10;" id="detailCancel">* สาเหตุการยกเลิก : {{installment_detail.issue_cancel}}</span>
+                    {% endif %}
+                    <span style="color:red;margin-left: 10;" id="detailApprove">
                 </div>
-                
                 <br>
-
             </div>
         </div>
 
@@ -33,21 +37,17 @@
                 
                     <!-- Body -->
                     <div class="card-body d-flex flex-row justify-content-center align-items-center gap-4" style="gap: 9.5rem !important;font-size: 18px;">
-                        <!-- ชื่อผู้ใช้ -->
                         <div>
                             <strong>ชื่อผู้ขอสินเชื่อ : </strong> 
-                            {% comment %} {{ prename.pre_name }}  {% endcomment %}
                             {{ customer_info.first_name }} 
                             {{ customer_info.last_name }}
                         </div>
                 
-                        <!-- เลขที่ขอสินเชื่อ -->
                         <div>
                             <strong>เลขที่ขอสินเชื่อ : </strong> 
                             {{ installment_detail.app_id }}
                         </div>
                 
-                        <!-- วันที่ขอสินเชื่อ -->
                         <div>
                             <strong>วันที่ขอสินเชื่อ : </strong> 
                             {% with customer.created_at|date:"d/m/Y" as formatted_date %}
@@ -81,9 +81,16 @@
                                     </div>
                                     <li class="d-flex align-items-center gap-2"  style="white-space: nowrap;margin-top: -15px;">
                                         เกณฑ์การให้คะแนน
-                                            <select class="js-data-scoringinfo-ajax">
-                                                <option value="1">SCORE SET 1</option>
-                                            </select>
+                                    <select class="js-data-scoringinfo-ajax" id="score_name" 
+                                        {% if customer_score.status_approve == '1' or customer_score.status_approve == '2' or customer_score.status_approve == '5' or customer_score.status_approve == '9' or customer_score.status_approve == '0' %}disabled{% endif %}>
+                                        {% if customer_score %}
+                                            <option value="{{ customer_score.score_name }}" {% if customer_score %}selected{% endif %}>
+                                                {{ customer_score.score_name }}
+                                            </option> 
+                                        {% else %}
+                                            <option value="1">SCORE SET 1</option>
+                                        {% endif %}
+                                    </select>
                                     </li>
                                 </ul>
                                 
@@ -252,7 +259,10 @@
                                             <div class="col-5 col-md-3 col-lg-2 text-end" style="margin-top: 20px;" >
                                                 <h5>คะแนนที่ได้</h5>
                                             </div>
-                                            <div class="col-7 col-md-9 col-lg-2" style="margin-top: 20px;" id="score_1">
+                                            <div class="col-7 col-md-9 col-lg-2" style="margin-top: 23px;" id="score_1" name="score_1">
+                                            {% if customer_score %}
+                                                <div id="customerScore_1">{{ customer_score.score_1 }}</div>
+                                            {% endif %}
                                             </div>
                                         </div>
                             
@@ -312,8 +322,10 @@
                                             <div class="col-5 col-md-3 col-lg-2 text-end" style="margin-top: 20px;" >
                                                 <h5 >คะแนนที่ได้</h5>
                                             </div>
-                                            <div class="col-7 col-md-9 col-lg-2" id="score_2" style="margin-top: 20px;">
-
+                                            <div class="col-7 col-md-9 col-lg-2" id="score_2" name="score_2" style="margin-top: 23px;">
+                                            {% if customer_score %}
+                                                <div id="customerScore21">{{ customer_score.score_2 }}</div>
+                                            {% endif %}
                                             </div>
                                         </div>
                                         <hr>
@@ -379,22 +391,23 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-5 col-md-3 col-lg-2 text-end" style="margin-top: 20px;" >
-                                                <h5>คะแนนที่รวม</h5>
+                                                <h5>คะแนนรวม</h5>
                                             </div>
-                                            <div class="col-7 col-md-9 col-lg-2" id="score_3" style="margin-top: 20px;">
-                                                
+                                            <div class="col-7 col-md-9 col-lg-2" id="score_3" name="score_3" style="margin-top: 23px;">
+                                            {% if customer_score %}
+                                                <div id="customerScore_3">{{ customer_score.score_3 }}</div>
+                                            {% endif %}
                                             </div>
                                             <div class="col-5 col-md-3 col-lg-2 text-end" style="margin-top: 20px;">
                                                 <h5>Grade</h5>
                                             </div>
-                                            <div class="col-7 col-md-9 col-lg-2" id="grade" style="margin-top: 20px;">
-                                                
+                                            <div class="col-7 col-md-9 col-lg-2" id="grade" style="margin-top: 23px;">
+                                            {% if customer_score %}
+                                                <div id="customerGrade">{{ customer_score.grade }}</div>
+                                            {% endif %}
                                             </div>
                                         </div>
-
-                                        <div id="guide">
-                                        </div>
-
+                                        <div id="guide"></div>
                                     </div>
 
                                     <div>
@@ -448,80 +461,23 @@
 
                         <div class="row">
                             <div class="col justify-content-end my-3" style="text-align: left">
-                                {% if customer_loan_detail.status_approve == 1 %}
-                                    <button type="button" class="btn btn-outline-danger " onclick="approve('5')">
-                                        ยกเลิก
-                                    </button>
-                                {% elif customer_loan_detail.status_approve == 9 %}
-                                    <button type="button" class="btn btn-outline-danger " onclick="approve('5')">
-                                        ยกเลิก
-                                    </button>
-                                {% elif customer_loan_detail.status_approve == 5 %}
-                                    <button type="button" class="btn btn-outline-danger " onclick="approve('5')" style="display: none">
-                                        ยกเลิก
-                                    </button>
-                                {% elif customer_loan_detail.status_approve == 2 %}
-                    
-                                {% else %}
-                    
-                                    {% if auth_reject_approve == False %}
-                                        <button type="button" class="btn btn-outline-danger " onclick="approve('5')">
-                                            ยกเลิก
-                                        </button>
-                                    {% elif auth_reject_approve == True %}
-                                        <button type="button" class="btn btn-outline-danger " onclick="approve('5')">
-                                            ยกเลิก
-                                        </button>
-                                    {% endif %}
-                    
-                                {% endif %}
+                                <a href="/name-list">
+                                    <button type="button" class="btn btn-outline-primary">ย้อนกลับ </button>
+                                </a>
                             </div>
-                            <div class="col justify-content-start my-3 " style="text-align: right">
-                                {% if customer_loan_detail.status_approve == 1 %}
-                                    <a href="/name-list">
-                                        <button type="button" class="btn btn-outline-primary ">ย้อนกลับ</button>
-                                    </a>
-                                    <button type="button" class="btn btn-outline-danger not-approve" onclick="approve('9')">
-                                        ไม่อนุมัติ
-                                    </button>
-                                {% elif customer_loan_detail.status_approve == 9 %}
-                                    <a href="/name-list">
-                                        <button type="button" class="btn btn-outline-primary ">ย้อนกลับ</button>
-                                    </a>
-                                    <button type="button" class="btn btn-outline-success approve" onclick="approve('1')">
-                                        อนุมัติ
-                                    </button>
-                                {% elif customer_loan_detail.status_approve == 2 %}
-                                    <a href="/name-list">
-                                        <button type="button" class="btn btn-outline-primary">ย้อนกลับ</button>
-                                    </a>
-                                {% elif customer_loan_detail.status_approve == 5 %}
-                                    <a href="/name-list">
-                                        <button type="button" class="btn btn-outline-primary">ย้อนกลับ</button>
-                                    </a>
-                                {% else %}
-                                    <a href="/name-list">
-                                        <button type="button" class="btn btn-outline-primary">ย้อนกลับ</button>
-                                    </a >
-                    
-                                    {% if auth_reject_approve == False %}
-                                        <button type="button" class="btn btn-outline-danger not-approve" onclick="approve('9')" style="display: none">
-                                            ไม่อนุมัติ
-                                        </button>
-                                        <button type="button" class="btn btn-outline-success approve" onclick="approve('1')" style="display: none">
-                                            อนุมัติ
-                                        </button>
-                                    {% elif auth_reject_approve == True %}
-                                        <button type="button" class="btn btn-outline-danger not-approve" onclick="approve('9')">
-                                            ไม่อนุมัติ
-                                        </button>
-                                        <button type="button" class="btn btn-outline-success approve" onclick="approve('1')">
-                                            อนุมัติ
-                                        </button>
+                            {% if auth_reject_approve == True %}
+                                <div class="col justify-content-start my-3 " style="text-align: right">
+                                    {% if installment_detail.status_approve == 1 %}
+                                        <button type="button" class="btn btn-outline-warning " onclick="approve('0')">แก้ไขการอนุมัติ</button>
+                                    {% elif installment_detail.status_approve == 9 %}
+                                        <button type="button" class="btn btn-outline-warning " onclick="approve('0')">แก้ไขการอนุมัติ</button>
+                                    {% elif installment_detail.status_approve == 0 or installment_detail.status_approve == '' or installment_detail.status_approve is Null %}
+                                        <button type="button" class="btn btn-outline-danger " onclick="approve('5')">ยกเลิก</button>
+                                        <button type="button" class="btn btn-outline-danger not-approve" onclick="approve('9')">ไม่อนุมัติ</button>
+                                        <button type="button" class="btn btn-outline-success approve" onclick="approve('1')">อนุมัติ</button>
                                     {% endif %}
-                    
-                                {% endif %}
-                            </div>
+                                </div>
+                            {% endif %}
                         </div>
 
                     </div>
@@ -558,6 +514,6 @@
     const shop_type = $(".col-5[data-shop-type]").data("shop-type");
     const rentalage = $(".col-5[data-rentalage]").data("rentalage");
 </script>
-<script src="/nameList/js/detail.js"></script>
+<script src="/nameList/js/detail.js?v=4"></script>
 <link rel="stylesheet" href="{% static 'css/detail.css' %}?v=9" >
 {% endblock %}

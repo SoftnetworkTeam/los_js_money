@@ -53,6 +53,7 @@ class Mastereducationlevel(models.Model):
 
     class Meta:
         managed = False
+        ordering = ['id']
         db_table = 'tb_mastereducationlevel'
         
 class Masterminorchildren(models.Model):
@@ -68,6 +69,7 @@ class Masterminorchildren(models.Model):
 
     class Meta:
         managed = False
+        ordering = ['id']
         db_table = 'tb_masterminorchildren'        
         
 class Masterworkingage(models.Model):
@@ -98,6 +100,7 @@ class Masterrentalage(models.Model):
 
     class Meta:
         managed = False
+        ordering = ['id']
         db_table = 'tb_masterrentalage'            
         
 class Mastermaritalstatus(models.Model):
@@ -126,6 +129,7 @@ class Mastercustomerage(models.Model):
 
     class Meta:
         managed = False
+        ordering = ['age_name']
         db_table = 'tb_mastercustomerage'          
 
 class Mastershoptypes(models.Model):
@@ -139,6 +143,7 @@ class Mastershoptypes(models.Model):
 
     class Meta:
         managed = False
+        ordering = ['id']
         db_table = 'tb_mastershoptypes'      
 
 class Masterbusinesstype(models.Model):
@@ -151,6 +156,7 @@ class Masterbusinesstype(models.Model):
     slug = models.CharField(unique=True, max_length=200)
 
     class Meta:
+        ordering = ['id']
         managed = False
         db_table = 'tb_masterbusinesstype'              
 
@@ -167,6 +173,7 @@ class Mastermonthlyprofit(models.Model):
 
 
     class Meta:
+        ordering = ['id']
         managed = False
         db_table = 'tb_mastermonthlyprofit'          
         
@@ -183,6 +190,7 @@ class Masterbusinessage(models.Model):
 
 
     class Meta:
+        ordering = ['id']
         managed = False
         db_table = 'tb_masterbusinessage'   
                                        
@@ -209,6 +217,7 @@ class Mastercontractreason(models.Model):
 
     class Meta:
         managed = False
+        ordering = ['id']
         db_table = 'tb_mastercontractreason'
         
 class Mastercountry(models.Model):

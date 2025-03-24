@@ -12,6 +12,7 @@ Masterscoringinfo,Masterincomestable,Masterincomenotstable,Mastercustomerage,Mas
 from configurations.models import Masterscoringdetail
 from configurations.views import Mastercountry
 
+from .models import customerscore
 
 from .serializers import MasterBranchAPSerializer, apmastSerializer, MasterOfficer, MasterOfficerSerializer, MasterBrandSerializer, MasterModelSerializer, MasterSubModelSerializer, MasterColorSerializer, interestSerializer, MasterNumberOfInstallmentSerializer, MasterCustomerPrenameSerializer, MasterOccupationSerializer, MasterNCBSerializer , MasterProvinceSerializer, MasterAmphoeSerializer, MasterTambonSerializer, MasterResidenceSerializer, MasterLivingTypeSerializer, MasterLivingOwnerSerializer, MasterBankSerializer, MasterContractDocumentSerializer,HireContactSerializer ,HireContract,CustomerLoanDetailSerializer,MasterBrandSerializer,MasterbranchSerializer
 from theme.serializers import InstallmentFileSerializers
@@ -54,10 +55,20 @@ def detail(request, id):
     installment_obj = InstallmentDetail.objects.filter(id=id).first()
     installment_id = CustomerLoanDetail.objects.filter(id=id).first()
     customerid = installment_id.customer_id
+    customer_score = customerscore.objects.filter(installmentdetail_id=id).first()
+    date_now = datetime.now()
     
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         status = request.POST.get('status')
         issue_cancel = request.POST.get('issue_cancel', '')
+        score_name = request.POST.get('score_name', '').strip()
+        score_1 = request.POST.get('score_1')
+        score_2 = request.POST.get('score_2')
+        score_3 = request.POST.get('score_3')
+        grade = request.POST.get('grade')
+        
+    
+        print(request.POST) 
         
         current_date = datetime.now()
         installment_detail = InstallmentDetail.objects.get(id=id)
@@ -67,8 +78,34 @@ def detail(request, id):
         installment_detail.user_id = request.session['username']
         installment_detail.issue_cancel = issue_cancel
         installment_detail.save()
+         
+        if status == '0' or status == '1' or status == '9':
+            if customer_score :
+                 customerscore.objects.filter(id=customer_score.id).update(
+                        score_name=score_name,
+                        score_1=score_1,
+                        score_2=score_2,
+                        score_3=score_3,
+                        grade=grade,
+                        status_approve=status,
+                        updated_at=date_now,
+                        user_id=request.session['user_id']
+                    )
+            else :
+                 customerscore.objects.create(
+                        installmentdetail_id=id,
+                        score_name=score_name,
+                        score_1=score_1,
+                        score_2=score_2,
+                        score_3=score_3,
+                        grade=grade,
+                        status_approve=status,
+                        created_at=date_now,
+                        updated_at=date_now,
+                        user_id=request.session['user_id']
+                    )
 
-        return JsonResponse({'success': True, 'message': 'บันทึกข้อมูลสำเร็จ', 'detail': issue_cancel})
+        return JsonResponse({'success': True, 'message': 'บันทึกข้อมูลสำเร็จ', 'detail': issue_cancel, 'status_approve': status})
 
     customer_loan_detail = CustomerLoanDetail.objects.filter(id=id).first()
     customer_info = CustomerInfo.objects.filter(id=customerid).first()
@@ -92,9 +129,9 @@ def detail(request, id):
     customer_address2_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=2).first()
     customer_address3_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=3).first()
     customer = CustomerLoanDetail.objects.filter(id=id).first()
-    
 
     file = InstallmentFile.objects.filter(installment_id=installment_obj.id)
+    
 
     badge_status = ""
     loan_status = ""
@@ -137,7 +174,8 @@ def detail(request, id):
         'file': file,
         'customer': customer,
         'badge_status': badge_status ,
-        'loan_status': loan_status
+        'loan_status': loan_status,
+        'customer_score': customer_score
     })
 
 def format_date_time(date_time):
@@ -659,8 +697,8 @@ class CalScoring(BaseListAPIView):
         grade_master = Masterscoringdetail.objects.filter(
             score_id=score_set,
             score_type='Y',
-            score__gte=score_3 
-        ).order_by('score').first()
+            score__lte=score_3
+        ).order_by('-score').first()
 
         if grade_master:  # ตรวจสอบว่า grade_master ไม่เป็น None
             grade_master_type_id = grade_master.type_id
@@ -674,21 +712,21 @@ class CalScoring(BaseListAPIView):
 
 
         if category_occupation == 1: #เกณฑ์ผู้มีรายได้รายได้ประจำ
-            criteria_stable_min = scoring_info.stable_min #คะแนนขั้นต่ำ
-            criteria_percent = scoring_info.stable_percent #หนี้ต่อรายได้ขั้นต่ำ
+            set_stable_min = scoring_info.stable_min #คะแนนขั้นต่ำ
+            set_percent = scoring_info.stable_percent #หนี้ต่อรายได้ขั้นต่ำ
             grade = Masterincomestable.objects.filter(id=grade_master_type_id).first() if grade_master_type_id else None
-            if score_3 != 0.00 and criteria_stable_min != 0.00 and score_3 >= criteria_stable_min and grade_master_type_id is not None:
+            if score_3 != 0.00 and set_stable_min != 0.00 and score_3 >= set_stable_min and grade_master_type_id is not None:
                 message = 'แนะนำให้อนุมัติ'
             else:
                 message = 'แนะนำไม่ให้อนุมัติ'
-
-            
+ 
+             
             
         else : #เกณฑ์ผู้มีรายได้ไม่สม่ำเสมอ
-            criteria_stable_min = scoring_info.not_stable_min #คะแนนขั้นต่ำ
-            criteria_percent = scoring_info.not_stable_percent #หนี้ต่อรายได้ขั้นต่ำ
+            set_stable_min = scoring_info.not_stable_min #คะแนนขั้นต่ำ
+            set_percent = scoring_info.not_stable_percent #หนี้ต่อรายได้ขั้นต่ำ
             grade = Masterincomenotstable.objects.filter(id=grade_master_type_id).first() if grade_master_type_id else None
-            if score_3 != 0.00 and criteria_stable_min != 0.00 and score_3 >= criteria_stable_min and grade_master_type_id is not None:
+            if score_3 != 0.00 and set_stable_min != 0.00 and score_3 >= set_stable_min and grade_master_type_id is not None:
                 message = 'แนะนำให้อนุมัติ'
             else:
                 message = 'แนะนำไม่ให้อนุมัติ'
@@ -699,7 +737,7 @@ class CalScoring(BaseListAPIView):
             'score_2': score_2,
             'score_3': score_3,
             'message': message,
-            'criteria_percent_': criteria_percent ,
+            'set_percent_': set_percent ,
             'grade': grade.grade_code if grade and score_3 != 0.00 else 'N/A',
 
         }
@@ -794,7 +832,7 @@ def insertInstallment(request):
                     customerInfo.book_no = post_data['book_no']
                     customerInfo.book_name = post_data['book_name']
                     customerInfo.bank_id = post_data['bank_id']
-                    customerInfo.guarantor_name = post_data['guarantor_name']
+                    customerInfo.guarantor_name = post_data.get('guarantor_name', '')
                     customerInfo.country_id = post_data['country_id']
                     customerInfo.channel_payment = post_data['channel_payment']
                     customerInfo.memo = post_data['telephone']
@@ -842,7 +880,7 @@ def insertInstallment(request):
                         age=post_data['age'],
                         book_no=post_data['book_no'],
                         book_name=post_data['book_name'],
-                        guarantor_name=post_data['guarantor_name'],
+                        guarantor_name=post_data.get('guarantor_name', ''), 
                         country_id=post_data['country_id'],
                         contract_reason_id=post_data['contract_reason'],
                         mobile=post_data['mobile'],

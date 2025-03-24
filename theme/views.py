@@ -86,6 +86,9 @@ def user_login(request):
             request.session['alert_login'] = 'success'
             request.session['user_id'] = user.id
             
+            check_userlogin = LogUserLogin.objects.filter(user_id=user.id).first()
+            check_branch_name = Masterbranch.objects.filter(id=check_userlogin.branch_id).first()
+            
             user_branch = UserBranch.objects.filter(user_id=user.id, status=True)
             master_branch = Masterbranch.objects.filter(id__in=[ub.branch_id for ub in user_branch])
             master_company = MasterCompany.objects.filter(id__in=[mb.company_id for mb in master_branch])
@@ -99,7 +102,9 @@ def user_login(request):
                 'master_branch': master_branch,
                 'user_id': user.id,
                 'username': user.username,
-                'name': full_name
+                'name': full_name,
+                'check_userlogin' : check_userlogin,
+                'check_branch_name' : check_branch_name,
             })
 
         else:
@@ -126,10 +131,16 @@ def save_branch(request):
             company_id = request.POST.get('company')
             branch_id = request.POST.get('branch')
             
+            company = MasterCompany.objects.filter(id=company_id).first()
             branch = Masterbranch.objects.filter(id=branch_id).first()
+            
+            company_name = company.company_name
+            company_name = company_name.replace("บริษัท ", "")
             
             request.session['company_id'] = company_id 
             request.session['branch_id'] = branch_id
+            request.session['company_name'] = company_name
+            request.session['branch_name'] = branch.branch_name
             request.session['branch_province_id'] = branch.province_id
 
             if not user_id or not company_id or not branch_id:

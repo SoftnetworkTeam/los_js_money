@@ -25,7 +25,7 @@
     <!-- FAVICONS ICON -->
     <link rel="stylesheet" href="{% static 'vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}">
     
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=98">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=100">
     <link rel="stylesheet" href="{% static 'css/css_all/css_all.css' %}?v=11">
     
     <link rel="stylesheet" href="{% static 'css/button.css' %}">
@@ -159,26 +159,28 @@
 				</div>
 			</div> {% endcomment %}
 			<a href="/" class="brand-logo">
-				<img src="{% static 'img/logo_login03.png' %}" width="50%">
-				<span class="k-ml-2" id="titleBase"> ระบบขออนุมัติสินเชื่อ</span>
+				<img src="{% static 'img/logo_login03.png' %}" width="100%">
+				{% comment %} <span class="k-ml-2" id="titleBase"> ระบบขออนุมัติสินเชื่อ</span> {% endcomment %}
 			</a>
 		</div>
 		<div class="header" style="position: fixed;width: 100%;">
 			<div class="header-content">
-				<nav class="navbar navbar-expand">
+               
+				<nav class="navbar navbar-expand align-items-center">
 					<div class="collapse navbar-collapse justify-content-between">
-						<div class="header-left">
-
-						</div>
+						<div class="header-left align-items-center">
+                        <div class=" flex-column align-items-start" style="color:white">
+                            <div style="font-size:24;">ระบบขออนุมัติสินเชื่อ</div>
+                            <div style="font-size:16">บริษัท {{ request.session.company_name }} สาขา  {{ request.session.branch_name }}</div>
+                        </div>
+                    </div>
 						<ul class="navbar-nav header-right">
-
-							<li class="nav-item ps-3">
+							<li class="nav-item ps-3 d-flex align-items-center">
 								<div class="dropdown header-profile2">
 									<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 										<div class="header-info2 d-flex align-items-center">
 											<center>
-												<div class="header-media" id="profileImage-1" style=" background: #105e4c; color: #fff; border-radius: 50%;">
-													<!-- <img id="profileImage" alt=""> -->
+												<div class="header-media" id="profileImage-1" style="background: #105e4c; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
 												</div>
 											</center>
 											<div class="header-info" >
@@ -188,16 +190,16 @@
 										</div>
 									</a>
 									<div class="dropdown-menu dropdown-menu-end" style="">
-										<div class="card border-0 mb-0">
+										<div class="card border-0 mb-0" style="margin-top: -7px;">
 											<div class="card-header py-2 d-flex align-items-center">
 												<div class="products">
 													<!-- <img src="images/tab/1.jpg" class="avatar avatar-md" alt=""> -->
 													<center>
-														<div class="header-media" id="profileImage-2" style="font-size: 12px; background: #105e4c; color: #fff; border-radius: 50%; padding-top: 5px;">
+														<div class="header-media" id="profileImage-2" style="background: #105e4c; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
 														</div>
 													</center>
 													<div>
-														<h6>{{ request.user }}</h6>
+														<h6 style="color: white;">{{ request.user }}</h6>
 													</div>
 												</div>
 											</div>
@@ -232,8 +234,6 @@
 <div class="deznav" style="position: fixed;">
     <div class="deznav-scroll">
         <ul class="metismenu" id="menu">
-            <li class="menu-title">SOFT NETWORK</li>
-
 			<div class="menu-search">
 				<input type="text" id="menuSearch" placeholder="ค้นหาเมนู..." class="form-control font14" />
 			</div>

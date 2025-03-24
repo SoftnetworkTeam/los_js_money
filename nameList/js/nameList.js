@@ -30,6 +30,7 @@ $(document).ready(function () {
             },
             { field: "customer_name", width: "auto", title: "ชื่อ - นามสกุล" },
             { field: "card_no", width: "auto", title: "เลขที่บัตร" },
+            { field: "price", width: "auto", title: "ยอดขอกู้" },
             {
                 title: "สถานะสัญญา",
                 width: "auto",

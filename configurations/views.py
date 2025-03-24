@@ -49,11 +49,11 @@ def configurations(request, grade_type=None):
     data_type = None
 
     if grade_type == 'grade-income':
-        type_obj = Masterincomestable.objects.all().order_by('id') 
+        type_obj = Masterincomestable.objects.all() 
         status_type = 'statusIncome'
         data_type = 'grade'
     elif grade_type == 'grade-unstable':
-        type_obj = Masterincomenotstable.objects.all().order_by('id')
+        type_obj = Masterincomenotstable.objects.all()
         status_type = 'statusNotIncome'
         data_type = 'grade'
     elif grade_type == 'scoring':
@@ -61,11 +61,11 @@ def configurations(request, grade_type=None):
             first_name=Subquery(
                 AuthUser.objects.filter(id=OuterRef('user_id')).values('first_name')[:1]
             )
-        ).order_by("id")
+        )
         status_type = 'statusScoring'
         data_type = 'scoring'
 
-    user_admin = AuthUser.objects.all().order_by('id')
+    user_admin = AuthUser.objects.all()
 
     if grade_type == 'scoring':
         user_dict = {user.id: user.username for user in user_admin}
@@ -98,14 +98,14 @@ class MasterincomestableApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterincomestableSerializer
     def get_queryset(self):
-            return Masterincomestable.objects.all().order_by("id")  
+            return Masterincomestable.objects.all()  
 
     
 class MasterincomenotstableApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
     serializer_class = MasterincomenotstableSerializer
     def get_queryset(self):
-        return Masterincomenotstable.objects.exclude(status='C').order_by("id")
+        return Masterincomenotstable.objects.exclude(status='C')
 
 class MasterscoringinfoApiView(BaseListAPIView):
     pagination_class = NoLimitPagination
@@ -123,7 +123,7 @@ class AdminscoringinfoApiView(BaseListAPIView):
             first_name=Subquery(
                 AuthUser.objects.filter(id=OuterRef('user_id')).values('first_name')[:1]
             )
-        ).order_by("id")
+        )
 
        
 class MasterscoringdetailApiView(BaseListAPIView):
@@ -472,7 +472,6 @@ class updateData(BaseListAPIView):
                         if new_scoringdetail:
                             Masterscoringdetail.objects.bulk_create(new_scoringdetail)
                             response_status = "save success"
- 
 
             elif type_button == "delete":
                 count_row = Masterscoringinfo.objects.count()  

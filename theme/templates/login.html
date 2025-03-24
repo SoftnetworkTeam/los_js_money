@@ -56,12 +56,14 @@
             <div class="mb-3 row">
               <label class="col-lg-3 col-form-label"> เลือกบริษัท </label>
               <div class="col-lg-8">
-                <select class="form-control" for="company" id="company" onchange="loadBranch()">
-                  <option value="">-- เลือกบริษัท --</option>
-                  {% for company in master_company %}
-                  <option value="{{ company.id }}">{{ company.company_name }}</option>
-                  {% endfor %}
-                </select>
+                  <select class="form-control" id="company" onchange="loadBranch()">
+                      <option value="">-- เลือกบริษัท --</option>
+                      {% for company in master_company %}
+                          <option value="{{ company.id }}" {% if company.id == check_userlogin.company_id %}selected{% endif %}>
+                              {{ company.company_name }}
+                          </option>
+                      {% endfor %}
+                  </select>
               </div>
             </div>
           </div>
@@ -70,8 +72,13 @@
             <div class="mb-3 row">
               <label class="col-lg-3 col-form-label"> เลือกสาขา </label>
               <div class="col-lg-8">
-                <select class="form-control" for="branch" id="branch" disabled>
-                  <option value="">-- เลือกสาขา --</option>
+                <select class="form-control" id="branch" disabled>
+                    <option value="">-- เลือกสาขา --</option>
+                    {% if check_userlogin and check_userlogin.branch_id %}
+                        <option value="{{ check_userlogin.branch_id }}" selected>
+                            {{ check_branch_name.branch_name }}
+                        </option>
+                    {% endif %}
                 </select>
               </div>
             </div>

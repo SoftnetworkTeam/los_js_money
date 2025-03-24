@@ -64,7 +64,6 @@ def UserAuthlist(request, id):
 
         elif request.method == 'POST':
 
-            print(request.data)
             data = request.data
             auth_id = data['id']
             # status = data['status']
@@ -72,13 +71,11 @@ def UserAuthlist(request, id):
                 status = True
             else:
                 status = False
-            print(status)
             user_auth_instance = UserAuth.objects.filter(id=auth_id).first()
 
             user_auth_instance.status = status
             user_auth_instance.save()
 
-            print(f"Auth ID: {auth_id}, Status: {status}")
 
             return JsonResponse({'success': True})
 

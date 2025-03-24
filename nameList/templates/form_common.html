@@ -121,7 +121,7 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    จำนวนบุตรไม่บรรลุนิติภาวะ
+                    <span class="text-danger">* </span>จำนวนบุตรไม่บรรลุนิติภาวะ
                   </label>
                   <div class="col-lg-8">
                     <select class="js-data-minorchildren-ajax w-100 select2-lg" id="minorchildren" name="minorchildren" required>
@@ -182,11 +182,11 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>วันที่อ่านบัตร 
+                    วันที่อ่านบัตร 
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="read_card" name="read_card" placeholder="วันที่อ่านบัตร"
-                      value="{{ formatted_date_time_date_read_card }}" required  />
+                      value="{{ formatted_date_time_date_read_card }}"/>
                     <div class="invalid-feedback">กรุณากรอกวันที่อ่านบัตร</div>
                   </div>
                 </div>
@@ -438,7 +438,7 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-xl-3 col-form-label">
-                    ยอดขอกู้ (บาท)
+                    <span class="text-danger">* </span>ยอดขอกู้ (บาท)
                   </label>
                   <div class="col-xl-8">
                     <input class="form-control" id="price" name="price" value="{{installment_detail.price}}"  placeholder="ยอดขอกู้ (บาท)" onkeypress="return onlyNumberKey(event)" required/>
@@ -662,7 +662,7 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>ผู้ค้ำประกัน / หลักประกัน
+                    ผู้ค้ำประกัน / หลักประกัน
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี"

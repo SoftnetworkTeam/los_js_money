@@ -77,6 +77,7 @@ class Mastercustomerage(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_mastercustomerage'
         
 class Mastershoptypes(models.Model):
@@ -89,6 +90,7 @@ class Mastershoptypes(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_mastershoptypes'
         
 class Masterrentalage(models.Model):
@@ -103,6 +105,7 @@ class Masterrentalage(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['age_name']
         db_table = 'tb_masterrentalage'
         
 class Mastermaritalstatus(models.Model):
@@ -115,6 +118,7 @@ class Mastermaritalstatus(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_mastermaritalstatus'
         
 class Masterminorchildren(models.Model):
@@ -129,6 +133,7 @@ class Masterminorchildren(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_masterminorchildren'
 
 class Mastereducationlevel(models.Model):
@@ -141,6 +146,7 @@ class Mastereducationlevel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_mastereducationlevel'
 
 
@@ -154,6 +160,7 @@ class MasterProvince(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_masterprovince'
 
 
@@ -168,6 +175,7 @@ class MasterAmphoe(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_masteramphoe'
 
 
@@ -183,6 +191,7 @@ class MasterTambon(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_mastertambon'
 
 
@@ -531,6 +540,7 @@ class MasterNumberOfInstallment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_masternumberofinstallment'
 
 
@@ -634,6 +644,7 @@ class MasterOccupation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_masteroccupation'
 
 class Masterbusinesstype(models.Model):
@@ -646,6 +657,7 @@ class Masterbusinesstype(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_masterbusinesstype'
 
 class Mastermonthlyprofit(models.Model):
@@ -660,6 +672,7 @@ class Mastermonthlyprofit(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_mastermonthlyprofit'
 
 class Masterbusinessage(models.Model):
@@ -674,6 +687,7 @@ class Masterbusinessage(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_masterbusinessage'
 
 class Mastercontractreason(models.Model):
@@ -685,6 +699,7 @@ class Mastercontractreason(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_mastercontractreason'
                 
 class MasterSubModel(models.Model):
@@ -698,6 +713,7 @@ class MasterSubModel(models.Model):
     model_id = models.IntegerField()
 
     class Meta:
+        ordering = ['id']
         db_table = 'tb_mastersubmodel'
 
 
@@ -722,8 +738,7 @@ class ContractInfo(models.Model):
     land_appraisal = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True, blank=True)
     building_appraisal = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True, blank=True)
     land_appraisal_government = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True, blank=True)
-    building_appraisal_government = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True,
-                                                        blank=True)
+    building_appraisal_government = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True,blank=True)
     land_appraisal_company = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True, blank=True)
     building_appraisal_company = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True, blank=True)
     mortgage_amount = models.DecimalField(max_digits=18, decimal_places=2, default=0, null=True, blank=True)
@@ -736,6 +751,7 @@ class ContractInfo(models.Model):
     conversion_id = models.IntegerField(null=True, blank=True, verbose_name='Convert data')
 
     class Meta:
+        ordering = ['id']        
         db_table = 'tb_contractinfo'
 
 
@@ -1105,6 +1121,7 @@ class CustomerLoanDetail(models.Model):
     guarantor_name = models.CharField(max_length=200)
     category_occupation = models.IntegerField()
     class Meta:
+        ordering = ['id']  
         db_table = 'view_installmentdetail'
 
 class CustomerAddressDetail(models.Model):
@@ -1179,7 +1196,7 @@ class Masterscoringinfo(models.Model):
     updated_at = models.DateTimeField()
     
     class Meta:
-        ordering = ['id']
+        ordering = ['score_name']
         db_table = 'tb_masterscoringinfo'
         
 class Masterbranch(models.Model):
