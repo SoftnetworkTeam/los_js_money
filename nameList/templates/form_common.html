@@ -74,6 +74,49 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                    <label class="col-lg-3 col-form-label">
+                        <span class="text-danger">* </span>เลขบัตรประชาชน
+                    </label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" value="{{ customer_info.card_no }}" id="card_id" name="card_id" 
+                              placeholder="เลขบัตรประชาชน" maxlength="13" required
+                              oninput="checkIDcard(this)" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+              </div>
+      
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>ว/ด/ป เกิด
+                  </label>
+                  <div class="col-lg-8">
+                    <div class="input-group">
+                      <input class="form-control" type="text" id="birthday" name="birthday" value="{{ formatted_date_time_birth_date }}" placeholder="ว/ด/ป เกิด"  />
+                      <span class="input-group-text">
+                        <i class="fa fa-calendar"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>อายุ
+                  </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="age" name="age" placeholder="อายุ"
+                      value="{% if customer_info.age %}{{ customer_info.age }}{% endif %}" required readonly />
+                    <div class="invalid-feedback">กรุณากรอกอายุ</div>
+                  </div>
+                </div>
+              </div>
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
@@ -81,7 +124,7 @@
                     <span class="text-danger">* </span>ช่วงอายุ
                   </label>
                   <div class="col-lg-8">
-                    <select class="js-data-customer_age-ajax w-100 select2-lg" id="customer_age" name="customer_age" required>
+                    <select class="js-data-customer_age-ajax w-100 select2-lg" id="customer_age" name="customer_age" disabled>
                     {% if customer_range_age.age_name %}
                     <option value="{{ customer_range_age.id }}">
                       {{ customer_range_age.age_name }}
@@ -92,7 +135,7 @@
                   </div>
                 </div>
               </div>
-      
+
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
@@ -575,56 +618,28 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                    <label class="col-lg-3 col-form-label">
-                        <span class="text-danger">* </span>เลขบัตรประชาชน
-                    </label>
-                    <div class="col-lg-8">
-                        <input type="text" class="form-control" value="{{ customer_info.card_no }}" id="card_id" name="card_id" 
-                              placeholder="เลขบัตรประชาชน" maxlength="13" required
-                              oninput="validateThaiID(this)" />
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-            </div>
-      
-              <div class="col-xl-4">
-                <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>ว/ด/ป เกิด
+                    <span class="text-danger">* </span>ช่องทางรับเงิน 
                   </label>
                   <div class="col-lg-8">
-                    <div class="input-group">
-                      <input class="form-control" type="text" id="birthday" name="birthday" value="{{ formatted_date_time_birth_date }}" placeholder="ว/ด/ป เกิด"  />
-                      <span class="input-group-text">
-                        <i class="fa fa-calendar"></i>
-                      </span>
-                    </div>
+                    <select class="default-select wide form-control" id="channel_payment" name="channel_payment" required>
+                      <option  {% if not customer_info.channel_payment %}selected{% endif %}>-- เลือกข้อมูล --</option>
+                      <option value="1" {% if customer_info.channel_payment|default:""|stringformat:"s" == "1" %}selected{% endif %}>เงินสด</option>
+                      <option value="2" {% if customer_info.channel_payment|default:""|stringformat:"s" == "2" %}selected{% endif %}>เช็ค</option>
+                      <option value="3" {% if customer_info.channel_payment|default:""|stringformat:"s" == "3" %}selected{% endif %}>โอนเข้าบัญขีธนาคาร</option>
+                    </select>
                   </div>
+                  <div class="invalid-feedback">กรุณาเลือกช่องทางรับเงิน</div>
                 </div>
               </div>
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>อายุ
+                    <span class="text-danger {% if customer_info.channel_payment == '3' %}d-none{% endif %}">* </span>เลขบัญชี
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="age" name="age" placeholder="อายุ"
-                      value="{% if customer_info.age %}{{ customer_info.age }}{% endif %}" required readonly />
-                    <div class="invalid-feedback">กรุณากรอกอายุ</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-xl-4">
-                <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>เลขบัญชี
-                  </label>
-                  <div class="col-lg-8">
-                    <input class="form-control" id="book_no" name="book_no" placeholder="เลขบัญชี"
-                      value="{{ customer_info.book_no }}" oninput="validateInput(this, 10, 'กรุณากรอกเลขบัญชี 10 หลัก')"
-                      maxlength="10" required  />
+                    <input class="form-control" id="book_no" name="book_no" placeholder="เลขบัญชี" value="{{ customer_info.book_no }}" oninput="validateInput(this, 10, 'กรุณากรอกเลขบัญชี 10 หลัก')" maxlength="10" {% if customer_info.channel_payment == '3' %}required{% endif %}  />
                     <div class="invalid-feedback">กรุณากรอกเลขบัญชี</div>
                   </div>
                 </div>
@@ -633,11 +648,10 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>ชื่อบัญชี
+                    <span class="text-danger {% if customer_info.channel_payment == '3' %}d-none{% endif %}">* </span>ชื่อบัญชี
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="book_name" name="book_name" placeholder="ชื่อบัญชี"
-                      value="{{ customer_info.book_name }}" required  />
+                    <input class="form-control" id="book_name" name="book_name" placeholder="ชื่อบัญชี" value="{{ customer_info.book_name }}" {% if customer_info.channel_payment == '3' %}required{% endif %}  />
                     <div class="invalid-feedback">กรุณากรอกชื่อบัญชี</div>
                   </div>
                 </div>
@@ -646,44 +660,15 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>ธนาคาร
+                    <span class="text-danger {% if customer_info.channel_payment == '3' %}d-none{% endif %}">* </span>ธนาคาร
                   </label>
                   <div class="col-lg-8">
-                    <select class="js-data-bank-ajax w-100" id="bank_id" name="bank_id" required>
+                    <select class="js-data-bank-ajax w-100" id="bank_id" name="bank_id" {% if customer_info.channel_payment == '3' %}required{% endif %}>
                       {% if bank.id %}
                       <option value="{{ bank.id }}">{{ bank.bank_name }}</option>
                       {% endif %}
                     </select>
                     <div class="invalid-feedback">กรุณาเลือกธนาคาร</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-xl-4">
-                <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
-                    ผู้ค้ำประกัน / หลักประกัน
-                  </label>
-                  <div class="col-lg-8">
-                    <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี"
-                    value="{{ customer_info.guarantor_name }}" required  />
-                    <div class="invalid-feedback">กรุณากรอกผู้ค้ำประกัน / หลักประกัน</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-xl-4">
-                <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>สัญชาติ
-                  </label>
-                  <div class="col-lg-8">
-                    <select class="js-data-nation-ajax w-100" id="country_id" name="country_id" required>
-                      {% if country.id %}
-                      <option value="{{ country.id }}" >{{ country.country_name_th }}</option>
-                      {% endif %}
-                    </select>
-                    <div class="invalid-feedback">กรุณาเลือกสัญชาติ</div>
                   </div>
                 </div>
               </div>
@@ -708,19 +693,31 @@
               <div class="col-xl-4">
                 <div class="mb-3 row">
                   <label class="col-lg-3 col-form-label">
-                    <span class="text-danger">* </span>ช่องทางรับเงิน 
+                    ผู้ค้ำประกัน / หลักประกัน
                   </label>
                   <div class="col-lg-8">
-                    <select class="default-select wide form-control" id="channel_payment" name="channel_payment" required>
-                      <option  {% if not customer_info.channel_payment %}selected{% endif %}>-- เลือกข้อมูล --</option>
-                      <option value="1" {% if customer_info.channel_payment|default:""|stringformat:"s" == "1" %}selected{% endif %}>เงินสด</option>
-                      <option value="2" {% if customer_info.channel_payment|default:""|stringformat:"s" == "2" %}selected{% endif %}>เช็ค</option>
-                      <option value="3" {% if customer_info.channel_payment|default:""|stringformat:"s" == "3" %}selected{% endif %}>โอนเข้าบัญขีธนาคาร</option>
-                    </select>
+                    <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี" value="{{ customer_info.guarantor_name }}" required  />
+                    <div class="invalid-feedback">กรุณากรอกผู้ค้ำประกัน / หลักประกัน</div>
                   </div>
-                  <div class="invalid-feedback">กรุณาเลือกช่องทางรับเงิน</div>
                 </div>
-              </div><hr>
+              </div>
+
+              <div class="col-xl-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label">
+                    <span class="text-danger">* </span>สัญชาติ
+                  </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-nation-ajax w-100" id="country_id" name="country_id" required>
+                      {% if country.id %}
+                      <option value="{{ country.id }}" >{{ country.country_name_th }}</option>
+                      {% endif %}
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกสัญชาติ</div>
+                  </div>
+                </div>
+              </div>
+              <hr>
 
               <div class="col-xl-12">
                 <div class="mb-3 row">
@@ -1307,6 +1304,8 @@
               </div>
                     {% if file %}
                         {% for files in file %}
+
+                        {% comment %} อัพโหลดรูปแบบโชว์รูป {% endcomment %}
                         <!--<div class="col-xl-6">
                           <div class="mb-3 row">
                             <div class="col-lg-10">
@@ -1371,25 +1370,25 @@
                           </div>
                         </div>
                         <script>
-                       document.addEventListener("DOMContentLoaded", function () {
-                            let fileInput = document.getElementById("file_{{ files.id }}");
-                            let fileNameDisplay = document.getElementById("file_name_{{ files.id }}");
+                            document.addEventListener("DOMContentLoaded", function () {
+                                  let fileInput = document.getElementById("file_{{ files.id }}");
+                                  let fileNameDisplay = document.getElementById("file_name_{{ files.id }}");
 
-                            let fileName = "{{ files.name }}";
-                            
-                                if (fileName) {
-                                fileNameDisplay.value = fileName; 
-                            } else {
-                                fileNameDisplay.placeholder = "เลือกไฟล์...";
-                            }
+                                  let fileName = "{{ files.name }}";
+                                  
+                                  if (fileName) {
+                                      fileNameDisplay.value = fileName; 
+                                  } else {
+                                      fileNameDisplay.placeholder = "เลือกไฟล์...";
+                                  }
 
-                            fileInput.addEventListener("change", function () {
-                                if (fileInput.files.length > 0) {
-                                    fileNameDisplay.value = fileInput.files[0].name;
-                                }
-                            });
-               
-                        });
+                                  fileInput.addEventListener("change", function () {
+                                      if (fileInput.files.length > 0) {
+                                          fileNameDisplay.value = fileInput.files[0].name;
+                                      }
+                                  });
+                    
+                              });
                         </script>
                         {% endfor %}
                         <input type="hidden" value="{{ file|length }}" id="countFile" readonly>
@@ -1669,6 +1668,6 @@
   }
 
 </script>
-<script src="{% static 'js/form_common_script.js' %}?v=109"></script>
+<script src="{% static 'js/form_common_script.js' %}?v=117"></script>
 <link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 
 {% endblock %}

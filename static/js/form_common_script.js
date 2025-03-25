@@ -349,6 +349,29 @@ $(document).ready(function () {
 
   });
 
+  let channelPayment = $("#channel_payment");
+  let bookNo = $("#book_no");
+  let bookName = $("#book_name");
+  let bankId = $("#bank_id");
+
+  function updatePayment() {
+      let type = channelPayment.val();
+
+      if (type === "3") {
+          bookNo.prop("disabled", false).prop("required", true);
+          bookName.prop("disabled", false).prop("required", true);
+          bankId.prop("disabled", false).prop("required", true);
+      } else {
+          bookNo.prop("disabled", true).prop("required", false).val("");
+          bookName.prop("disabled", true).prop("required", false).val("");
+          bankId.prop("disabled", true).prop("required", false).val("").html('<option value="">-- เลือกธนาคาร --</option>');
+      }
+  }
+
+  updatePayment();
+
+  channelPayment.on("change", updatePayment);
+
 
 });
 
@@ -430,13 +453,8 @@ function viewPDF(id, viewEditId = null) {
     var ext = fileName.split('.').pop().toLowerCase();
 
     if (ext === "pdf") {
-      $("#pdfBlank").replaceWith(`
-        <object id="pdfBlank" data="${filePath}" type="application/pdf" style="width: 100%; height: 800px; display:block;">
-            <p style="font-size: 16;color: #fff;">เบราว์เซอร์ของคุณไม่รองรับการแสดงผล PDF กรุณา <a href="${filePath}" target="_blank">ดาวน์โหลดที่นี่</a></p>
-        </object>
-    `);
+      window.open(filePath, '_blank');
       $("#imageViewer").css('display', 'none');
-      new bootstrap.Modal($("#previewFile")).show();
     }
     else if (["jpg", "jpeg", "png", "gif"].includes(ext)) {
       $("#imageViewer").attr("src", filePath).css('display', 'block');
@@ -598,7 +616,6 @@ function calculateAgeFromBirthday(dateStr, outputSelector) {
         if (ageData.age_name) {
           $('#customer_age').html('');
           $('#customer_age').append('<option value="' + ageData.id + '" selected>' + ageData.age_name + '</option>');
-
           $('#customer_age').trigger('change');
         }
       }
@@ -606,26 +623,48 @@ function calculateAgeFromBirthday(dateStr, outputSelector) {
 
   });
 
-
-
 }
 
-function validateThaiID(input) {
-  let id = input.value;
+function checkIDcard(input) {
+  console.log('<id>',installmentdetail_id);
   let feedback = input.nextElementSibling; 
+    let card_no = input.value.trim();
 
-  if (id.length === 13) {
-      if (checkID(id)) {
+    if (card_no.length === 13) {  
+
+        if (checkID(card_no)) {
           input.classList.remove("is-invalid");
           feedback.textContent = "";
+
+          $.ajax({
+            url: "/name-list/check-card-no/"+installmentdetail_id, 
+            type: "GET",  
+            dataType: "json",
+            data: { card_no: card_no },
+            success: function(response) {
+                if (response.status === "success") {
+                    $("#card_id").addClass("is-invalid"); 
+                    $("#card_id").next(".invalid-feedback").text(response.message);
+                } else {
+                    $("#card_id").removeClass("is-invalid").addClass("is-valid");
+                    $("#card_id").next(".invalid-feedback").text("");  
+                }
+            },
+            error: function() {
+                console.error("เกิดข้อผิดพลาดในการตรวจสอบเลขบัตรประชาชน");
+            }
+        });
       } else {
           input.classList.add("is-invalid");
           feedback.textContent = "กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง";
       }
-  } else {
-      input.classList.add("is-invalid");
+    } else {
+        $("#card_id").removeClass("is-invalid is-valid");
+        $("#card_id").next(".invalid-feedback").text("");
+
+        input.classList.add("is-invalid");
       feedback.textContent = "กรุณากรอกเลขบัตรประชาชนด้วยตัวเลข 13 หลัก";
-  }
+    }
 }
 
 function checkID(id) {

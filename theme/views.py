@@ -119,7 +119,7 @@ def select_branch(request):
         if company_id:
             master_branch = request.session.get('master_branch', [])
             branch = Masterbranch.objects.filter(company_id=company_id, id__in=master_branch)
-            branch_list = [{'id': branch.id, 'branch_name': branch.branch_name} for branch in branch]
+            branch_list = [{'id': branch.id, 'branch_name': branch.branch_code+' - '+branch.branch_name} for branch in branch]
 
             return JsonResponse({'branch': branch_list})
 

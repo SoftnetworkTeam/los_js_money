@@ -411,46 +411,6 @@ function datepicker(inputSelector, dateValue = null) {
 //   return `${day}/${month}/${year}`;
 // }
 
-// ฟังก์ชันคำนวณอายุ
-function calculateAgeFromBirthday(dateStr, outputSelector) {
-  let parts = dateStr.split('/');
-  let day = parseInt(parts[0], 10);
-  let month = parseInt(parts[1], 10) - 1;
-  let year = parseInt(parts[2], 10);
-
-  let birthDate = new Date(year, month, day);
-  let today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-
-  if (today.getMonth() < birthDate.getMonth() ||
-    (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) {
-    age--;
-  }
-
-  $(outputSelector).val(age);
-  $.ajax({
-    url: '/nameList/rangeAge/', 
-    type: 'GET',
-    dataType: 'json',
-    data: {
-      "age": age,  // ส่งค่าอายุ
-    },
-    success: function (response) {
-      console.log('Range age data:', response);
-      
-      // ถ้าตอบกลับมีค่า age_name
-      if (response && response.age_name) {
-        // เอาค่าที่ได้จาก response มาแสดงใน <select> #customer_age
-        $('#customer_age').html(''); // ลบตัวเลือกที่มีอยู่
-        $('#customer_age').append('<option value="' + response.id + '">' + response.age_name + '</option>');
-      }
-    },
-    error: function (error) {
-      console.error('Error fetching range age:', error);
-    }
-  });
-  
-}
 
 function calculateWorkAge(dateStr, yearSelector, monthSelector, daySelector) {
   let parts = dateStr.split('/');

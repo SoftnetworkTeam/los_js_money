@@ -2718,7 +2718,7 @@ progress {
 }
 
 .form-control:disabled {
-    background-color: var(--bs-secondary-bg);
+    background-color: #eee;
     opacity: 1;
 }
 
@@ -25427,7 +25427,7 @@ input#checkAll.form-check-input:checked {
 
 .form-control:disabled,
 .form-control[readonly] {
-    background: #fff;
+    background: #eee;
     opacity: 1;
 }
 

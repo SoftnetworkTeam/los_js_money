@@ -316,6 +316,20 @@ def createCustomer(request):
                 
         })
     
+def check_card_no(request):
+    card_no = request.GET.get('card_no', '')
+    
+    customer_info = CustomerInfo.objects.filter(card_no=card_no).first()
+    print('customer_info:',customer_info)
+
+    if InstallmentDetail.objects.filter(
+        customer_id=customer_info.id, 
+        status_approve__in=[None, 0]
+    ).exists():
+        return JsonResponse({"status": "success", "message": "บุคคลผู้นี้เคยขอสินเชื่อแล้ว"})
+    
+    return JsonResponse({"status": "error"})
+    
 def safe_decimal(value, default=Decimal('0')):
     try:
         # Try to remove commas and convert to Decimal

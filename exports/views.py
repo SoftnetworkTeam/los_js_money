@@ -40,6 +40,8 @@ class exports(View):
                         WHEN a.category_occupation = '2' THEN 'รายได้ไม่สม่ำเสมอ'
                     END AS "หมวดอาชีพ",
                     COALESCE(a.price, 0) AS "ยอดขอกู้",
+                    g.score_3 AS "คะแนน",
+                    g.grade AS "เกรด",
                     CASE 
                         WHEN a.status_approve = '1' THEN 'ผ่าน'
                         WHEN a.status_approve = '2' THEN 'ทำสัญญาแล้ว'
@@ -54,6 +56,7 @@ class exports(View):
                 LEFT JOIN Tb_MasterNCB d ON d.id = a.ncb_id
                 LEFT JOIN tb_masteroccupation e ON e.id = c.occupation_id
                 LEFT JOIN auth_user f ON f.username = a.user_id
+                LEFT JOIN tb_customerscore g ON g.installmentdetail_id = a.id
                 WHERE CAST(a.created_at AS DATE) BETWEEN %s AND %s
                 AND a.create_to_branch_id = %s 
                 AND a.company_id = %s
