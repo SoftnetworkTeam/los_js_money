@@ -219,6 +219,8 @@ function approve(status) {
         styleTag.innerHTML =
             '#swal-textarea:focus {border-color: #2196F3; box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);}';
         document.head.appendChild(styleTag);
+
+        $('#score_name').prop('disabled', true);
     } else if (status == 5) {
         Swal.fire({
             title: '<span style="font-size: 18px;">สาเหตุการยกเลิกเอกสารคำขอสินเชื่อ</span>',
@@ -274,11 +276,14 @@ function approve(status) {
             }
         });
 
+        $('#score_name').prop('disabled', true);
+
         const styleTag = document.createElement('style');
         styleTag.innerHTML =
             '#swal-textarea:focus {border-color: #2196F3; box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);}';
         document.head.appendChild(styleTag);
     } else {
+        $('#score_name').prop('disabled', true);
         $.ajax({
             url: "",
             type: "POST",

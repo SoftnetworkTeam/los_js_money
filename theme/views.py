@@ -62,7 +62,12 @@ def dashboard(request):
 
     installment_all = InstallmentDetail.objects.filter(company_id=company_id,create_to_branch_id=create_to_branch_id).count()
     installment_approve = InstallmentDetail.objects.filter(status_approve=1, company_id=company_id,create_to_branch_id=create_to_branch_id).count()
-    installment_waiting = InstallmentDetail.objects.filter(status_approve__isnull=True, company_id=company_id,create_to_branch_id=create_to_branch_id).count()
+    # installment_waiting = InstallmentDetail.objects.filter(status_approve__isnull=True, company_id=company_id,create_to_branch_id=create_to_branch_id).count()
+    installment_waiting = InstallmentDetail.objects.filter(
+        Q(status_approve__isnull=True) | Q(status_approve='0'),
+        company_id=company_id,
+        create_to_branch_id=create_to_branch_id
+    ).count()
     
     return render(request, 'dashboard.html', {
         'installment_all': installment_all,

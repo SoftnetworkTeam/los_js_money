@@ -80,9 +80,9 @@
                                         </li>
                                     </div>
                                     <li class="d-flex align-items-center gap-2"  style="white-space: nowrap;margin-top: -15px;">
-                                        เกณฑ์การให้คะแนน
+                                        เกณฑ์การให้คะแนน 
                                     <select class="js-data-scoringinfo-ajax" id="score_name" 
-                                        {% if customer_score.status_approve == '1' or customer_score.status_approve == '2' or customer_score.status_approve == '5' or customer_score.status_approve == '9' or customer_score.status_approve == '0' %}disabled{% endif %}>
+                                        {% if installment_detail.status_approve == 1 or installment_detail.status_approve == 2 or installment_detail.status_approve == 5 or installment_detail.status_approve == 9 %}disabled{% endif %}>
                                         {% if customer_score %}
                                             <option value="{{ customer_score.score_name }}" {% if customer_score %}selected{% endif %}>
                                                 {{ customer_score.score_name }}
@@ -514,6 +514,6 @@
     const shop_type = $(".col-5[data-shop-type]").data("shop-type");
     const rentalage = $(".col-5[data-rentalage]").data("rentalage");
 </script>
-<script src="/nameList/js/detail.js?v=4"></script>
+<script src="/nameList/js/detail.js?v=5"></script>
 <link rel="stylesheet" href="{% static 'css/detail.css' %}?v=9" >
 {% endblock %}
