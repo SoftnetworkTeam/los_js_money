@@ -513,7 +513,11 @@
     const category_occupation = $(".col-5[data-category-occupation]").data("category-occupation");
     const shop_type = $(".col-5[data-shop-type]").data("shop-type");
     const rentalage = $(".col-5[data-rentalage]").data("rentalage");
+    const customer_score_3 = {{ customer_score.score_3 }}
+    const customer_stable_min = {{ customer_score.stable_min }}
+
+
 </script>
-<script src="/nameList/js/detail.js?v=5"></script>
+<script src="/nameList/js/detail.js?v=6"></script>
 <link rel="stylesheet" href="{% static 'css/detail.css' %}?v=9" >
 {% endblock %}

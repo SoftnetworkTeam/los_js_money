@@ -10,7 +10,7 @@ $(document).ready(function(){
         $(this).addClass('hover');
       }
       else {
-        $(this).removeClass('hover');
+  $(this).removeClass('hover');
       }
     });
     

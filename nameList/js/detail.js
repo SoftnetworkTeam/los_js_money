@@ -1,4 +1,23 @@
 $(document).ready(function () {
+
+    if(customer_score_3 >= customer_stable_min){
+        $('#guide').html(`<br>
+            <div style="background-color: #03A9F3; color: white; padding: 10px; text-align: center; font-weight: bold;">
+                คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ผ่านเกณฑ์ แนะนำให้อนุมัติ
+            </div>
+        `);
+        $('.approve').removeClass('d-none')
+    }else{
+        $('#guide').html(`
+            <div style="background-color:rgb(218, 57, 70); color: white; padding: 10px; text-align: center; font-weight: bold;">
+                คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ไม่ดีและหนี้ต่อได้รายได้ไม่ผ่านเกณฑ์ แนะนำ ไม่ให้อนุมัติ
+            </div>
+        `);
+        $('.approve').addClass('d-none')
+    }
+
+
+
     loadSelect2Data(urlMasterscoringinfo, ".js-data-scoringinfo-ajax", "results", "id", "score_name");
     var form_data = {
         "score_set": score_set,

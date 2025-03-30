@@ -62,13 +62,13 @@ def detail(request, id):
         status = request.POST.get('status')
         issue_cancel = request.POST.get('issue_cancel', '')
         score_name = request.POST.get('score_name', '').strip()
+        score_set = request.POST.get('score_set')
         score_1 = request.POST.get('score_1')
         score_2 = request.POST.get('score_2')
         score_3 = request.POST.get('score_3')
         grade = request.POST.get('grade')
         
-    
-        print(request.POST) 
+        scoring_info = Masterscoringinfo.objects.filter(id=score_set).first()
         
         current_date = datetime.now()
         installment_detail = InstallmentDetail.objects.get(id=id)
@@ -88,6 +88,10 @@ def detail(request, id):
                         score_3=score_3,
                         grade=grade,
                         status_approve=status,
+                        stable_min=scoring_info.stable_min,
+                        stable_percent=scoring_info.stable_percent,
+                        not_stable_min=scoring_info.not_stable_min,
+                        not_stable_percent=scoring_info.not_stable_percent,
                         updated_at=date_now,
                         user_id=request.session['user_id']
                     )
@@ -100,6 +104,10 @@ def detail(request, id):
                         score_3=score_3,
                         grade=grade,
                         status_approve=status,
+                        stable_min=scoring_info.stable_min,
+                        stable_percent=scoring_info.stable_percent,
+                        not_stable_min=scoring_info.not_stable_min,
+                        not_stable_percent=scoring_info.not_stable_percent,
                         created_at=date_now,
                         updated_at=date_now,
                         user_id=request.session['user_id']
