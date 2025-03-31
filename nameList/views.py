@@ -57,6 +57,8 @@ def detail(request, id):
     customerid = installment_id.customer_id
     customer_score = customerscore.objects.filter(installmentdetail_id=id).first()
     date_now = datetime.now()
+    customer_info = CustomerInfo.objects.filter(id=customerid).first()
+    
     
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         status = request.POST.get('status')
@@ -69,6 +71,13 @@ def detail(request, id):
         grade = request.POST.get('grade')
         
         scoring_info = Masterscoringinfo.objects.filter(id=score_set).first()
+        
+        if customer_info.occupation_id == 1 :
+            minimum_score = scoring_info.stable_min
+            minimum_dept_income = scoring_info.stable_percent
+        else :
+            minimum_score = scoring_info.not_stable_min
+            minimum_dept_income = scoring_info.not_stable_percent
         
         current_date = datetime.now()
         installment_detail = InstallmentDetail.objects.get(id=id)
@@ -88,10 +97,8 @@ def detail(request, id):
                         score_3=score_3,
                         grade=grade,
                         status_approve=status,
-                        stable_min=scoring_info.stable_min,
-                        stable_percent=scoring_info.stable_percent,
-                        not_stable_min=scoring_info.not_stable_min,
-                        not_stable_percent=scoring_info.not_stable_percent,
+                        minimum_score=minimum_score,
+                        minimum_dept_income=minimum_dept_income,
                         updated_at=date_now,
                         user_id=request.session['user_id']
                     )
@@ -104,10 +111,8 @@ def detail(request, id):
                         score_3=score_3,
                         grade=grade,
                         status_approve=status,
-                        stable_min=scoring_info.stable_min,
-                        stable_percent=scoring_info.stable_percent,
-                        not_stable_min=scoring_info.not_stable_min,
-                        not_stable_percent=scoring_info.not_stable_percent,
+                        minimum_score=minimum_score,
+                        minimum_dept_income=minimum_dept_income,
                         created_at=date_now,
                         updated_at=date_now,
                         user_id=request.session['user_id']
@@ -116,9 +121,7 @@ def detail(request, id):
         return JsonResponse({'success': True, 'message': 'บันทึกข้อมูลสำเร็จ', 'detail': issue_cancel, 'status_approve': status})
 
     customer_loan_detail = CustomerLoanDetail.objects.filter(id=id).first()
-    customer_info = CustomerInfo.objects.filter(id=customerid).first()
     prename = MasterCustomerPrename.objects.filter(id=customer_info.pre_name_id).first()
-    
     installment = InstallmentDetail.objects.get(id=id)
     customer_range_age = Mastercustomerage.objects.filter(id=customer_info.customer_age_id).first()
     marital_status = Mastermaritalstatus.objects.filter(id=customer_info.marital_status).first()
@@ -132,7 +135,6 @@ def detail(request, id):
     number_Installment = MasterNumberOfInstallment.objects.filter(id=installment.installment).first()
     shop_type = Mastershoptypes.objects.filter(id=customer_info.shop_type_id).first()
     rentalage = Masterrentalage.objects.filter(id=customer_info.rentalage_id).first()
-    
     customer_address_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=1).first()
     customer_address2_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=2).first()
     customer_address3_detail = CustomerAddressDetail.objects.filter(customer_id=customerid, address_id=3).first()

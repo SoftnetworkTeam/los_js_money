@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    if(customer_score_3 >= customer_stable_min){
+    if(minimum_score >= minimum_dept_income ){
         $('#guide').html(`<br>
             <div style="background-color: #03A9F3; color: white; padding: 10px; text-align: center; font-weight: bold;">
                 คำแนะนำระบบ : ผู้ขอกู้มีคะแนนที่ดีและหนี้ต่อได้รายได้ผ่านเกณฑ์ แนะนำให้อนุมัติ
