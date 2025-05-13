@@ -380,13 +380,12 @@
                                                 <label >หนี้นอกระบบ (บาท/เดือน)</label>
                                             </div>
                                             <div class="col-7 col-md-9 col-lg-2">
-                                               0
+                                               {{ installment_detail.debt_informal }}
                                             </div>
                                             <div class="col-5 col-md-3 col-lg-2 text-end">
                                                 <label>หนี้ต่อรายได้ (%)</label>
                                             </div>
-                                            <div class="col-7 col-md-9 col-lg-2">
-                                                {{ installment_detail.debt_informal }}
+                                            <div class="col-7 col-md-9 col-lg-2" id="debtIncome">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -513,6 +512,25 @@
     const category_occupation = $(".col-5[data-category-occupation]").data("category-occupation");
     const shop_type = $(".col-5[data-shop-type]").data("shop-type");
     const rentalage = $(".col-5[data-rentalage]").data("rentalage");
+
+    const base_income = {{ installment_detail.base_income }};
+    const debt_in = {{ installment_detail.debt_in }};
+    const debt_informal = {{ installment_detail.debt_informal }};
+
+    function calculateDebtIncome(priceInstallment, debtIn, debtInformal) {
+        if (priceInstallment === 0) return 0;
+
+        console.log(priceInstallment, debtIn, debtInformal)
+
+        const totalDebt = debtIn + debtInformal;
+        const debtIncomeRatio = (totalDebt / priceInstallment) * 100;
+
+        return debtIncomeRatio.toFixed(2);
+    }
+
+    const debtIncome = calculateDebtIncome(base_income, debt_in, debt_informal);
+    document.getElementById('debtIncome').textContent = `${debtIncome}%`;
+
     {% if customer_score %}
         const minimum_score = {{ customer_score.minimum_score }};
         const minimum_dept_income = {{ customer_score.minimum_dept_income }};
@@ -520,9 +538,6 @@
         const minimum_score = null;
         const minimum_dept_income = null;
     {% endif %}
-
-
-
 
 </script>
 <script src="/nameList/js/detail.js?v=6"></script>
