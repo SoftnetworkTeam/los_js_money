@@ -21,6 +21,7 @@ $(document).ready(function () {
     var columns = [
             { title: "ลำดับ", template: "#= index #", width: "auto" },
             // { field: "apname", width: "auto", title: "ผู้จำหน่าย" },
+            { field: "branch_name", width: "auto", title: "สาขา" },
             { field: "app_id", width: "auto", title: "เลขที่ขอสินเชื่อ" },
             {
                 field: "created_at", title: "วันที่ขอสินเชื่อ",
