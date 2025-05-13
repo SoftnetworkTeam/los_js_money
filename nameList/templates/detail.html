@@ -520,8 +520,6 @@
     function calculateDebtIncome(priceInstallment, debtIn, debtInformal) {
         if (priceInstallment === 0) return 0;
 
-        console.log(priceInstallment, debtIn, debtInformal)
-
         const totalDebt = debtIn + debtInformal;
         const debtIncomeRatio = (totalDebt / priceInstallment) * 100;
 
