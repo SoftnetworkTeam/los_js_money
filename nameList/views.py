@@ -59,7 +59,6 @@ def detail(request, id):
     date_now = datetime.now()
     customer_info = CustomerInfo.objects.filter(id=customerid).first()
     
-    
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         status = request.POST.get('status')
         issue_cancel = request.POST.get('issue_cancel', '')
@@ -858,9 +857,9 @@ def insertInstallment(request):
                     customerInfo.businessage_id = post_data['businessage_id']
                     customerInfo.contract_reason_id = post_data['contract_reason']
                     customerInfo.age = post_data['age']
-                    customerInfo.book_no = post_data['book_no']
-                    customerInfo.book_name = post_data['book_name']
-                    customerInfo.bank_id = post_data['bank_id']
+                    customerInfo.book_no =  post_data.get('book_no', None) 
+                    customerInfo.book_name = post_data.get('book_name', None)
+                    customerInfo.bank_id = post_data.get('bank_id', None)
                     customerInfo.guarantor_name = post_data.get('guarantor_name', '')
                     customerInfo.country_id = post_data['country_id']
                     customerInfo.channel_payment = post_data['channel_payment']
@@ -907,8 +906,8 @@ def insertInstallment(request):
                         monthlyprofit_id=post_data['monthlyprofit_id'],
                         businessage_id=post_data['businessage_id'],
                         age=post_data['age'],
-                        book_no=post_data['book_no'],
-                        book_name=post_data['book_name'],
+                        book_no=post_data.get('book_no', None) ,  
+                        book_name=post_data.get('book_name', None) , 
                         guarantor_name=post_data.get('guarantor_name', ''), 
                         country_id=post_data['country_id'],
                         contract_reason_id=post_data['contract_reason'],
@@ -1161,10 +1160,7 @@ def insertInstallment(request):
                 # else:
                 #     start_payment = None
 
-                if post_data['bank_id']:
-                    bank_id = post_data['bank_id']
-                else:
-                    bank_id = None
+                bank_id = post_data.get('bank_id', None)
 
                 try:
                         

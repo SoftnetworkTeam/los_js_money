@@ -52,7 +52,7 @@ class CustomerInfo(models.Model):
     monthlyprofit_id = models.IntegerField()
     businessage_id = models.IntegerField()
     age = models.IntegerField()
-    book_no = models.IntegerField()
+    book_no = models.IntegerField(null=True, blank=True)
     book_name = models.CharField(max_length=100)
     guarantor_name = models.CharField(max_length=100)
     country_id = models.IntegerField()

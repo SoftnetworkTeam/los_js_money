@@ -124,7 +124,7 @@
                     <span class="text-danger">* </span>ช่วงอายุ
                   </label>
                   <div class="col-lg-8">
-                    <select class="js-data-customer_age-ajax w-100 select2-lg" id="customer_age" name="customer_age" disabled>
+                    <select class="js-data-customer_age-ajax w-100 select2-lg" id="customer_age" name="customer_age" readonly>
                     {% if customer_range_age.age_name %}
                     <option value="{{ customer_range_age.id }}">
                       {{ customer_range_age.age_name }}
@@ -696,7 +696,7 @@
                     ผู้ค้ำประกัน / หลักประกัน
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี" value="{{ customer_info.guarantor_name }}" required  />
+                    <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี" value="{{ customer_info.guarantor_name }}"   />
                     <div class="invalid-feedback">กรุณากรอกผู้ค้ำประกัน / หลักประกัน</div>
                   </div>
                 </div>
