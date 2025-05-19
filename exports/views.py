@@ -10,6 +10,7 @@ from decimal import Decimal
 from urllib.parse import quote
 from django.views import View
 from django.template.response import TemplateResponse as render
+from theme.models import UserBranch
 
 
 def export(request, type):
@@ -20,15 +21,30 @@ class exports(View):
     def post(self, request):
         post_data = request.POST.dict()
         company_id = request.session.get("company_id")
-        branch_id = request.session.get("branch_id")
+        post_data_branch_id = post_data.get("branch_id", None)
+
+        userbranch = UserBranch.objects.filter(user_id=self.request.session['user_id'])
+        user_branch_id = list(userbranch.values_list('branch_id', flat=True))
+
+        print('post_data_branch_id', post_data_branch_id)
+
+        if post_data_branch_id == 'all':
+            branch_id = user_branch_id
+        else:
+            branch_id = [post_data_branch_id]
+
         status_approve = post_data.get("status_approve", "").strip()
         start_date = try_convert_date(post_data.get("start_date", ""))
         end_date = try_convert_date(post_data.get("end_date", ""))
 
         cursor = connection.cursor()
         try:
-            query = """
-                SELECT a.app_id AS "เลขที่ขออนุมัติ",
+            # สร้าง placeholder สำหรับ IN (%s, %s, ...)
+            create_to_branch_id = ', '.join(['%s'] * len(branch_id))
+
+            query = f"""
+                SELECT 
+                    a.app_id AS "เลขที่ขออนุมัติ",
                     a.created_at AS "วันที่",
                     a.customer_name AS "ชื่อ - นามสกุลลูกค้า",
                     a.mobile AS "เบอร์โทรลูกค้า",
@@ -58,11 +74,11 @@ class exports(View):
                 LEFT JOIN auth_user f ON f.username = a.user_id
                 LEFT JOIN tb_customerscore g ON g.installmentdetail_id = a.id
                 WHERE CAST(a.created_at AS DATE) BETWEEN %s AND %s
-                AND a.create_to_branch_id = %s 
+                AND a.create_to_branch_id IN ({create_to_branch_id})
                 AND a.company_id = %s
             """
 
-            params = [start_date, end_date, branch_id, company_id]
+            params = [start_date, end_date, *branch_id, company_id]
 
             if status_approve.lower() != "all":
                 query += " AND COALESCE(a.status_approve, 0) = %s"
@@ -70,7 +86,7 @@ class exports(View):
 
             query += " ORDER BY a.created_at"
 
-            # print("query: ", query % tuple(["'%s'" % p for p in params]))
+            print("query: ", cursor.mogrify(query, params).decode("utf-8") if hasattr(cursor, "mogrify") else query)
             cursor.execute(query, params)
 
             columns_header = [col[0] for col in cursor.description]
@@ -79,6 +95,7 @@ class exports(View):
             cursor.close()
 
         return export_xlsx("รายงานการขออนุมัติสินเชื่อ.xlsx", row_data, None)
+
 
 
 def export_xlsx(filename, data, rename_column=None):

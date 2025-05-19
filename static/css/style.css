@@ -25425,9 +25425,13 @@ input#checkAll.form-check-input:checked {
     height: 100%;
 }
 
-.form-control:disabled,
-.form-control[readonly] {
+.form-control:disabled {
     background: #eee;
+    opacity: 1;
+}
+
+.form-control[readonly] {
+    background: #fff;
     opacity: 1;
 }
 

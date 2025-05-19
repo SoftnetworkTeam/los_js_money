@@ -2,6 +2,12 @@
 <title id="title">Report | รายงานขออนุมัติสินเชื่อ</title>
 {% endblock %} {% block content %}
 
+<style>
+  .form-control[readonly] input {
+    background: #fff !important;
+  }
+</style>
+
 <form action="{% url 'report:print_report' %}" autocomplete="off" method="GET" target="_blank" id="reportForm">
   <div class="content-body">
     <div class="container-fluid">
@@ -10,43 +16,57 @@
           <div class="card">
             <div class="card-header">
               <span id="reportName">Report รายงานขออนุมัติสินเชื่อ </span>
-                <input type="hidden" id="reportnm" name="report" value="rp_installmentDetail.fr3">
-                <input type="hidden" id="company_id" name="i_company_id" value="{{request.session.company_id}}">
-                <input type="hidden" id="branch_id" name="i_branch_id" value="{{request.session.branch_id}}">
-                <input type="hidden" name="format" value="PDF">
+              <input type="hidden" id="reportnm" name="report" value="rp_installmentDetail.fr3">
+              <input type="hidden" id="company_id" name="i_company_id" value="{{request.session.company_id}}">
+              <!-- <input type="hidden" id="branch_id" name="i_branch_id" value="{{request.session.branch_id}}"> -->
+              <input type="hidden" name="format" value="PDF">
             </div>
-              <div class="card-body px-4">
-                <div class="row" id="content">
-                  <div class="col-xl-6">
-                    <div class="mb-2 row">
-                      <label class="col-lg-2 col-form-label"> ช่วงเวลา </label>
-                      <div class="col-lg-8">
-                        <input class="form-control" type="text" id="rangDate" value="" placeholder="ช่วงเวลา" />
-                      </div>
+            <div class="card-body px-4">
+              <div class="row" id="content">
+                {% if auth_branchap_menu == True %}
+                <div class="col-xl-6">
+                  <div class="mb-3 row">
+                    <label class="col-lg-2 col-form-label"> สาขา </label>
+                    <div class="col-lg-8">
+                      <select class="form-control select2" id="branch_id_report" name="i_branch_id">
+                      </select>
                     </div>
                   </div>
-                  <div class="col-xl-6">
-                    <div class="mb-3 row">
-                      <label class="col-lg-2 col-form-label"> สถานะ </label>
-                      <div class="col-lg-8">
-                        <select class="form-control select2" for="s_status_approve" id="s_status_approve" name="s_status_approve">
-                          <option value="A">ทั้งหมด</option>
-                          <option value="0">Waiting</option>
-                          <option value="1">Approve</option>
-                          <option value="2">Reject</option>
-                          <option value="9">Created Contract</option>
-                        </select>
-                      </div>
+                  <input class="form-control" type="hidden" id="d_start_date" name="d_start_date" />
+                  <input class="form-control" type="hidden" id="d_end_date" name="d_end_date" />
+                </div>
+                {% endif %}
+                <div class="col-xl-6">
+                  <div class="mb-2 row">
+                    <label class="col-lg-2 col-form-label"> ช่วงเวลา </label>
+                    <div class="col-lg-8">
+                      <input class="form-control" type="text" id="rangDate" value="" placeholder="ช่วงเวลา" />
                     </div>
-                    <input class="form-control" type="hidden" id="d_start_date" name="d_start_date"/>
-                    <input class="form-control" type="hidden" id="d_end_date" name="d_end_date" />
                   </div>
                 </div>
-                <hr />
-                <div class="col-xl-12 text-center">
-                  <button class="btn btn-outline-primary btn-sm"><i class="k-icon k-i-printer k-button-icon" style="font-size: 25px"></i><span style="margin-left: 5;font-size: 14;">Preview<span></button>
+                <div class="col-xl-6">
+                  <div class="mb-3 row">
+                    <label class="col-lg-2 col-form-label"> สถานะ </label>
+                    <div class="col-lg-8">
+                      <select class="form-control select2" for="s_status_approve" id="s_status_approve" name="s_status_approve">
+                        <option value="A">ทั้งหมด</option>
+                        <option value="0">Waiting</option>
+                        <option value="1">Approve</option>
+                        <option value="2">Reject</option>
+                        <option value="9">Created Contract</option>
+                      </select>
+                    </div>
+                  </div>
+                  <input class="form-control" type="hidden" id="d_start_date" name="d_start_date" />
+                  <input class="form-control" type="hidden" id="d_end_date" name="d_end_date" />
                 </div>
               </div>
+              <hr />
+              <div class="col-xl-12 text-center">
+                <button class="btn btn-outline-primary btn-sm"><i class="k-icon k-i-printer k-button-icon" style="font-size: 25px"></i><span
+                    style="margin-left: 5;font-size: 14;">Preview<span></button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -57,15 +77,21 @@
 
 {% endblock %} {% block script %}
 <script>
+
+  $(document).ready(function () {
+    loadSelect2Data("/branchAPIView/", "#branch_id_report", "results", "id", "branch_name");
+  });
+
   datepickerRange("#rangDate");
   var authEdit = "{{ auth_edit_delete }}";
 
-  $("#reportForm").submit(function(event) {
+
+  $("#reportForm").submit(function (event) {
     let startDate = $("#d_start_date").val();
     let endDate = $("#d_end_date").val();
 
-    let startDateObj = new Date(startDate.split("/").reverse().join("-")); 
-    let endDateObj = new Date(endDate.split("/").reverse().join("-")); 
+    let startDateObj = new Date(startDate.split("/").reverse().join("-"));
+    let endDateObj = new Date(endDate.split("/").reverse().join("-"));
 
     let startDateFormatted = startDateObj.toISOString().split('T')[0];
     let endDateFormatted = endDateObj.toISOString().split('T')[0];
@@ -75,5 +101,6 @@
   });
 
 </script>
-{% comment %} <script src="/report/js/report.js"></script> {% endcomment %}
+{% comment %}
+<script src="/report/js/report.js"></script> {% endcomment %}
 {% endblock %}

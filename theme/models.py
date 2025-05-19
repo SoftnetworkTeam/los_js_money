@@ -1234,6 +1234,7 @@ class Masterbranch(models.Model):
 
     class Meta:
         managed = False  
+        ordering = ['branch_code']
         db_table = 'tb_masterbranch' 
         
 class MasterCompany(models.Model):

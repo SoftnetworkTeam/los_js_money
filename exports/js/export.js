@@ -6,11 +6,15 @@ async function exports(type) {
     var startDate = $('#startDateInput').val();
     var endDate = $('#endDateInput').val();
     var status = $('#status').val();
+    var branch_id = $('#branch_id_report').val();
+
 
     var formData = new FormData();
     formData.append('start_date', startDate);
     formData.append('end_date', endDate);
     formData.append('status_approve', status);
+    formData.append('branch_id', branch_id);
+
 
     if (type === 'requestLoan') {
         try {

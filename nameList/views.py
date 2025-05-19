@@ -355,19 +355,27 @@ class CustomerLoanDetailApiView(BaseListAPIView):
         company_id = self.request.session.get('company_id')
         create_to_branch_id = self.request.session.get('branch_id')
 
-        
-        
-        if(status == 'approve') :
-            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,status_approve=1)
-        elif(status == 'waiting') :
-            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id,status_approve__isnull=True)
-        else :
-            customer_detail = CustomerLoanDetail.objects.filter(company_id=company_id)
+        if status == 'approve':
+            queryset = CustomerLoanDetail.objects.filter(company_id=company_id, status_approve=1)
+        elif status == 'waiting':
+            queryset = CustomerLoanDetail.objects.filter(company_id=company_id, status_approve__isnull=True)
+        else:
+            queryset = CustomerLoanDetail.objects.filter(company_id=company_id)
 
-        for detail in customer_detail:
-            print('branch_name sss:', detail.branch)
-        
-        return customer_detail
+        filter_value = self.request.query_params.get('filter[filters][0][value]', None)
+
+        if filter_value:
+            search_query = (
+                Q(branch__icontains=filter_value) |
+                Q(app_id__icontains=filter_value) |
+                Q(customer_name__icontains=filter_value) |
+                Q(card_no__icontains=filter_value) |
+                Q(price__icontains=filter_value) |
+                Q(status_approve_name__icontains=filter_value)  
+            )
+            queryset = queryset.filter(search_query)
+
+        return queryset
 
 
 class NoLimitPagination(PageNumberPagination):
@@ -393,6 +401,28 @@ class MasterBranchAPAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
     queryset = MasterBranchAP.objects.all()
     serializer_class = MasterBranchAPSerializer
+
+class MasterbranchAPIView(BaseListAPIView):
+    pagination_class = NoLimitPagination
+    serializer_class = MasterbranchSerializer
+
+    def get(self, request):
+        userbranch = UserBranch.objects.filter(user_id=request.session['user_id'])
+        branch_id = userbranch.values_list('branch_id', flat=True)
+        queryset = Masterbranch.objects.filter(id__in=branch_id)
+
+        return queryset
+    
+class branchAPIView(BaseListAPIView):
+    pagination_class = NoLimitPagination
+    serializer_class = MasterbranchSerializer
+
+    def get_queryset(self):
+        userbranch = UserBranch.objects.filter(user_id=self.request.session['user_id'])
+        company_id = self.request.session.get('company_id')
+        branch_id = userbranch.values_list('branch_id', flat=True)
+        return Masterbranch.objects.filter(id__in=branch_id, company_id=company_id)
+
 
         
 class MasterOfficerAPIView(BaseListAPIView):

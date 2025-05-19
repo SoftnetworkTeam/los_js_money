@@ -60,19 +60,44 @@ def dashboard(request):
     company_id = request.session.get('company_id')
     create_to_branch_id = request.session.get('branch_id')
 
-    installment_all = InstallmentDetail.objects.filter(company_id=company_id).count()
-    installment_approve = InstallmentDetail.objects.filter(status_approve=1).count()
-    # installment_waiting = InstallmentDetail.objects.filter(status_approve__isnull=True, company_id=company_id,create_to_branch_id=create_to_branch_id).count()
-    installment_waiting = InstallmentDetail.objects.filter(
-        Q(status_approve__isnull=True) | Q(status_approve='0'),
-        company_id=company_id,
-    ).count()
-    
-    return render(request, 'dashboard.html', {
-        'installment_all': installment_all,
-        'installment_approve': installment_approve,
-        'installment_waiting': installment_waiting,
-    })
+    userbranch = UserBranch.objects.filter(user_id=request.session['user_id'])
+    # print('userbranch', list(userbranch.values()))
+    branch_id = userbranch.values_list('branch_id', flat=True)
+    # print('branch_id_list', branch_id)
+    branch_count = branch_id.count()
+    # print('branch_count', branch_count)
+
+    user = request.user
+    if user.is_authenticated:
+        user_auth = UserAuth.objects.filter(user=user, auth__auth_code='A006').first()
+        # print('user_auth',user_auth.status)
+
+        if user_auth and  user_auth.status != False:  
+            # print('dashboard A006')
+
+            installment_all = InstallmentDetail.objects.filter(company_id=company_id, create_to_branch_id__in=branch_id).count()
+            installment_approve = InstallmentDetail.objects.filter(status_approve=1, create_to_branch_id__in=branch_id).count()
+            installment_waiting = InstallmentDetail.objects.filter(
+                Q(status_approve__isnull=True) | Q(status_approve='0'),
+                company_id=company_id,
+                create_to_branch_id__in=branch_id
+            ).count()
+        else :
+            # print('dashboard not A006')
+
+            installment_all = InstallmentDetail.objects.filter(company_id=company_id,create_to_branch_id=create_to_branch_id).count()
+            installment_approve = InstallmentDetail.objects.filter(status_approve=1,company_id=company_id,create_to_branch_id=create_to_branch_id).count()
+            installment_waiting = InstallmentDetail.objects.filter(
+                Q(status_approve__isnull=True) | Q(status_approve='0'),
+                company_id=company_id,
+                create_to_branch_id=create_to_branch_id
+            ).count()
+            
+        return render(request, 'dashboard.html', {
+            'installment_all': installment_all,
+            'installment_approve': installment_approve,
+            'installment_waiting': installment_waiting,
+        })
 
 def user_login(request):
     if request.method == "POST":
@@ -89,13 +114,13 @@ def user_login(request):
             request.session['username'] = user.username
             request.session['alert_login'] = 'success'
             request.session['user_id'] = user.id
-            
             check_userlogin = LogUserLogin.objects.filter(user_id=user.id).first()
             check_branch_name = Masterbranch.objects.filter(id=check_userlogin.branch_id).first()
-            
             user_branch = UserBranch.objects.filter(user_id=user.id, status=True)
-            master_branch = Masterbranch.objects.filter(id__in=[ub.branch_id for ub in user_branch])
-            master_company = MasterCompany.objects.filter(id__in=[mb.company_id for mb in master_branch])
+            branch_id = user_branch.values_list('branch_id', flat=True)
+            master_branch = Masterbranch.objects.filter(id__in=branch_id)
+            master_branch_id = master_branch.values_list('company_id', flat=True)
+            master_company = MasterCompany.objects.filter(id__in=master_branch_id)
             
             request.session['master_company'] = [company.id for company in master_company]
             request.session['master_branch'] = [branch.id for branch in master_branch]

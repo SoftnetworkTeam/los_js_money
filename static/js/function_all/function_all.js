@@ -2,7 +2,7 @@ $(document).ready(function () {
   const searchInput = $("#menuSearch");
   const menuItems = $("#menu > li");
   const noMenuMessage = $("#noMenuMessage");
-  $('.select2').select2();
+  $(".select2").select2();
 
   searchInput.on("input", function () {
     const filter = searchInput.val().toLowerCase();
@@ -13,12 +13,12 @@ $(document).ready(function () {
       const text = item.text().toLowerCase();
 
       if (item.hasClass("menu-title")) {
-        item.show(); 
+        item.show();
       } else if (text.includes(filter)) {
         item.show();
         hasVisibleMenu = true;
       } else {
-        item.hide(); 
+        item.hide();
       }
     });
 
@@ -70,8 +70,7 @@ $(document).ready(function () {
     templateSelection: formatRepoSelection,
   });
 
-  kendo.culture("th-TH");  // ตั้งค่าภาษาไทย
-
+  kendo.culture("th-TH"); // ตั้งค่าภาษาไทย
 });
 
 // document.querySelectorAll('#example [data-bs-toggle="tooltip"]')
@@ -110,8 +109,8 @@ function notification(d_title, d_text, d_icon, d_btn_text) {
       text: d_text,
       icon: d_icon,
       confirmButtonText: d_btn_text,
-      allowOutsideClick: false
-    })
+      allowOutsideClick: false,
+    });
   });
 }
 
@@ -139,7 +138,15 @@ function notification_v2(
   });
 }
 
-function initKendoGrid(gridSelector, dataSourceUrl, columns, fields = null, sortField, sortOrder = null, pageSize = 10) {
+function initKendoGrid(
+  gridSelector,
+  dataSourceUrl,
+  columns,
+  fields = null,
+  sortField,
+  sortOrder = null,
+  pageSize = 10
+) {
   $(gridSelector).kendoGrid({
     dataSource: {
       transport: {
@@ -147,24 +154,26 @@ function initKendoGrid(gridSelector, dataSourceUrl, columns, fields = null, sort
           url: dataSourceUrl,
           dataType: "json",
           type: "GET",
-          contentType: "application/json"
+          contentType: "application/json",
         },
       },
       schema: {
         data: "results",
         total: "count",
         model: {
-          fields: fields
-        }
+          fields: fields,
+        },
       },
       pageSize: pageSize,
       serverPaging: true,
       serverFiltering: true,
       serverSorting: true,
-      sort: [{
-        field: sortField,
-        dir: sortOrder
-      }],
+      sort: [
+        {
+          field: sortField,
+          dir: sortOrder,
+        },
+      ],
       change: function (e) {
         let data = this.data();
         data.forEach(function (item, index) {
@@ -181,42 +190,40 @@ function initKendoGrid(gridSelector, dataSourceUrl, columns, fields = null, sort
       refresh: true,
       messages: {
         display: "{0} - {1} จาก {2} รายการ",
-        itemsPerPage: "รายการต่อหน้า"
-      }
+        itemsPerPage: "รายการต่อหน้า",
+      },
     },
     filterable: true,
-    toolbar: ["search", 
+    toolbar: [
+      "search",
       // {
       //   name: "excel",
       //   template: '<button type="button" class="k-grid-excel k-button k-button-md k-rounded-md k-button-solid k-button-solid-base k-icon-button"  data-bs-toggle="tooltip" title="Export to Excel"><span class="k-icon k-i-file-excel k-button-icon"></span></button>'
-      // } 
-  ],
+      // }
+    ],
     // excel: {
     //   fileName: "ex.xlsx",
     //   filterable: true
     // },
     dataBound: function () {
-
       $("th[data-bs-toggle='tooltip']").each(function () {
         var element = $(this);
         element.kendoTooltip({
           content: element.attr("title"),
-          position: "top"
+          position: "top",
         });
       });
 
       $('[data-bs-toggle="tooltip"]').each(function () {
         var element = $(this);
         element.kendoTooltip({
-          content: element.attr('title'),
-          position: "top"
+          content: element.attr("title"),
+          position: "top",
         });
       });
-
-    }
+    },
   });
 }
-
 
 function formatRepo(repo) {
   if (repo.loading) return repo.text;
@@ -234,13 +241,21 @@ function formatRepoSelection(repo) {
   return repo.text;
 }
 
-function loadSelect2Data(url, selector, responseKey = null, idKey = null, textKey = null, additionalParams = {}, selectedValue = null, placeholder = '-- เลือกข้อมูล --') {
-
+function loadSelect2Data(
+  url,
+  selector,
+  responseKey = null,
+  idKey = null,
+  textKey = null,
+  additionalParams = {},
+  selectedValue = null,
+  placeholder = "-- เลือกข้อมูล --"
+) {
   let textSelector;
   if (selector == ".js-data-file_type-ajax") {
-    textSelector = '-- เลือกประเภทเอกสาร --';
+    textSelector = "-- เลือกประเภทเอกสาร --";
   } else {
-    textSelector = '-- เลือกข้อมูล --';
+    textSelector = placeholder;
   }
 
   $(selector).select2({
@@ -248,52 +263,74 @@ function loadSelect2Data(url, selector, responseKey = null, idKey = null, textKe
     placeholder: textSelector,
     ajax: {
       url: url,
-      dataType: 'json',
+      dataType: "json",
       delay: 250,
       data: function (params) {
         return {
           q: params.term,
           page: params.page,
-          ...additionalParams
+          ...additionalParams,
         };
       },
       processResults: function (data, params) {
         params.page = params.page || 1;
 
-        const selectData = data[responseKey].map((item) => {
-          let text = item[textKey]; 
+        const selectData = [];
 
-          if (selector === ".js-data-branch-ajax") {
-            text = item.branch_code + "-" + item.branch_name;
-          }
+        // เพิ่ม option "ทั้งหมด" ให้รายงาน
+        if (selector === "#branch_id_report") {
+          selectData.push({
+            id: "all",
+            text: "ทั้งหมด",
+          });
+        }
 
-          return {
-            id: item[idKey] || item.id,
-            text: text,
-            value: item.score_type || null,
-            name: text  
-          };
-        });
+        // เติมข้อมูลจาก ajax
+        selectData.push(
+          ...data[responseKey].map((item) => {
+            let text = item[textKey];
+            if (
+              selector === ".js-data-branch-ajax" ||
+              selector === "#branch_id_report"
+            ) {
+              text = item.branch_code + "-" + item.branch_name;
+            }
+            return {
+              id: item[idKey] || item.id,
+              text: text,
+              value: item.score_type || null,
+              name: text,
+            };
+          })
+        );
 
         return {
           results: selectData,
           pagination: {
-            more: (params.page * 30) < data.total_count
-          }
+            more: params.page * 30 < data.total_count,
+          },
         };
       },
-      cache: true
+      cache: true,
     },
-    escapeMarkup: function (markup) { return markup; },
+    escapeMarkup: function (markup) {
+      return markup;
+    },
     minimumInputLength: 0,
     templateResult: formatRepo,
-    templateSelection: formatRepoSelection
+    templateSelection: formatRepoSelection,
   });
 
-  if (selectedValue) {
-    $(selector).val(selectedValue).trigger('change');
+  if (selector === "#branch_id_report") {
+    const defaultOption = new Option("ทั้งหมด", "all", true, true);
+    $(selector).append(defaultOption).trigger("change");
+  } else if (selector === "#branch_id_report" && !selectedValue) {
+    $(selector).val("all").trigger("change");
   }
 
+  if (selectedValue) {
+    $(selector).val(selectedValue).trigger("change");
+  }
 }
 
 function mathInstallment() {
@@ -303,7 +340,10 @@ function mathInstallment() {
   if (price > 0) {
     $("#down_payment").prop("disabled", false);
   } else {
-    $("#down_payment, #interest, #installment, #price_installment").prop("disabled", true);
+    $("#down_payment, #interest, #installment, #price_installment").prop(
+      "disabled",
+      true
+    );
   }
 
   if (price > 0 && down_payment > 0) {
@@ -334,13 +374,14 @@ function calculateInstallment() {
 
   if (net_amount > 0 && interest_cal > 0 && installment > 0) {
     interest_cal = interest_cal / 100;
-    let installment_price = Math.floor((((net_amount * interest_cal) * installment) + net_amount) / installment);
+    let installment_price = Math.floor(
+      (net_amount * interest_cal * installment + net_amount) / installment
+    );
     $("#price_installment").val(installment_price.toFixed(2));
   } else {
     $("#price_installment").val("");
   }
 }
-
 
 // ฟังก์ชัน datepicker
 function datepicker(inputSelector, dateValue = null) {
@@ -359,16 +400,50 @@ function datepicker(inputSelector, dateValue = null) {
     altInput: true,
     altFormat: "d/m/Y",
     allowInput: true,
-    defaultDate: dateValue ,
+    defaultDate: dateValue,
     locale: {
       weekdays: {
         shorthand: ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."],
-        longhand: ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"]
+        longhand: [
+          "อาทิตย์",
+          "จันทร์",
+          "อังคาร",
+          "พุธ",
+          "พฤหัสบดี",
+          "ศุกร์",
+          "เสาร์",
+        ],
       },
       months: {
-        shorthand: ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."],
-        longhand: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
-      }
+        shorthand: [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ],
+        longhand: [
+          "มกราคม",
+          "กุมภาพันธ์",
+          "มีนาคม",
+          "เมษายน",
+          "พฤษภาคม",
+          "มิถุนายน",
+          "กรกฎาคม",
+          "สิงหาคม",
+          "กันยายน",
+          "ตุลาคม",
+          "พฤศจิกายน",
+          "ธันวาคม",
+        ],
+      },
     },
     onChange: function (selectedDates, dateStr, instance) {
       // แปลงวันที่จาก พ.ศ. เป็น ค.ศ. โดยตรงในเวลาที่เลือก
@@ -380,9 +455,14 @@ function datepicker(inputSelector, dateValue = null) {
         calculateAgeFromBirthday(gregorianDate, "#age"); // คำนวณอายุจากวันเกิด
       }
       if (inputSelector === "#start_work") {
-        calculateWorkAge(gregorianDate, "#longevity_year", "#longevity_month", "#longevity_day"); // คำนวณอายุงานจากวันที่เริ่มงาน
+        calculateWorkAge(
+          gregorianDate,
+          "#longevity_year",
+          "#longevity_month",
+          "#longevity_day"
+        ); // คำนวณอายุงานจากวันที่เริ่มงาน
       }
-    }
+    },
   });
 }
 
@@ -411,9 +491,8 @@ function datepicker(inputSelector, dateValue = null) {
 //   return `${day}/${month}/${year}`;
 // }
 
-
 function calculateWorkAge(dateStr, yearSelector, monthSelector, daySelector) {
-  let parts = dateStr.split('/');
+  let parts = dateStr.split("/");
   let day = parseInt(parts[0], 10);
   let month = parseInt(parts[1], 10) - 1;
   let year = parseInt(parts[2], 10);
@@ -428,30 +507,30 @@ function calculateWorkAge(dateStr, yearSelector, monthSelector, daySelector) {
   // ตรวจสอบกรณีที่เดือนปัจจุบันน้อยกว่าเดือนเริ่มงาน
   if (months < 0) {
     years--;
-    months += 12;  // ถ้าเดือนน้อยกว่า 0 ให้ปรับปีลงและบวกเดือนให้เป็นบวก
+    months += 12; // ถ้าเดือนน้อยกว่า 0 ให้ปรับปีลงและบวกเดือนให้เป็นบวก
   }
 
   // ตรวจสอบกรณีวันที่น้อยกว่าที่เริ่มงาน
   if (days < 0) {
-    months--;  // ถ้าวันที่น้อยกว่า 0 ให้ปรับเดือนลง
-    let lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);  // คำนวณจำนวนวันในเดือนล่าสุด
-    days += lastMonth.getDate();  // เพิ่มจำนวนวันของเดือนก่อนหน้าให้ถูกต้อง
+    months--; // ถ้าวันที่น้อยกว่า 0 ให้ปรับเดือนลง
+    let lastMonth = new Date(today.getFullYear(), today.getMonth(), 0); // คำนวณจำนวนวันในเดือนล่าสุด
+    days += lastMonth.getDate(); // เพิ่มจำนวนวันของเดือนก่อนหน้าให้ถูกต้อง
   }
 
   // อัพเดตค่าที่ outputSelector
-  $(yearSelector).val(years);  // ปี
-  $(monthSelector).val(months);  // เดือน
-  $(daySelector).val(days);  // จำนวนวัน
+  $(yearSelector).val(years); // ปี
+  $(monthSelector).val(months); // เดือน
+  $(daySelector).val(days); // จำนวนวัน
 }
 
-function confirmDelete(fileId,type=null) {
-  console.log('fileId',fileId)
+function confirmDelete(fileId, type = null) {
+  console.log("fileId", fileId);
   notification_v2(
-    'แจ้งเตือน',
-    'กดตกลงเพื่อยืนยันการลบไฟล์',
-    'warning',
-    'ตกลง',
-    'ยกเลิก',
+    "แจ้งเตือน",
+    "กดตกลงเพื่อยืนยันการลบไฟล์",
+    "warning",
+    "ตกลง",
+    "ยกเลิก",
     function () {
       $.ajax({
         url: "/detaildelete/" + fileId + "/",
@@ -460,11 +539,11 @@ function confirmDelete(fileId,type=null) {
           console.log(response);
           Swal.fire({
             title: "Deleted!",
-            icon: "success"
+            icon: "success",
           }).then(() => {
-            $('#confirmDelete-' + fileId).remove();
-            if(type == 'edit'){
-              $('#editFile-' + fileId).remove();
+            $("#confirmDelete-" + fileId).remove();
+            if (type == "edit") {
+              $("#editFile-" + fileId).remove();
             }
           });
         },
@@ -473,9 +552,9 @@ function confirmDelete(fileId,type=null) {
           Swal.fire({
             title: "Error!",
             text: "An error occurred while deleting the file.",
-            icon: "error"
+            icon: "error",
           });
-        }
+        },
       });
     }
   );
@@ -493,8 +572,8 @@ function thaiDate() {
   const buddhistYear = today.getFullYear() + 543;
 
   // ดึงวันที่และเดือน
-  const day = today.getDate().toString().padStart(2, '0'); // เติมเลข 0 ข้างหน้าหากวันมี 1 หลัก
-  const month = (today.getMonth() + 1).toString().padStart(2, '0'); // เดือนเริ่มจาก 0, ต้องบวก 1
+  const day = today.getDate().toString().padStart(2, "0"); // เติมเลข 0 ข้างหน้าหากวันมี 1 หลัก
+  const month = (today.getMonth() + 1).toString().padStart(2, "0"); // เดือนเริ่มจาก 0, ต้องบวก 1
   const year = buddhistYear;
 
   // สร้างวันที่ในรูปแบบ "dd/mm/yyyy"
@@ -505,9 +584,9 @@ function engDate() {
   const today = new Date();
   const buddhistYear = today.getFullYear();
 
-
-  const day = today.getDate().toString().padStart(2, '0');
-  const month = (today.getMonth() + 1).toString().padStart(2, '0'); 1
+  const day = today.getDate().toString().padStart(2, "0");
+  const month = (today.getMonth() + 1).toString().padStart(2, "0");
+  1;
   const year = buddhistYear;
 
   return `${day}/${month}/${year}`;
@@ -523,22 +602,20 @@ function formatDate(dateStr) {
 
 function getCookie(name) {
   let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
       }
+    }
   }
   return cookieValue;
 }
 
-
-
-function changStatus(type, id, status,statusType,userauth=null) {
+function changStatus(type, id, status, statusType, userauth = null) {
   var color = "";
   var tmpTitle = "";
 
@@ -606,60 +683,110 @@ function changStatus(type, id, status,statusType,userauth=null) {
 
 function datepickerRange(inputSelector) {
   const currentDate = new Date();
-  const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-  const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);  // +1 คือเดือนถัดไป 0 คือวันที่สุดท้ายของเดือนก่อนหน้า
+  const startDate = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+  const endDate = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  ); // +1 คือเดือนถัดไป 0 คือวันที่สุดท้ายของเดือนก่อนหน้า
   const startFormatted = formatDate(startDate);
   const endFormatted = formatDate(endDate);
 
   $(inputSelector).flatpickr({
-      mode: "range",
-      dateFormat: "d/m/Y",
-      altInput: true,
-      altFormat: "d/m/Y",
-      allowInput: false,
-      defaultDate: [startFormatted, endFormatted],
-      locale: {
-          weekdays: {
-              shorthand: ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."],
-              longhand: ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"]
-          },
-          months: {
-              shorthand: ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."],
-              longhand: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
-          }
+    mode: "range",
+    dateFormat: "d/m/Y",
+    altInput: true,
+    altFormat: "d/m/Y",
+    allowInput: false,
+    defaultDate: [startFormatted, endFormatted],
+    locale: {
+      weekdays: {
+        shorthand: ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."],
+        longhand: [
+          "อาทิตย์",
+          "จันทร์",
+          "อังคาร",
+          "พุธ",
+          "พฤหัสบดี",
+          "ศุกร์",
+          "เสาร์",
+        ],
       },
-      onChange: function (selectedDates, dateStr, instance) {
-          if (selectedDates.length === 2) {
-              // แทนที่คำว่า "to" ด้วย "ถึง"
-              let formattedDate = dateStr.replace(" to ", " ถึง ");
-              $(inputSelector).val(formattedDate);
-              $(instance.altInput).val(formattedDate);
-          }
-          const startDate = formatDate(selectedDates[0]);
-          const endDate = formatDate(selectedDates[1]);
-
-          $('#startDateInput').val(startDate);
-          $('#endDateInput').val(endDate);
-          $('#d_start_date').val(startDate);
-          $('#d_end_date').val(endDate);
+      months: {
+        shorthand: [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ],
+        longhand: [
+          "มกราคม",
+          "กุมภาพันธ์",
+          "มีนาคม",
+          "เมษายน",
+          "พฤษภาคม",
+          "มิถุนายน",
+          "กรกฎาคม",
+          "สิงหาคม",
+          "กันยายน",
+          "ตุลาคม",
+          "พฤศจิกายน",
+          "ธันวาคม",
+        ],
       },
-      onReady: function (selectedDates, dateStr, instance) {
-          if (dateStr.indexOf(" to ") !== -1) {
-              let formattedDate = dateStr.replace(" to ", " ถึง ");
-              $(inputSelector).val(formattedDate);
-              $(instance.altInput).val(formattedDate);
-          }
-          const currentDate = new Date();
-          const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-          const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-
-          const startFormatted = formatDate(startDate);
-          const endFormatted = formatDate(endDate);
-
-          $('#startDateInput').val(startFormatted);
-          $('#endDateInput').val(endFormatted);
-          $('#d_start_date').val(startFormatted);
-          $('#d_end_date').val(endFormatted);
+    },
+    onChange: function (selectedDates, dateStr, instance) {
+      if (selectedDates.length === 2) {
+        // แทนที่คำว่า "to" ด้วย "ถึง"
+        let formattedDate = dateStr.replace(" to ", " ถึง ");
+        $(inputSelector).val(formattedDate);
+        $(instance.altInput).val(formattedDate);
       }
+      const startDate = formatDate(selectedDates[0]);
+      const endDate = formatDate(selectedDates[1]);
+
+      $("#startDateInput").val(startDate);
+      $("#endDateInput").val(endDate);
+      $("#d_start_date").val(startDate);
+      $("#d_end_date").val(endDate);
+    },
+    onReady: function (selectedDates, dateStr, instance) {
+      if (dateStr.indexOf(" to ") !== -1) {
+        let formattedDate = dateStr.replace(" to ", " ถึง ");
+        $(inputSelector).val(formattedDate);
+        $(instance.altInput).val(formattedDate);
+      }
+      const currentDate = new Date();
+      const startDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        1
+      );
+      const endDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+      );
+
+      const startFormatted = formatDate(startDate);
+      const endFormatted = formatDate(endDate);
+
+      $("#startDateInput").val(startFormatted);
+      $("#endDateInput").val(endFormatted);
+      $("#d_start_date").val(startFormatted);
+      $("#d_end_date").val(endFormatted);
+    },
   });
 }

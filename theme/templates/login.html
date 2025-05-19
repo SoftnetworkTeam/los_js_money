@@ -7,8 +7,7 @@
   href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
   rel="stylesheet"
   integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-  crossorigin="anonymous"
-/>
+  crossorigin="anonymous" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;1,100;1,200;1,300&display=swap" rel="stylesheet" />
@@ -56,14 +55,15 @@
             <div class="mb-3 row">
               <label class="col-lg-3 col-form-label"> เลือกบริษัท </label>
               <div class="col-lg-8">
-                  <select class="form-control" id="company" onchange="loadBranch()">
-                      <option value="">-- เลือกบริษัท --</option>
-                      {% for company in master_company %}
-                          <option value="{{ company.id }}" {% if company.id == check_userlogin.company_id %}selected{% endif %}>
-                              {{company.company_code}} - {{ company.company_name }}
-                          </option>
-                      {% endfor %}
-                  </select>
+                <select class="form-control" id="company" onchange="loadBranch()">
+                  <option value="">-- เลือกบริษัท --</option>
+                  {% for company in master_company %}
+                  <option value="{{ company.id }}" {% if company.id|stringformat:"s" == check_userlogin.company_id|stringformat:"s" %}selected{% endif %}>
+
+                    {{company.company_code}} - {{ company.company_name }}
+                  </option>
+                  {% endfor %}
+                </select>
               </div>
             </div>
           </div>
@@ -72,13 +72,13 @@
             <div class="mb-3 row">
               <label class="col-lg-3 col-form-label"> เลือกสาขา </label>
               <div class="col-lg-8">
-                <select class="form-control" id="branch" >
-                    <option value="">-- เลือกสาขา --</option>
-                    {% if check_userlogin and check_userlogin.branch_id %}
-                        <option value="{{ check_userlogin.branch_id }}" selected>
-                            {{ check_branch_name.branch_code }} - {{ check_branch_name.branch_name }}
-                        </option>
-                    {% endif %}
+                <select class="form-control" id="branch">
+                  {#  <option value="">-- เลือกสาขา --</option>  #}
+                  {% if check_userlogin and check_userlogin.branch_id %}
+                  <option value="{{ check_userlogin.branch_id }}" selected>
+                    {{ check_branch_name.branch_code }} - {{ check_branch_name.branch_name }}
+                  </option>
+                  {% endif %}
                 </select>
               </div>
             </div>
@@ -98,80 +98,89 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-        function notification(d_title, d_text, d_icon, d_btn_text) {
-            $(document).ready(function () {
-                Swal.fire({
-                    title: d_title,
-                    text: d_text,
-                    icon: d_icon,
-                    confirmButtonText: d_btn_text,
-                    allowOutsideClick: false
-                })
-            });
-        }
-
-        var msg = "{{ msg }}"
-
-        if (msg == "คุณไม่มีสิทธิ์ใช้งานระบบนี้") {
-            notification("แจ้งเตือน", 'คุณไม่มีสิทธิ์ใช้งานระบบนี้', "error", "ปิด");
-        }
-
-  function loadBranch() {
-      var companyId = $('#company').val();
-      var branchSelect = $('#branch');
-
-      branchSelect.empty();
-      branchSelect.append('<option value="">-- เลือกสาขา --</option>');
-
-      if (companyId) {
-          $.ajax({
-              url: '/select_branch/',
-              method: 'POST',
-              data: {
-                  'company_id': companyId,
-                  'csrfmiddlewaretoken': '{{ csrf_token }}'
-              },
-              success: function(data) {
-
-                  data.branch.forEach(function(branch) {
-                      branchSelect.append(`<option value="${branch.id}">${branch.branch_name}</option>`);
-                  });
-
-              }
-          });
-      } 
+  function notification(d_title, d_text, d_icon, d_btn_text) {
+    $(document).ready(function () {
+      Swal.fire({
+        title: d_title,
+        text: d_text,
+        icon: d_icon,
+        confirmButtonText: d_btn_text,
+        allowOutsideClick: false
+      })
+    });
   }
 
-$(document).ready(function () {
+  let msg = "{{ msg }}"
+
+  if (msg == "คุณไม่มีสิทธิ์ใช้งานระบบนี้") {
+    notification("แจ้งเตือน", 'คุณไม่มีสิทธิ์ใช้งานระบบนี้', "error", "ปิด");
+  }
+
+  function loadBranch(companyId = null) {
+    let branchSelect = $('#branch');
+    let selectCompanyId = $('#company').val();
+
+    if (!companyId) {
+      branchSelect.empty();
+      branchSelect.append('<option value="">-- เลือกสาขา --</option>');
+      company_id = selectCompanyId;
+    } else {
+      company_id = companyId;
+    }
+
+    $.ajax({
+      url: '/select_branch/',
+      method: 'POST',
+      data: {
+        'company_id': company_id,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      },
+      success: function (data) {
+        const selectedBranchId = branchSelect.find('option:selected').val();
+
+        data.branch.forEach(function (branch) {
+         if (branch.id != selectedBranchId) {  
+          branchSelect.append(`<option value="${branch.id}">${branch.branch_name}</option>`);
+        }
+        });
+
+      }
+    });
+  }
+
+  $(document).ready(function () {
+    let companyId = $('#company').val();
+    loadBranch(companyId);
+
     {% if show_branch_modal %}
-        var branchModal = new bootstrap.Modal(document.getElementById('branchModal'));
-        branchModal.show();
+    let branchModal = new bootstrap.Modal(document.getElementById('branchModal'));
+    branchModal.show();
     {% endif %}
 
     $('#saveBranchBtn').click(function () {
-        var selectedCompany = $('#company').val();
-        var selectedBranch = $('#branch').val();
-        var userId = "{{ user_id }}";
+      let selectedCompany = $('#company').val();
+      let selectedBranch = $('#branch').val();
+      let userId = "{{ user_id }}";
 
-        if (selectedBranch && selectedCompany) {
-            $.ajax({
-                url: '/save_branch/',
-                method: 'POST',
-                data: {
-                    'user_id': userId,
-                    'company': selectedCompany,
-                    'branch': selectedBranch,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function () {
-                    window.location.href = '/dashboard';
-                }
-            });
-        } else {
-            notification("แจ้งเตือน", "กรุณาเลือกบริษัทและสาขาก่อน", "warning", "ปิด");
-        }
+      if (selectedBranch && selectedCompany) {
+        $.ajax({
+          url: '/save_branch/',
+          method: 'POST',
+          data: {
+            'user_id': userId,
+            'company': selectedCompany,
+            'branch': selectedBranch,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function () {
+            window.location.href = '/dashboard';
+          }
+        });
+      } else {
+        notification("แจ้งเตือน", "กรุณาเลือกบริษัทและสาขาก่อน", "warning", "ปิด");
+      }
     });
-});
+  });
 </script>
 
 {% endblock %}
