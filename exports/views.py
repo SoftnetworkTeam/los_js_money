@@ -10,7 +10,7 @@ from decimal import Decimal
 from urllib.parse import quote
 from django.views import View
 from django.template.response import TemplateResponse as render
-from theme.models import UserBranch
+from theme.models import UserBranch,MasterCompany
 
 
 def export(request, type):
@@ -23,10 +23,13 @@ class exports(View):
         company_id = request.session.get("company_id")
         post_data_branch_id = post_data.get("branch_id", None)
 
+        company = MasterCompany.objects.filter(id=company_id).first()
+        company_name = company.company_name
+
+        print('company :',company_name)
+
         userbranch = UserBranch.objects.filter(user_id=self.request.session['user_id'])
         user_branch_id = list(userbranch.values_list('branch_id', flat=True))
-
-        print('post_data_branch_id', post_data_branch_id)
 
         if post_data_branch_id == 'all':
             branch_id = user_branch_id
@@ -39,11 +42,11 @@ class exports(View):
 
         cursor = connection.cursor()
         try:
-            # สร้าง placeholder สำหรับ IN (%s, %s, ...)
             create_to_branch_id = ', '.join(['%s'] * len(branch_id))
 
             query = f"""
                 SELECT 
+                    CONCAT(h.branch_code, '-', h.branch_name) AS "สาขา",
                     a.app_id AS "เลขที่ขออนุมัติ",
                     a.created_at AS "วันที่",
                     a.customer_name AS "ชื่อ - นามสกุลลูกค้า",
@@ -73,6 +76,7 @@ class exports(View):
                 LEFT JOIN tb_masteroccupation e ON e.id = c.occupation_id
                 LEFT JOIN auth_user f ON f.username = a.user_id
                 LEFT JOIN tb_customerscore g ON g.installmentdetail_id = a.id
+                LEFT JOIN tb_masterbranch h ON h.id = a.create_to_branch_id
                 WHERE CAST(a.created_at AS DATE) BETWEEN %s AND %s
                 AND a.create_to_branch_id IN ({create_to_branch_id})
                 AND a.company_id = %s
@@ -86,7 +90,7 @@ class exports(View):
 
             query += " ORDER BY a.created_at"
 
-            print("query: ", cursor.mogrify(query, params).decode("utf-8") if hasattr(cursor, "mogrify") else query)
+            # print("query: ", cursor.mogrify(query, params).decode("utf-8") if hasattr(cursor, "mogrify") else query)
             cursor.execute(query, params)
 
             columns_header = [col[0] for col in cursor.description]
@@ -94,13 +98,14 @@ class exports(View):
         finally:
             cursor.close()
 
-        return export_xlsx("รายงานการขออนุมัติสินเชื่อ.xlsx", row_data, None)
+        return export_xlsx("รายงานการขออนุมัติสินเชื่อ.xlsx", row_data, None, company_name)
 
 
 
-def export_xlsx(filename, data, rename_column=None):
+def export_xlsx(filename, data, rename_column=None, company_name=None):
     df = pd.DataFrame.from_records(data)
     get_col_type = []
+
     if data:
         first_row = data[0]
         for key, value in first_row.items():
@@ -129,25 +134,38 @@ def export_xlsx(filename, data, rename_column=None):
         date_format="dd/mm/yyyy",
         datetime_format="dd/mm/yyyy",
     ) as writer:
-        df.to_excel(writer, sheet_name="Sheet1", index=False)
-
         workbook = writer.book
-        worksheet = writer.sheets["Sheet1"]
+        worksheet = workbook.add_worksheet("Sheet1")
+        writer.sheets["Sheet1"] = worksheet
 
-        currency_format = workbook.add_format({"num_format": "#,##0.00"})
+        header_format = workbook.add_format({
+            "bold": True,
+            "font_size": 16,
+        })
+        worksheet.write(0, 0, company_name , header_format)
 
-        for foo in get_col_type:
-            if foo["type"] == Decimal:
-                worksheet.set_column(foo["index"], foo["index"], 20, currency_format)
+        df.to_excel(writer, sheet_name="Sheet1", startrow=1, index=False)
 
+        text_format = workbook.add_format({"align": "left"})
+        date_format = workbook.add_format({"align": "left", "num_format": "dd/mm/yyyy"})
+        number_format = workbook.add_format({"align": "right", "num_format": "#,##0.00"})
+        phone_format = workbook.add_format({"align": "right"})
+
+        for i, col in enumerate(df.columns):
+            if col.strip() == "เบอร์โทรลูกค้า":
+                worksheet.set_column(i, i, 18, phone_format)
+            elif pd.api.types.is_numeric_dtype(df[col]):
+                worksheet.set_column(i, i, 18, number_format)
+            elif pd.api.types.is_datetime64_any_dtype(df[col]):
+                worksheet.set_column(i, i, 18, date_format)
+            else:
+                worksheet.set_column(i, i, 18, text_format)
     output.seek(0)
 
     response = HttpResponse(
         output.getvalue(),
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
-    response["Content-Disposition"] = "attachment; filename*=UTF-8''%s" % quote(
-        filename
-    )
+    response["Content-Disposition"] = "attachment; filename*=UTF-8''%s" % quote(filename)
 
     return response
