@@ -14,6 +14,7 @@ urlpatterns = [
     path("name-list/detail/<id>", views.detail, name='detail'),
     path("name-list/edit/<id>", views.editFormcommon, name='edit'),
     path("name-list/create", views.createCustomer, name='name-list_create'),
+    path("name-list/create/guarantee", views.createCustomer, name='name-list_guarantee'),
     re_path(r"^edit/$", views.createCustomer, name="editloan"),
     path("detaildelete/<int:file_id>/", views.DetailDeleteFile, name='detaildelete_file'),  
     path('MasterOfficer/', MasterOfficerAPIView.as_view(), name='MasterOfficer'),

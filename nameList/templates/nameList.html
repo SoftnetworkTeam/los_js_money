@@ -5,6 +5,61 @@
   .k-window-titlebar .k-window-action {
     color: #ffffff;
   }
+
+  .timeLineCard {
+    flex: 1;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    min-height: 160px;
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .billitem-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+  }
+
+  .timeLineCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-header .close {
+    padding: 3px 21px;
+    border: none;
+    background-color: #fff;
+  }
+
+  .timeLineCard:hover .billitem-icon i {
+    margin-top: 16px;
+    color: rgb(75, 196, 149);
+  }
+
+  .fa-regular,
+  .far {
+    margin-top: 16px;
+  }
+
+  .modal-title{
+    font-size: 20px;
+  }
+
+  .fw-bold {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .text-muted {
+    font-size: 14px;
+    text-align: center;
+  }
 </style>
 {% endblock %} {% block content %}
 
@@ -17,9 +72,11 @@
             <div class="table-responsive active-projects style-1">
               <div class="mb-3 mt-3 d-flex justify-content-between">
                 <h3 style="margin-left: 13px">ข้อมูลผู้ขอสินเชื่อ</h3>
-                  {% if auth_insert_info == True %}
-                    <a href="name-list/create" id="openDialogButton" class="btn btn-success" ><i class="fa-solid fa-circle-plus"></i>เพิ่มข้อมูล</a>
-                  {% endif %}
+                {% if auth_insert_info == True %}
+                <button type="button" id="openDialogButton" class="btn btn-success" title="เพิ่มข้อมูล" data-toggle="modal" data-target="#modal_billtype">
+                  <i class="fa-solid fa-circle-plus"></i> เพิ่มข้อมูล
+                </button>
+                {% endif %}
               </div>
               <div id="dialog" class="dialog"></div>
               <div id="grid" class="grid_font_size"></div>
@@ -31,15 +88,84 @@
   </div>
 </div>
 
+
+
+
+<div class="modal fade text-left" id="modal_billtype" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="max-width: 600px !important; width: 600px !important;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modal_title">
+          เลือกหมวดที่ท่านต้องการ
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <div id="timeline" class="d-flex gap-3 justify-content-between flex-wrap">
+              <a href="name-list/create/guarantee" class="text-decoration-none text-dark card-option" style="flex: 1; min-width: 250px;">
+                <div class="timeLineCard">
+                  <p class="fw-bold mb-1">มีหลักทรัพย์</p>
+                  <small class="text-muted">ระบุข้อมูลหลักทรัพย์</small>
+                  <p class="billitem-icon mt-2">
+                    <i class="far fa-circle fa-2x"></i>
+                  </p>
+                </div>
+              </a>
+              <a href="name-list/create" class="text-decoration-none text-dark card-option" style="flex: 1; min-width: 250px;">
+                <div class="timeLineCard">
+                  <p class="fw-bold mb-1">ไม่มีหลักทรัพย์</p>
+                  <small class="text-muted">ไม่ระบุข้อมูลหลักทรัพย์</small>
+                  <p class="billitem-icon mt-2">
+                    <i class="far fa-circle fa-2x"></i>
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" id="id_btn_close" data-dismiss="modal">ปิด</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %} {% block script %}
 <script>
   $(document).ready(function () {
     {% for message in messages %}
-      showToast('success', '{{ message }}', '', 'bottom-right');
+    showToast('success', '{{ message }}', '', 'bottom-right');
     {% endfor %}
   });
   var authEdit = "{{ auth_edit_delete }}";
 
+</script>
+<script>
+  document.getElementById("openDialogButton").addEventListener("click", function () {
+    const modalElement = document.getElementById("modal_billtype");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+  });
+
+  document.querySelectorAll('.card-option').forEach(function (card) {
+    const icon = card.querySelector('i');
+
+    card.addEventListener('mouseenter', function () {
+      icon.classList.remove('far', 'fa-circle');
+      icon.classList.add('fa-solid', 'fa-circle-check');
+    });
+
+    card.addEventListener('mouseleave', function () {
+      icon.classList.remove('fa-solid', 'fa-circle-check');
+      icon.classList.add('far', 'fa-circle');
+    });
+  });
 </script>
 <script src="/nameList/js/nameList.js?v=1"></script>
 {% endblock %}

@@ -18,6 +18,101 @@
         <input type="hidden" name="company_id" id="company_id" />
         <input type="hidden" name="province_save" id="province_save" />
         {% csrf_token %}
+        
+        
+        <div class="card" id="guarantee">
+          <div class="card-header">
+            <span>ระบุข้อมูลหลักทรัพย์</span>
+          </div>
+          <div class="card-body px-3">
+            <div class="row">
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label">
+                    <span class="text-danger">* </span> ประเภทหลักประกัน
+                  </label>
+                  <div class="col-xl-11" style="width: 89%;">
+                   <select class="select2 form-control" id="collateral_type" name="collateral_type" >
+                      <option value=""> -- เลือกข้อมูล -- </option>
+                      <option value="1" >รถ/เล่มทะเบียน</option> 
+                      <option value="2">ที่ดินเปล่า</option>
+                      <option value="3" selected>ที่ดินพร้อมสิ่งปลูกสร้าง</option>
+                  </select>
+                  </div>
+                </div>
+              </div>
+
+              <section id="section_collateral_type"></section>
+
+              <div class="col-lg-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label"> ประเภทการประเมิน </label>
+                  <div class="col-lg-8">
+                    <select class="js-data-appraiser_type-ajax w-100 select2-lg" id="appraiser_type" name="appraiser_type" ></select>
+                    <div class="invalid-feedback">กรุณาเลือกประเภทการประเมิน</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <div class="mb-3 row">
+                  <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> ผู้ประเมิน </label>
+                  <div class="col-lg-10">
+                    <select class="js-data-appraiser-ajax w-100 select2-lg" id="appraiser" name="appraiser" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกผู้ประเมิน</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> วันที่ประเมิน </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="date_estimate" name="date_estimate" placeholder="วันที่ประเมิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุวันที่ประเมิน </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <div class="mb-3 row">
+                  <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> ผู้ถือกรรมสิทธิ์  </label>
+                  <div class="col-lg-10">
+                    <input class="form-control" id="ownership" name="ownership" placeholder="ผู้ถือกรรมสิทธิ์" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุผู้ถือกรรมสิทธิ์ </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label">
+                    หมายเหตุ
+                  </label>
+                  <div class="col-xl-11"  style="width: 89%;">
+                    <input class="form-control" id="memo" name="memo" placeholder="หมายเหตุ" value="">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label">
+                    <span class="text-danger">* </span> สถานะ 
+                  </label>
+                  <div class="col-xl-11" style="width: 89%;">
+                   <select class="select2 form-control" id="status" name="status" >
+                      <option value=""> -- เลือกข้อมูล -- </option>
+                      <option value="A" selected>Active</option> 
+                      <option value="C">Cancel</option>
+                  </select>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       
         <div class="card">
           <div class="card-header">
@@ -57,7 +152,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="first_name" name="first_name" placeholder="ชื่อ"
                       value="{{ customer_info.first_name }}" required />
-                    <div class="invalid-feedback">กรุณากรอกชื่อ</div>
+                    <div class="invalid-feedback">กรุณาระบุชื่อ</div>
                   </div>
                 </div>
               </div>
@@ -70,7 +165,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="last_name" name="last_name" placeholder="นามสกุล"
                       value="{{ customer_info.last_name }}" required />
-                    <div class="invalid-feedback">กรุณากรอกนามสกุล</div>
+                    <div class="invalid-feedback">กรุณาระบุนามสกุล</div>
                   </div>
                 </div>
               </div>
@@ -113,7 +208,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="age" name="age" placeholder="อายุ"
                       value="{% if customer_info.age %}{{ customer_info.age }}{% endif %}" required readonly />
-                    <div class="invalid-feedback">กรุณากรอกอายุ</div>
+                    <div class="invalid-feedback">กรุณาระบุอายุ</div>
                   </div>
                 </div>
               </div>
@@ -204,7 +299,7 @@
                   <div class="col-lg-8"> 
                     <input class="form-control" id="issue_date" name="issue_date" placeholder="วันออกบัตร"
                       value="{{ formatted_date_time_issue_date }}" required  />
-                    <div class="invalid-feedback">กรุณากรอกวันออกบัตร</div>
+                    <div class="invalid-feedback">กรุณาระบุวันออกบัตร</div>
                   </div>
                 </div>
               </div>
@@ -217,7 +312,7 @@
                   <div class="col-lg-8"> 
                     <input class="form-control" id="expire_date" name="expire_date" placeholder="วันบัตรหมดอายุ"
                       value="{{ formatted_date_time_expire_date }}" required  />
-                    <div class="invalid-feedback">กรุณากรอกวันบัตรหมดอายุ</div>
+                    <div class="invalid-feedback">กรุณาระบุวันบัตรหมดอายุ</div>
                   </div>
                 </div>
               </div>
@@ -230,7 +325,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="read_card" name="read_card" placeholder="วันที่อ่านบัตร"
                       value="{{ formatted_date_time_date_read_card }}"/>
-                    <div class="invalid-feedback">กรุณากรอกวันที่อ่านบัตร</div>
+                    <div class="invalid-feedback">กรุณาระบุวันที่อ่านบัตร</div>
                   </div>
                 </div>
               </div>
@@ -260,7 +355,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="mobile" name="mobile" placeholder="โทรศัพท์มือถือ"
-                      value="{{ customer_info.mobile }}"  oninput="validateInput(this, 10, 'กรุณากรอกเบอร์มือถือด้วยตัวเลข 10 หลัก')"
+                      value="{{ customer_info.mobile }}"  oninput="validateInput(this, 10, 'กรุณาระบุเบอร์มือถือด้วยตัวเลข 10 หลัก')"
                       maxlength="10"  required />
                     <div class="invalid-feedback"></div>
                   </div>
@@ -273,7 +368,7 @@
                     เบอร์สำรอง
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="telephone" name="telephone" placeholder="เบอร์สำรอง" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')"
+                    <input class="form-control" id="telephone" name="telephone" placeholder="เบอร์สำรอง" oninput="validateInput(this, 10, 'กรุณาระบุเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')"
                       value="{{ customer_info.telephone }}"  />
                       <div class="invalid-feedback"></div>
                   </div>
@@ -474,7 +569,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="base_income" name="base_income" placeholder="รายได้ (บาท/เดือน)" onkeypress="return onlyNumberKey(event)" value="{{ installment_detail.base_income }}"  required/>
                   </div>
-                  <div class="invalid-feedback">กรุณากรอกรายได้</div>
+                  <div class="invalid-feedback">กรุณาระบุรายได้</div>
                 </div>
               </div>
 
@@ -486,7 +581,7 @@
                   <div class="col-xl-8">
                     <input class="form-control" id="price" name="price" value="{{installment_detail.price}}"  placeholder="ยอดขอกู้ (บาท)" onkeypress="return onlyNumberKey(event)" required/>
                   </div>
-                  <div class="invalid-feedback">กรุณากรอกยอดขอกู้</div>
+                  <div class="invalid-feedback">กรุณาระบุยอดขอกู้</div>
                 </div>
               </div>
       
@@ -639,8 +734,8 @@
                     <span class="text-danger {% if customer_info.channel_payment == '3' %}d-none{% endif %}">* </span>เลขบัญชี
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="book_no" name="book_no" placeholder="เลขบัญชี" value="{{ customer_info.book_no }}" oninput="validateInput(this, 10, 'กรุณากรอกเลขบัญชี 10 หลัก')" maxlength="10" {% if customer_info.channel_payment == '3' %}required{% endif %}  />
-                    <div class="invalid-feedback">กรุณากรอกเลขบัญชี</div>
+                    <input class="form-control" id="book_no" name="book_no" placeholder="เลขบัญชี" value="{{ customer_info.book_no }}" oninput="validateInput(this, 10, 'กรุณาระบุเลขบัญชี 10 หลัก')" maxlength="10" {% if customer_info.channel_payment == '3' %}required{% endif %}  />
+                    <div class="invalid-feedback">กรุณาระบุเลขบัญชี</div>
                   </div>
                 </div>
               </div>
@@ -652,7 +747,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="book_name" name="book_name" placeholder="ชื่อบัญชี" value="{{ customer_info.book_name }}" {% if customer_info.channel_payment == '3' %}required{% endif %}  />
-                    <div class="invalid-feedback">กรุณากรอกชื่อบัญชี</div>
+                    <div class="invalid-feedback">กรุณาระบุชื่อบัญชี</div>
                   </div>
                 </div>
               </div>
@@ -697,7 +792,7 @@
                   </label>
                   <div class="col-lg-8">
                     <input class="form-control" id="guarantor_name" name="guarantor_name" placeholder="ชื่อบัญชี" value="{{ customer_info.guarantor_name }}"   />
-                    <div class="invalid-feedback">กรุณากรอกผู้ค้ำประกัน / หลักประกัน</div>
+                    <div class="invalid-feedback">กรุณาระบุผู้ค้ำประกัน / หลักประกัน</div>
                   </div>
                 </div>
               </div>
@@ -738,7 +833,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="address" name="address" placeholder="ที่อยู่"
                       value="{% if customer_address_detail %}{{ customer_address_detail.house_no }}{% endif %}" required />
-                    <div class="invalid-feedback">กรุณากรอกที่อยู่</div>
+                    <div class="invalid-feedback">กรุณาระบุที่อยู่</div>
                   </div>
                 </div>
               </div>
@@ -810,7 +905,7 @@
                       </option>
                       {% endif %}
                     </select>
-                    <div class="invalid-feedback">กรุณากรอกอำเภอ</div>
+                    <div class="invalid-feedback">กรุณาระบุอำเภอ</div>
                   </div>
                 </div>
               </div>
@@ -828,7 +923,7 @@
                       </option>
                       {% endif %}
                     </select>
-                    <div class="invalid-feedback">กรุณากรอกตำบล</div>
+                    <div class="invalid-feedback">กรุณาระบุตำบล</div>
                   </div>
                 </div>
               </div>
@@ -841,7 +936,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="postcode" name="postcode" placeholder="รหัสไปรษณีย์"
                       value="{{ customer_address_detail.postcode }}"  />
-                    <div class="invalid-feedback">กรุณากรอกรหัสไปรษณีย์</div>
+                    <div class="invalid-feedback">กรุณาระบุรหัสไปรษณีย์</div>
                   </div>
                 </div>
               </div>
@@ -851,9 +946,9 @@
                   <label class="col-xl-1 col-form-label">
                     รายละเอียดที่อยู่
                   </label>
-                  <div class="col-xl-11">
+                  <div class="col-xl-11"  style="width: 89%;">
                     <input class="form-control" id="relate" name="relate" placeholder="รายละเอียดที่อยู่"
-                    value="{{ customer_address_detail.relate }}"  />
+                    value="{{ customer_address_detail.relate }}">
                   </div>
                 </div>
               </div>
@@ -880,7 +975,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="address_current" name="address_current" placeholder="ที่อยู่"
                       value="{% if customer_address2_detail %}{{ customer_address2_detail.house_no }}{% endif %}" required />
-                    <div class="invalid-feedback">กรุณากรอกที่อยู่</div>
+                    <div class="invalid-feedback">กรุณาระบุที่อยู่</div>
                   </div>
                 </div>
               </div>
@@ -952,7 +1047,7 @@
                       </option>
                       {% endif %}
                     </select>
-                    <div class="invalid-feedback">กรุณากรอกอำเภอ</div>
+                    <div class="invalid-feedback">กรุณาระบุอำเภอ</div>
                   </div>
                 </div>
               </div>
@@ -970,7 +1065,7 @@
                       </option>
                       {% endif %}
                     </select>
-                    <div class="invalid-feedback">กรุณากรอกตำบล</div>
+                    <div class="invalid-feedback">กรุณาระบุตำบล</div>
                   </div>
                 </div>
               </div>
@@ -983,7 +1078,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="postcode_current" name="postcode_current" placeholder="รหัสไปรษณีย์"
                       value="{{ customer_address2_detail.postcode }}"  />
-                    <div class="invalid-feedback">กรุณากรอกรหัสไปรษณีย์</div>
+                    <div class="invalid-feedback">กรุณาระบุรหัสไปรษณีย์</div>
                   </div>
                 </div>
               </div>
@@ -1045,9 +1140,9 @@
                   <label class="col-xl-1 col-form-label">
                     รายละเอียดที่อยู่
                   </label>
-                  <div class="col-xl-11">
+                  <div class="col-xl-11" style="width: 89%;">
                     <input class="form-control" id="relate_current" name="relate_current" placeholder="รายละเอียดที่อยู่"
-                    value="{% if customer_address2_detail.relate %}{{ customer_address2_detail.relate }}{% endif %}"  />
+                    value="{% if customer_address2_detail.relate %}{{ customer_address2_detail.relate }}{% endif %}">
                   </div>
                 </div>
               </div>
@@ -1082,7 +1177,7 @@
                     เบอร์โทรศัพท์
                   </label>
                   <div class="col-lg-8">
-                    <input class="form-control" id="company_tel" name="company_tel" placeholder="เบอร์โทรศัพท์" oninput="validateInput(this, 10, 'กรุณากรอกเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')" maxlength="10" value="{{ installment_detail.company_tel }}"  />
+                    <input class="form-control" id="company_tel" name="company_tel" placeholder="เบอร์โทรศัพท์" oninput="validateInput(this, 10, 'กรุณาระบุเบอร์โทรศัพท์ด้วยตัวเลขไม่เกิน 10 หลัก')" maxlength="10" value="{{ installment_detail.company_tel }}"  />
                     <div class="invalid-feedback"></div>
                   </div>
                 </div>
@@ -1119,7 +1214,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="company_address" name="company_address" placeholder="ที่อยู่"
                       value="{{ customer_address3_detail.house_no }}"  required/>
-                      <div class="invalid-feedback">กรุณากรอกที่อยู่</div>
+                      <div class="invalid-feedback">กรุณาระบุที่อยู่</div>
                   </div>
                 </div>
               </div>
@@ -1231,9 +1326,9 @@
                   <label class="col-xl-1 col-form-label">
                     รายละเอียดที่อยู่
                   </label>
-                  <div class="col-xl-11">
+                  <div class="col-xl-11" style="width: 89%;">
                     <input class="form-control" id="company_relate" name="company_relate" placeholder="รายละเอียดที่อยู่"
-                    value="{{ customer_address3_detail.relate }}"  />
+                    value="{{ customer_address3_detail.relate }}">
                   </div>
                 </div>
               </div><hr>
@@ -1254,7 +1349,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="refer_name" name="refer_name" placeholder="ชื่อ-สกุล"
                       value="{{customer_info.refer_name}}" required />
-                    <div class="invalid-feedback">กรุณากรอกชื่อ-สกุล</div>
+                    <div class="invalid-feedback">กรุณาระบุชื่อ-สกุล</div>
                   </div>
                 </div>
               </div>
@@ -1267,7 +1362,7 @@
                   <div class="col-lg-8">
                     <input class="form-control" id="refer_description" name="refer_description" placeholder="ความสัมพันธ์"
                       value="{{customer_info.refer_description}}" required />
-                    <div class="invalid-feedback">กรุณากรอกความสัมพันธ์</div>
+                    <div class="invalid-feedback">กรุณาระบุความสัมพันธ์</div>
                   </div>
                 </div>
               </div>
@@ -1285,15 +1380,14 @@
                 </div>
               </div>
 
-              <div class="col-xl-4">
+              <div class="col-xl-12">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-1 col-form-label">
                     <span class="text-danger">* </span>รายละเอียดการปล่อยสินเชื่อ
                   </label>
-                  <div class="col-lg-8">
-                    <textarea class="form-control" rows="4"  id="lending_description" name="lending_description"  placeholder="รายละเอียดการปล่อยสินเชื่อ" required />{{installment_detail.lending_description}}
-                    </textarea>
-                    <div class="invalid-feedback">กรุณากรอกรายละเอียดการปล่อยสินเชื่อ</div>
+                  <div class="col-lg-11">
+                    <input class="form-control" id="lending_description" name="lending_description"  placeholder="รายละเอียดการปล่อยสินเชื่อ" required style="width:97%" />{{installment_detail.lending_description}}
+                    <div class="invalid-feedback">กรุณาระบุรายละเอียดการปล่อยสินเชื่อ</div>
                   </div>
                 </div>
               </div><hr>
@@ -1471,6 +1565,13 @@
   var branch_province_id = "{{ request.session.branch_province_id }}";
   const ref_id = new URLSearchParams(window.location.search).get("ref_id");
   const add_loan = window.location.pathname.includes("create");
+  var guarantee = window.location.pathname.includes("guarantee");
+
+  console.log(guarantee)
+ 
+  if (!guarantee) {
+    $('#guarantee').addClass('d-none');
+  }
 
   var idno = "{{ customer_loan_detail.idno }}";
   var brand_id = ref_id ? "{{ contract_into.brand_id }}" : "{{ brand.id }}";
@@ -1667,7 +1768,484 @@
     loadSelect2Data(urlMasterContractDocument, `.js-data-file_type-${fileRowCount}-ajax`, "results", "id", "doc_name");
   }
 
+$(document).ready(function() {
+    // ฟังก์ชันโหลด template ตามค่า selected
+    function loadCollateralTemplate(type) {
+        let templateId = "";
+        if(type === "1") {
+            templateId = "#template_collateral_type_1";
+        } else if(type === "2") {
+            templateId = "#template_collateral_type_2";
+        } else if(type === "3") {
+            templateId = "#template_collateral_type_3";
+        }else {
+            $('#section_collateral_type').empty();
+            return;
+        }
+
+        const content = document.getElementById(templateId.replace("#", "")).content.cloneNode(true);
+        $('#section_collateral_type').empty().append(content);
+
+        // รี-อินิท select2 ถ้ามี
+        $('#section_collateral_type select.select2-lg').select2({
+            width: '100%'
+        });
+    }
+
+    // โหลดค่าเริ่มต้น (selected) ตอนหน้าโหลด
+    const defaultType = $('#collateral_type').val() || "3";
+    loadCollateralTemplate(defaultType);
+
+    // เมื่อเปลี่ยนค่า dropdown
+    $('#collateral_type').on('change', function() {
+        loadCollateralTemplate($(this).val());
+    });
+});
+
 </script>
+
+<!-- Template ของ รถ/เล่มทะเบียน -->
+<template id="template_collateral_type_1">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
+                <div class="col-lg-8">
+                    <select class="js-data-product_type-ajax w-100 select2-lg" id="product_type_1" name="product_type_1" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกกลุ่มหลักประกัน</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขตัวถัง</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="chassis_no_1" name="chassis_no_1" placeholder="เลขตัวถัง" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเลขตัวถัง</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขเครื่อง </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="engine_no_1" name="engine_no_1" placeholder="เลขเครื่อง " value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเลขเครื่อง </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="mb-3 row">
+                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> ยี่ห้อ </label>
+                <div class="col-lg-10">
+                     <select class="js-data-brand-ajax w-100 select2-lg" id="brand" name="brand" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกยี่ห้อ</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label">ปีที่ผลิต </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="manu_year" name="manu_year" placeholder="ปีที่ผลิต " value=""  />
+                    <div class="invalid-feedback">กรุณาระบุปีที่ผลิต </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="mb-3 row">
+                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> รุ่น </label>
+                <div class="col-lg-10">
+                     <select class="js-data-model-ajax w-100 select2-lg" id="model" name="model" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกรุ่น</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label">เลขไมล์ </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="mile" name="mile" placeholder="เลขไมล์ " value=""  />
+                    <div class="invalid-feedback">กรุณาระบุเลขไมล์ </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="mb-3 row">
+                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> แบบ </label>
+                <div class="col-lg-10">
+                     <select class="js-data-sub_model-ajax w-100 select2-lg" id="sub_model" name="sub_model" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกแบบ</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> ซีซี </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="cc" name="cc" placeholder="เลขไมล์ " value=""  />
+                    <div class="invalid-feedback">กรุณาระบุซีซี </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="mb-3 row">
+                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> สี </label>
+                <div class="col-lg-10">
+                     <select class="js-data-color-ajax w-100 select2-lg" id="color" name="color" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกสี</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label">อายุรถ ปี </label>
+                <div class="col-lg-3">
+                    <input class="form-control" id="car_age_year" name="car_age_year" placeholder="อายุรถ" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุอายุรถ ปี </div>
+                </div>
+                <label class="col-lg-2 col-form-label"><span class="text-danger">*</span> อายุรถ เดือน </label>
+                 <div class="col-lg-3">
+                    <input class="form-control" id="car_age_month" name="car_age_month" placeholder="อายุรถ" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเดือน </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขทะเบียน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="reg_no" name="reg_no" placeholder="เลขทะเบียน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเลขทะเบียน</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ทะเบียนจังหวัด</label>
+                <div class="col-lg-8">
+                    <select class="js-data-province_reg-ajax w-100 select2-lg" id="province_reg" name="province_reg" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกทะเบียนจังหวัด</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> วันที่จดทะเบียน </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="reg_date" name="reg_date" placeholder="วันที่จดทะเบียน " value=""  />
+                    <div class="invalid-feedback">กรุณาระบุวันที่จดทะเบียน </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> ทะเบียนหมดอายุ</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="reg_expire" name="reg_expire" placeholder="ทะเบียนหมดอายุ" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุทะเบียนหมดอายุ</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ราคาประเมิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="price_estimate" name="price_estimate" placeholder="ราคาประเมิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุทะเบียนหมดอายุ</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> Rate Book </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="rate_book" name="rate_book" placeholder="Rate Book " value="" required />
+                    <div class="invalid-feedback">กรุณาระบุ Rate Book </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<!-- Template ที่ดินเปล่า-->
+<template id="template_collateral_type_2">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
+                <div class="col-lg-8">
+                    <select class="js-data-product_type-ajax w-100 select2-lg" id="product_type_2" name="product_type_2" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกกลุ่มหลักประกัน</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขโฉนด</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="chassis_no_2" name="chassis_no_2" placeholder="เลขโฉนด" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเลขโฉนด</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ระวางที่ดิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="engine_no_2" name="engine_no_2" placeholder="ระวางที่ดิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุระวางที่ดิน</div>
+                </div>
+            </div>
+        </div>
+</template>
+
+<!-- Template ที่ดินพร้อมสิ่งปลูกสร้าง -->
+<template id="template_collateral_type_3">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
+                <div class="col-lg-8">
+                    <select class="js-data-product_type_3-ajax w-100 select2-lg" id="product_type_2" name="product_type_2" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกกลุ่มหลักประกัน</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขโฉนด</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="chassis_no_2" name="chassis_no_2" placeholder="เลขโฉนด" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเลขโฉนด</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ระวางที่ดิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="engine_no_2" name="engine_no_2" placeholder="ระวางที่ดิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุระวางที่ดิน</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขที่ดิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="land_no" name="land_no" placeholder="เลขที่ดิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเลขที่ดิน</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> หน้าสำรวจ</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="survey_no" name="survey_no" placeholder="หน้าสำรวจ" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุหน้าสำรวจ</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เล่ม</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="book_no" name="book_no" placeholder="เล่ม" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเล่ม</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> หมู่บ้าน/อาคาร</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="village" name="village" placeholder="หมู่บ้าน/อาคาร" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุหมู่บ้าน/อาคาร</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ซอย</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="soi" name="soi" placeholder="ซอย" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุซอย</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ถนน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="road" name="road" placeholder="ถนน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุถนน</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> จังหวัด</label>
+                <div class="col-lg-8">
+                    <select class="js-data-province_collateral_type_2-ajax w-100 select2-lg" id="province_collateral_type_2" name="province_collateral_type_2" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกกจังหวัด</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> อำเภอ/เขต</label>
+                <div class="col-lg-8">
+                    <select class="js-data-amphoe_collateral_type_2-ajax w-100 select2-lg" id="amphoe_collateral_type_2" name="amphoe_collateral_type_2" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกอำเภอ/เขต</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ตำบล/แขวง</label>
+                <div class="col-lg-8">
+                    <select class="js-data-tambon_collateral_type_2-ajax w-100 select2-lg" id="tambon_collateral_type_2" name="tambon_collateral_type_2" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกตำบล/แขวง</div>
+                </div>
+            </div>
+        </div>
+
+         <div class="col-lg-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label">อายุสิ่งปลูกสร้าง ปี </label>
+                <div class="col-lg-3">
+                    <input class="form-control" id="building_age_year" name="building_age_year" placeholder="อายุ" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุอายุสิ่งปลูกสร้าง ปี </div>
+                </div>
+                <label class="col-lg-2 col-form-label"><span class="text-danger">*</span>  เดือน </label>
+                 <div class="col-lg-3">
+                    <input class="form-control" id="building_age_month" name="building_age_month" placeholder="อายุ" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุอายุสิ่งปลูกสร้าง เดือน </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="mb-3 row">
+                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> ลักษณะที่อยู่อาศัย </label>
+                <div class="col-lg-10">
+                     <select class="js-data-residence_collateral_type_3-ajax w-100 select2-lg" id="residence" name="residence" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกลักษณะที่อยู่อาศัย</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+          <div class="mb-3 row">
+            <label class="col-xl-1 col-form-label">
+              <span class="text-danger">* </span> สถานที่ใกล้เคียง
+            </label>
+            <div class="col-xl-11" style="width: 89%;">
+              <select class="js-data-relate_collateral_type_3-ajax w-100 select2-lg" id="relate_collateral_type_3" name="relate_collateral_type_3" required></select>
+              <div class="invalid-feedback">กรุณาเลือกสถานที่ใกล้เคียง</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ไร่</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="rai" name="rai" placeholder="ไร่" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุไร่</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> งาน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="ngan" name="ngan" placeholder="งาน" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุงาน </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ตารางวา</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="square_wa" name="square_wa" placeholder="ตารางวา" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุตารางวา </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> พื้นที่ใช้สอย/ตรม.</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="usable_area" name="usable_area" placeholder="พื้นที่ใช้สอย/ตรม." value=""  />
+                    <div class="invalid-feedback">กรุณาระบุพื้นที่ใช้สอย/ตรม.</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> มูลค่าจำนอง</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="mortgage_amount" name="mortgage_amount" placeholder="มูลค่าจำนอง" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุมูลค่าจำนอง </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> วันที่จำนอง</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="mortgage_date" name="mortgage_date" placeholder="วันที่จำนอง" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุตารางวา </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ประเภทการจำนอง</label>
+                <div class="col-lg-8">
+                  <select class="js-data-mortgage_type-ajax w-100 select2-lg" id="mortgage_type" name="mortgage_type" required></select>
+                  <div class="invalid-feedback">กรุณาเลือกประเภทการจำนอง</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ราคาที่ดิน (ประเมินราชการ)</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="land_appraisal_government" name="land_appraisal_government" placeholder="ราคาที่ดิน" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุราคาที่ดิน (ประเมินราชการ) </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ราคาสิ่งปลูกสร้าง (ประเมินราชการ)</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="building_appraisal_government" name="building_appraisal_government" placeholder="ราคาสิ่งปลูกสร้าง" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุตารางวา </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+
 <script src="{% static 'js/form_common_script.js' %}?v=117"></script>
 <link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 
 {% endblock %}
