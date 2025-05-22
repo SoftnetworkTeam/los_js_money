@@ -1,17 +1,40 @@
-@font-face {
+/* @font-face {
   font-family: "Noto Sans Thai";
   src: url("/static/fonts/NotoSansThai-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
+} */
 
+@font-face {
+  font-family: 'Sarabun 700';
+  src: url('/static/fonts/sarabun-v7-thai_latin-700.woff2') format('woff2');   
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; }
+
+  @font-face {
+    font-family: 'Sarabun 500';
+    src: url('/static/fonts/sarabun-v7-thai_latin-500.woff2') format('woff2');   
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; }    
+    
 body {
-  font-family: "Noto Sans Thai";
+  /* font-family: "Noto Sans Thai";
   src: url("/static/fonts/NotoSansThai-Bold.woff") format("woff"), url("/static/fonts/NotoSansThai-Bold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: swap; */
+  margin: 0;
+  font-family: 'Sarabun 500';
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #edf1f5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .card-header {
@@ -289,4 +312,8 @@ body {
 }
 .modal {
   z-index: 1050;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
 }

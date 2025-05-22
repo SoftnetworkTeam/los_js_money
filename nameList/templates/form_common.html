@@ -18,101 +18,6 @@
         <input type="hidden" name="company_id" id="company_id" />
         <input type="hidden" name="province_save" id="province_save" />
         {% csrf_token %}
-        
-        
-        <div class="card" id="guarantee">
-          <div class="card-header">
-            <span>ระบุข้อมูลหลักทรัพย์</span>
-          </div>
-          <div class="card-body px-3">
-            <div class="row">
-
-              <div class="col-xl-12">
-                <div class="mb-3 row">
-                  <label class="col-xl-1 col-form-label">
-                    <span class="text-danger">* </span> ประเภทหลักประกัน
-                  </label>
-                  <div class="col-xl-11" style="width: 89%;">
-                   <select class="select2 form-control" id="collateral_type" name="collateral_type" >
-                      <option value=""> -- เลือกข้อมูล -- </option>
-                      <option value="1" >รถ/เล่มทะเบียน</option> 
-                      <option value="2">ที่ดินเปล่า</option>
-                      <option value="3" selected>ที่ดินพร้อมสิ่งปลูกสร้าง</option>
-                  </select>
-                  </div>
-                </div>
-              </div>
-
-              <section id="section_collateral_type"></section>
-
-              <div class="col-lg-4">
-                <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label"> ประเภทการประเมิน </label>
-                  <div class="col-lg-8">
-                    <select class="js-data-appraiser_type-ajax w-100 select2-lg" id="appraiser_type" name="appraiser_type" ></select>
-                    <div class="invalid-feedback">กรุณาเลือกประเภทการประเมิน</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-8">
-                <div class="mb-3 row">
-                  <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> ผู้ประเมิน </label>
-                  <div class="col-lg-10">
-                    <select class="js-data-appraiser-ajax w-100 select2-lg" id="appraiser" name="appraiser" required></select>
-                    <div class="invalid-feedback">กรุณาเลือกผู้ประเมิน</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> วันที่ประเมิน </label>
-                  <div class="col-lg-8">
-                    <input class="form-control" id="date_estimate" name="date_estimate" placeholder="วันที่ประเมิน" value="" required />
-                    <div class="invalid-feedback">กรุณาระบุวันที่ประเมิน </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-8">
-                <div class="mb-3 row">
-                  <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> ผู้ถือกรรมสิทธิ์  </label>
-                  <div class="col-lg-10">
-                    <input class="form-control" id="ownership" name="ownership" placeholder="ผู้ถือกรรมสิทธิ์" value="" required />
-                    <div class="invalid-feedback">กรุณาระบุผู้ถือกรรมสิทธิ์ </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-xl-12">
-                <div class="mb-3 row">
-                  <label class="col-xl-1 col-form-label">
-                    หมายเหตุ
-                  </label>
-                  <div class="col-xl-11"  style="width: 89%;">
-                    <input class="form-control" id="memo" name="memo" placeholder="หมายเหตุ" value="">
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-xl-12">
-                <div class="mb-3 row">
-                  <label class="col-xl-1 col-form-label">
-                    <span class="text-danger">* </span> สถานะ 
-                  </label>
-                  <div class="col-xl-11" style="width: 89%;">
-                   <select class="select2 form-control" id="status" name="status" >
-                      <option value=""> -- เลือกข้อมูล -- </option>
-                      <option value="A" selected>Active</option> 
-                      <option value="C">Cancel</option>
-                  </select>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
       
         <div class="card">
           <div class="card-header">
@@ -128,7 +33,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>คำนำหน้า
                   </label>
                   <div class="col-lg-8">
@@ -146,7 +51,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ชื่อ
                   </label>
                   <div class="col-lg-8">
@@ -159,7 +64,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>นามสกุล
                   </label>
                   <div class="col-lg-8">
@@ -172,7 +77,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                    <label class="col-lg-3 col-form-label">
+                    <label class="col-lg-3 col-form-label font-weight-bold">
                         <span class="text-danger">* </span>เลขบัตรประชาชน
                     </label>
                     <div class="col-lg-8">
@@ -186,7 +91,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ว/ด/ป เกิด
                   </label>
                   <div class="col-lg-8">
@@ -202,7 +107,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>อายุ
                   </label>
                   <div class="col-lg-8">
@@ -215,7 +120,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ช่วงอายุ
                   </label>
                   <div class="col-lg-8">
@@ -233,7 +138,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>สถานะภาพสมรส 
                   </label>
                   <div class="col-lg-8">
@@ -258,7 +163,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>จำนวนบุตรไม่บรรลุนิติภาวะ
                   </label>
                   <div class="col-lg-8">
@@ -275,7 +180,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ระดับการศึกษา
                   </label>
                   <div class="col-lg-8">
@@ -293,7 +198,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>วันออกบัตร 
                   </label>
                   <div class="col-lg-8"> 
@@ -306,7 +211,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>วันบัตรหมดอายุ 
                   </label>
                   <div class="col-lg-8"> 
@@ -332,7 +237,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>เพศ
                   </label>
                   <div class="col-lg-8">
@@ -350,7 +255,7 @@
               
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>โทรศัพท์มือถือ
                   </label>
                   <div class="col-lg-8">
@@ -410,7 +315,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ประเภทอาชีพ
                   </label>
                   <div class="col-lg-8">
@@ -428,7 +333,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>หมวดอาชีพ
                   </label>
                   <div class="col-lg-8">
@@ -444,7 +349,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ลักษณะธุรกิจ
                   </label>
                   <div class="col-lg-8">
@@ -462,7 +367,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ประเภทร้านค้า
                   </label>
                   <div class="col-lg-8">
@@ -480,7 +385,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>อายุสัญญาเช่าพื้นที่
                   </label>
                   <div class="col-lg-8">
@@ -498,7 +403,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>กำไร/เดือน
                   </label>
                   <div class="col-lg-8">
@@ -516,7 +421,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>อายุของธุรกิจ
                   </label>
                   <div class="col-lg-8">
@@ -536,6 +441,103 @@
           </div>
         </div>
 
+        <div class="card" id="guarantee">
+          <div class="card-header">
+            <span>ระบุข้อมูลหลักทรัพย์</span>
+          </div>
+          <div class="card-body px-3">
+            <div class="row">
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label font-weight-bold">
+                    <span class="text-danger">* </span> ประเภทหลักประกัน
+                  </label>
+                  <div class="col-xl-11" style="width: 89%;">
+                   <select class="select2 form-control" id="collateral_type" name="collateral_type" >
+                      <option value=""> -- เลือกข้อมูล -- </option>
+                      <option value="1" selected>รถ/เล่มทะเบียน</option> 
+                      <option value="2">ที่ดินเปล่า</option>
+                      <option value="3">ที่ดินพร้อมสิ่งปลูกสร้าง</option>
+                      <option value="4">อื่นๆ</option>
+                  </select>
+                  </div>
+                </div>
+              </div>
+
+              <section id="section_collateral_type"></section>
+
+              <div class="col-lg-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label"> ประเภทการประเมิน </label>
+                  <div class="col-lg-8">
+                    <select class="select2 form-control" id="appraiser_type" name="appraiser_type" >
+                      <option value="1" selected>ประเมิณภายใน</option> 
+                      <option value="2">ประเมิณภายนอก</option>
+                    </select>
+                    <div class="invalid-feedback">กรุณาเลือกประเภทการประเมิน</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <div class="mb-3 row">
+                  <label class="col-lg-2 col-form-label font-weight-bold" style="width: 12.5%;"><span class="text-danger">*</span> ผู้ประเมิน </label>
+                  <div class="col-lg-10">
+                    <select class="js-data-appraiser-ajax w-100 select2-lg" id="appraiser" name="appraiser" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกผู้ประเมิน</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4">
+                <div class="mb-3 row">
+                  <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> วันที่ประเมิน </label>
+                  <div class="col-lg-8">
+                    <input class="form-control" id="date_estimate" name="date_estimate" placeholder="วันที่ประเมิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุวันที่ประเมิน </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <div class="mb-3 row">
+                  <label class="col-lg-2 col-form-label font-weight-bold" style="width: 12.5%;"><span class="text-danger">*</span> ผู้ถือกรรมสิทธิ์  </label>
+                  <div class="col-lg-10">
+                    <input class="form-control" id="ownership" name="ownership" placeholder="ผู้ถือกรรมสิทธิ์" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุผู้ถือกรรมสิทธิ์ </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label">
+                    หมายเหตุ
+                  </label>
+                  <div class="col-xl-11"  style="width: 89%;">
+                    <input class="form-control" id="memo" name="memo" placeholder="หมายเหตุ" value="">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-12">
+                <div class="mb-3 row">
+                  <label class="col-xl-1 col-form-label font-weight-bold">
+                    <span class="text-danger">* </span> สถานะ 
+                  </label>
+                  <div class="col-xl-11" style="width: 89%;">
+                   <select class="select2 form-control" id="status" name="status" >
+                      <option value=""> -- เลือกข้อมูล -- </option>
+                      <option value="A" selected>Active</option> 
+                      <option value="C">Cancel</option>
+                  </select>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header">
             <span>ข้อมูลการขอสินเชื่อ</span>
@@ -545,7 +547,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>วัตถุประสงค์การขอกู้
                   </label>
                   <div class="col-lg-8">
@@ -563,7 +565,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>รายได้ (บาท/เดือน)
                   </label>
                   <div class="col-lg-8">
@@ -575,7 +577,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-xl-3 col-form-label">
+                  <label class="col-xl-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ยอดขอกู้ (บาท)
                   </label>
                   <div class="col-xl-8">
@@ -598,7 +600,7 @@
       
               <div class="col-xl-4 d-none">
                 <div class="mb-3 row">
-                  <label class="col-xl-3 col-form-label">
+                  <label class="col-xl-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>คิดเป็น(%)
                   </label>
                   <div class="col-xl-8">
@@ -609,7 +611,7 @@
       
               <div class="col-xl-4 d-none">
                 <div class="mb-3 row">
-                  <label class="col-xl-3 col-form-label">
+                  <label class="col-xl-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ยอดจัดสุทธิ
                   </label>
                   <div class="col-xl-8">
@@ -620,7 +622,7 @@
       
               <div class="col-xl-4 d-none">
                 <div class="mb-3 row">
-                  <label class="col-xl-3 col-form-label">
+                  <label class="col-xl-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ดอกเบี้ย/เดือน
                   </label>
                   <div class="col-xl-8">
@@ -636,7 +638,7 @@
       
               <div class="col-xl-4 d-none">
                 <div class="mb-3 row">
-                  <label class="col-xl-3 col-form-label">
+                  <label class="col-xl-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>เริ่มงวดแรก
                   </label>
                   <div class="col-xl-8">
@@ -652,7 +654,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-xl-3 col-form-label">
+                  <label class="col-xl-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>จำนวนงวด (เดือน)
                   </label>
                   <div class="col-xl-8">
@@ -668,7 +670,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-xl-3 col-form-label">
+                  <label class="col-xl-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>งวดละ
                   </label>
                   <div class="col-xl-8">
@@ -713,7 +715,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ช่องทางรับเงิน 
                   </label>
                   <div class="col-lg-8">
@@ -799,7 +801,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>สัญชาติ
                   </label>
                   <div class="col-lg-8">
@@ -827,7 +829,7 @@
               
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ที่อยู่
                   </label>
                   <div class="col-lg-8">
@@ -876,7 +878,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>จังหวัด
                   </label>
                   <div class="col-lg-8">
@@ -894,7 +896,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>อำเภอ
                   </label>
                   <div class="col-lg-8">
@@ -912,7 +914,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ตำบล
                   </label>
                   <div class="col-lg-8">
@@ -930,7 +932,7 @@
               
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>รหัสไปรษณีย์
                   </label>
                   <div class="col-lg-8">
@@ -969,7 +971,7 @@
               
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ที่อยู่
                   </label>
                   <div class="col-lg-8">
@@ -1103,7 +1105,7 @@
       
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>สถานะที่พักอาศัย
                   </label>
                   <div class="col-lg-8">
@@ -1125,7 +1127,7 @@
       
               {% comment %} <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ค่าเช่า/เดือน
                   </label>
                   <div class="col-lg-8">
@@ -1343,7 +1345,7 @@
               
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ชื่อ-สกุล
                   </label>
                   <div class="col-lg-8">
@@ -1356,7 +1358,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>ความสัมพันธ์
                   </label>
                   <div class="col-lg-8">
@@ -1369,7 +1371,7 @@
 
               <div class="col-xl-4">
                 <div class="mb-3 row">
-                  <label class="col-lg-3 col-form-label">
+                  <label class="col-lg-3 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>เบอร์ติดต่อ
                   </label>
                   <div class="col-lg-8">
@@ -1382,7 +1384,7 @@
 
               <div class="col-xl-12">
                 <div class="mb-3 row">
-                  <label class="col-lg-1 col-form-label">
+                  <label class="col-lg-1 col-form-label font-weight-bold">
                     <span class="text-danger">* </span>รายละเอียดการปล่อยสินเชื่อ
                   </label>
                   <div class="col-lg-11">
@@ -1624,6 +1626,7 @@
   var urlMasterContractDocument = "{% url 'nameList:MasterContractDocument' %}";
   var urlrangeAge = "{% url 'nameList:rangeAge' %}";
 
+
   var price_installment = "{{ customer_loan_detail.price_installment }}";
   var startPaymentDate = "{{ formatted_date_time_start_payment }}";
   var birthDate = "{{ formatted_date_time_birth_date }}";
@@ -1734,7 +1737,7 @@
     var newFileRow = `<div class="row">
                         <div class="col-xl-6">
                           <div class="mb-3 row">
-                            <label class="col-lg-2 col-form-label">
+                            <label class="col-lg-2 col-form-label font-weight-bold">
                               <span class="text-danger">* </span>อัพโหลดเอกสาร
                             </label>
                             <div class="col-lg-8">
@@ -1774,10 +1777,24 @@ $(document).ready(function() {
         let templateId = "";
         if(type === "1") {
             templateId = "#template_collateral_type_1";
+            loadSelect2Data("{% url 'nameList:appraiser' %}", ".js-data-appraiser-ajax", "results", "id", "full_name",{collateral_type : 'collateral_type1'});
+            loadSelect2Data("{% url 'nameList:product_type' %}", ".js-data-product_type-ajax", "results", "id", "full_name",{collateral_type : '1'});
+
         } else if(type === "2") {
             templateId = "#template_collateral_type_2";
+            loadSelect2Data("{% url 'nameList:appraiser' %}", ".js-data-appraiser-ajax", "results", "id", "full_name",{collateral_type : 'collateral_type2'});
+            loadSelect2Data("{% url 'nameList:product_type' %}", ".js-data-product_type-ajax", "results", "id", "full_name",{collateral_type : '2'});
+
         } else if(type === "3") {
             templateId = "#template_collateral_type_3";
+            loadSelect2Data("{% url 'nameList:appraiser' %}", ".js-data-appraiser-ajax", "results", "id", "full_name",{collateral_type : 'collateral_type3'});
+            loadSelect2Data("{% url 'nameList:product_type' %}", ".js-data-product_type-ajax", "results", "id", "full_name",{collateral_type : '3'});
+
+        } else if(type === "4") {
+            templateId = "#template_collateral_type_4";
+            loadSelect2Data("{% url 'nameList:appraiser' %}", ".js-data-appraiser-ajax", "results", "id", "full_name",{collateral_type : 'collateral_type4'});
+            loadSelect2Data("{% url 'nameList:product_type' %}", ".js-data-product_type-ajax", "results", "id", "full_name",{collateral_type : '4'});
+
         }else {
             $('#section_collateral_type').empty();
             return;
@@ -1793,8 +1810,17 @@ $(document).ready(function() {
     }
 
     // โหลดค่าเริ่มต้น (selected) ตอนหน้าโหลด
-    const defaultType = $('#collateral_type').val() || "3";
+    const defaultType = $('#collateral_type').val() || "1";
     loadCollateralTemplate(defaultType);
+    loadSelect2Data("{% url 'nameList:appraiser' %}", ".js-data-appraiser-ajax", "results", "id", "full_name",{collateral_type : 'collateral_type1'});
+    loadSelect2Data("{% url 'nameList:product_type' %}", ".js-data-product_type-ajax", "results", "id", "full_name",{collateral_type : '1'});
+    loadSelect2Data("{% url 'nameList:MasterBrand' %}", ".js-data-brand-ajax", "results", "id", "full_name");
+    loadSelect2Data("{% url 'nameList:MasterModel' %}", ".js-data-model-ajax", "results", "id", "full_name");
+    loadSelect2Data("{% url 'nameList:MasterSubModel' %}", ".js-data-sub_model-ajax", "results", "id", "full_name");
+    loadSelect2Data("{% url 'nameList:MasterColor' %}", ".js-data-color-ajax", "results", "id", "full_name");
+    loadSelect2Data("{% url 'nameList:MasterProvince' %}", ".js-data-province_reg-ajax", "results", "id", "full_name");
+
+
 
     // เมื่อเปลี่ยนค่า dropdown
     $('#collateral_type').on('change', function() {
@@ -1809,27 +1835,27 @@ $(document).ready(function() {
     <div class="row">
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
                 <div class="col-lg-8">
-                    <select class="js-data-product_type-ajax w-100 select2-lg" id="product_type_1" name="product_type_1" required></select>
+                    <select class="js-data-product_type-ajax w-100 select2-lg" id="product_type" name="product_type" required></select>
                     <div class="invalid-feedback">กรุณาเลือกกลุ่มหลักประกัน</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขตัวถัง</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> เลขตัวถัง</label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="chassis_no_1" name="chassis_no_1" placeholder="เลขตัวถัง" value="" required />
+                    <input class="form-control" id="chassis_no" name="chassis_no" placeholder="เลขตัวถัง" value="" required />
                     <div class="invalid-feedback">กรุณาระบุเลขตัวถัง</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขเครื่อง </label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> เลขเครื่อง </label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="engine_no_1" name="engine_no_1" placeholder="เลขเครื่อง " value="" required />
+                    <input class="form-control" id="engine_no" name="engine_no" placeholder="เลขเครื่อง " value="" required />
                     <div class="invalid-feedback">กรุณาระบุเลขเครื่อง </div>
                 </div>
             </div>
@@ -1837,7 +1863,7 @@ $(document).ready(function() {
 
         <div class="col-lg-8">
             <div class="mb-3 row">
-                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> ยี่ห้อ </label>
+                <label class="col-lg-2 col-form-label font-weight-bold" style="width: 12.5%;"><span class="text-danger">*</span> ยี่ห้อ </label>
                 <div class="col-lg-10">
                      <select class="js-data-brand-ajax w-100 select2-lg" id="brand" name="brand" required></select>
                     <div class="invalid-feedback">กรุณาเลือกยี่ห้อ</div>
@@ -1856,7 +1882,7 @@ $(document).ready(function() {
 
         <div class="col-lg-8">
             <div class="mb-3 row">
-                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> รุ่น </label>
+                <label class="col-lg-2 col-form-label font-weight-bold" style="width: 12.5%;"><span class="text-danger">*</span> รุ่น </label>
                 <div class="col-lg-10">
                      <select class="js-data-model-ajax w-100 select2-lg" id="model" name="model" required></select>
                     <div class="invalid-feedback">กรุณาเลือกรุ่น</div>
@@ -1875,7 +1901,7 @@ $(document).ready(function() {
 
         <div class="col-lg-8">
             <div class="mb-3 row">
-                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> แบบ </label>
+                <label class="col-lg-2 col-form-label font-weight-bold" style="width: 12.5%;"><span class="text-danger">*</span> แบบ </label>
                 <div class="col-lg-10">
                      <select class="js-data-sub_model-ajax w-100 select2-lg" id="sub_model" name="sub_model" required></select>
                     <div class="invalid-feedback">กรุณาเลือกแบบ</div>
@@ -1894,7 +1920,7 @@ $(document).ready(function() {
 
         <div class="col-lg-8">
             <div class="mb-3 row">
-                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> สี </label>
+                <label class="col-lg-2 col-form-label font-weight-bold" style="width: 12.5%;"><span class="text-danger">*</span> สี </label>
                 <div class="col-lg-10">
                      <select class="js-data-color-ajax w-100 select2-lg" id="color" name="color" required></select>
                     <div class="invalid-feedback">กรุณาเลือกสี</div>
@@ -1908,7 +1934,7 @@ $(document).ready(function() {
                     <input class="form-control" id="car_age_year" name="car_age_year" placeholder="อายุรถ" value=""  />
                     <div class="invalid-feedback">กรุณาระบุอายุรถ ปี </div>
                 </div>
-                <label class="col-lg-2 col-form-label"><span class="text-danger">*</span> อายุรถ เดือน </label>
+                <label class="col-lg-2 col-form-label font-weight-bold"><span class="text-danger">*</span> อายุรถ เดือน </label>
                  <div class="col-lg-3">
                     <input class="form-control" id="car_age_month" name="car_age_month" placeholder="อายุรถ" value="" required />
                     <div class="invalid-feedback">กรุณาระบุเดือน </div>
@@ -1918,7 +1944,7 @@ $(document).ready(function() {
 
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขทะเบียน</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> เลขทะเบียน</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="reg_no" name="reg_no" placeholder="เลขทะเบียน" value="" required />
                     <div class="invalid-feedback">กรุณาระบุเลขทะเบียน</div>
@@ -1927,7 +1953,7 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ทะเบียนจังหวัด</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ทะเบียนจังหวัด</label>
                 <div class="col-lg-8">
                     <select class="js-data-province_reg-ajax w-100 select2-lg" id="province_reg" name="province_reg" required></select>
                     <div class="invalid-feedback">กรุณาเลือกทะเบียนจังหวัด</div>
@@ -1955,7 +1981,7 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ราคาประเมิน</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาประเมิน</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="price_estimate" name="price_estimate" placeholder="ราคาประเมิน" value="" required />
                     <div class="invalid-feedback">กรุณาระบุทะเบียนหมดอายุ</div>
@@ -1964,9 +1990,9 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> Rate Book </label>
+                <label class="col-lg-3 col-form-label"> Rate Book </label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="rate_book" name="rate_book" placeholder="Rate Book " value="" required />
+                    <input class="form-control" id="rate_book" name="rate_book" placeholder="Rate Book " value=""  />
                     <div class="invalid-feedback">กรุณาระบุ Rate Book </div>
                 </div>
             </div>
@@ -1980,16 +2006,16 @@ $(document).ready(function() {
     <div class="row">
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
                 <div class="col-lg-8">
-                    <select class="js-data-product_type-ajax w-100 select2-lg" id="product_type_2" name="product_type_2" required></select>
+                    <select class="js-data-product_type-ajax w-100 select2-lg" id="product_type" name="product_type" required></select>
                     <div class="invalid-feedback">กรุณาเลือกกลุ่มหลักประกัน</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขโฉนด</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> เลขโฉนด</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="chassis_no_2" name="chassis_no_2" placeholder="เลขโฉนด" value="" required />
                     <div class="invalid-feedback">กรุณาระบุเลขโฉนด</div>
@@ -1998,41 +2024,9 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ระวางที่ดิน</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ระวางที่ดิน</label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="engine_no_2" name="engine_no_2" placeholder="ระวางที่ดิน" value="" required />
-                    <div class="invalid-feedback">กรุณาระบุระวางที่ดิน</div>
-                </div>
-            </div>
-        </div>
-</template>
-
-<!-- Template ที่ดินพร้อมสิ่งปลูกสร้าง -->
-<template id="template_collateral_type_3">
-    <div class="row">
-        <div class="col-xl-4">
-            <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
-                <div class="col-lg-8">
-                    <select class="js-data-product_type_3-ajax w-100 select2-lg" id="product_type_2" name="product_type_2" required></select>
-                    <div class="invalid-feedback">กรุณาเลือกกลุ่มหลักประกัน</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4">
-            <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขโฉนด</label>
-                <div class="col-lg-8">
-                    <input class="form-control" id="chassis_no_2" name="chassis_no_2" placeholder="เลขโฉนด" value="" required />
-                    <div class="invalid-feedback">กรุณาระบุเลขโฉนด</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4">
-            <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ระวางที่ดิน</label>
-                <div class="col-lg-8">
-                    <input class="form-control" id="engine_no_2" name="engine_no_2" placeholder="ระวางที่ดิน" value="" required />
+                    <input class="form-control" id="engine_no" name="engine_no" placeholder="ระวางที่ดิน" value="" required />
                     <div class="invalid-feedback">กรุณาระบุระวางที่ดิน</div>
                 </div>
             </div>
@@ -2040,7 +2034,7 @@ $(document).ready(function() {
 
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เลขที่ดิน</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> เลขที่ดิน</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="land_no" name="land_no" placeholder="เลขที่ดิน" value="" required />
                     <div class="invalid-feedback">กรุณาระบุเลขที่ดิน</div>
@@ -2049,18 +2043,18 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> หน้าสำรวจ</label>
+                <label class="col-lg-3 col-form-label"> หน้าสำรวจ</label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="survey_no" name="survey_no" placeholder="หน้าสำรวจ" value="" required />
+                    <input class="form-control" id="survey_no" name="survey_no" placeholder="หน้าสำรวจ" value=""  />
                     <div class="invalid-feedback">กรุณาระบุหน้าสำรวจ</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> เล่ม</label>
+                <label class="col-lg-3 col-form-label">เล่ม</label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="book_no" name="book_no" placeholder="เล่ม" value="" required />
+                    <input class="form-control" id="book_no" name="book_no" placeholder="เล่ม" value=""  />
                     <div class="invalid-feedback">กรุณาระบุเล่ม</div>
                 </div>
             </div>
@@ -2068,16 +2062,236 @@ $(document).ready(function() {
 
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> หมู่บ้าน/อาคาร</label>
+                <label class="col-lg-3 col-form-label">หน้า</label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="village" name="village" placeholder="หมู่บ้าน/อาคาร" value="" required />
+                    <input class="form-control" id="page_no" name="page_no" placeholder="หน้า" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุหน้า</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label">วันที่ออกโฉนด</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="issue_date" name="issue_date" placeholder="วันที่ออกโฉนด" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุวันที่ออกโฉนด</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> จังหวัด </label>
+                <div class="col-lg-8">
+                    <select class="js-data-province_collateral_type-ajax w-100 select2-lg" id="province_collateral_type" name="province_collateral_type" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกจังหวัด </div>
+                </div>
+            </div>
+        </div>
+
+         <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> อำเภอ/เขต</label>
+                <div class="col-lg-8">
+                    <select class="js-data-amphoe_collateral_type-ajax w-100 select2-lg" id="amphoe_collateral_type" name="amphoe_collateral_type" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกอำเภอ/เขต</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ตำบล/แขวง</label>
+                <div class="col-lg-8">
+                    <select class="js-data-tambon_collateral_type-ajax w-100 select2-lg" id="tambon_collateral_type" name="tambon_collateral_type" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกตำบล/แขวง</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> ไร่</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="booraik_no" name="rai" placeholder="ไร่" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุไร่</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> งาน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="ngan" name="ngan" placeholder="งาน" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุงาน </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ตารางวา</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="square_wa" name="square_wa" placeholder="ตารางวา" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุตารางวา </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> มูลค่าจำนอง</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="mortgage_amount" name="mortgage_amount" placeholder="มูลค่าจำนอง" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุมูลค่าจำนอง </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> วันที่จำนอง</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="mortgage_date" name="mortgage_date" placeholder="วันที่จำนอง" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุตารางวา </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ประเภทการจำนอง</label>
+                <div class="col-lg-8">
+                  <select class="js-data-mortgage_type-ajax w-100 select2-lg" id="mortgage_type" name="mortgage_type" required></select>
+                  <div class="invalid-feedback">กรุณาเลือกประเภทการจำนอง</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> ติดทางสาธารณะประโยชน์</label>
+                <div class="col-lg-8">
+                  <select class="js-data-land_status-ajax w-100 select2-lg" id="land_status" name="land_status" required></select>
+                  <div class="invalid-feedback">กรุณาเลือกประเภทติดทางสาธารณะประโยชน์</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาที่ดิน (ประเมินราชการ)</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="land_appraisal_government" name="land_appraisal_government" placeholder="ราคาที่ดิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุราคาที่ดิน (ประเมินราชการ) </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> ราคาที่ดิน (ประเมินบริษัท)</label>
+                <div class="col-lg-8">
+                  <input class="form-control" id="land_appraisal_company" name="land_appraisal_company" placeholder="ราคาที่ดิน" value=""  />
+                  <div class="invalid-feedback">กรุณาระบุราคาที่ดิน (ประเมินบริษัท) </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาประเมินที่ดิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="land_appraisal" name="land_appraisal" placeholder="ราคาประเมินที่ดิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุตารางวา </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาประเมิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="price_estimate" name="price_estimate" placeholder="ราคาประเมิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุทะเบียนหมดอายุ</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label">Rate Book </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="rate_book" name="rate_book" placeholder="Rate Book " value=""  />
+                    <div class="invalid-feedback">กรุณาระบุ Rate Book </div>
+                </div>
+            </div>
+        </div>
+
+</template>
+
+<!-- Template ที่ดินพร้อมสิ่งปลูกสร้าง -->
+<template id="template_collateral_type_3">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
+                <div class="col-lg-8">
+                    <select class="js-data-product_type-ajax w-100 select2-lg" id="product_type" name="product_type" required></select>
+                    <div class="invalid-feedback">กรุณาเลือกกลุ่มหลักประกัน</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> เลขโฉนด</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="chassis_no_2" name="chassis_no_2" placeholder="เลขโฉนด" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเลขโฉนด</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ระวางที่ดิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="engine_no" name="engine_no" placeholder="ระวางที่ดิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุระวางที่ดิน</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> เลขที่ดิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="land_no" name="land_no" placeholder="เลขที่ดิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุเลขที่ดิน</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> หน้าสำรวจ</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="survey_no" name="survey_no" placeholder="หน้าสำรวจ" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุหน้าสำรวจ</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label">เล่ม</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="book_no" name="book_no" placeholder="เล่ม" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุเล่ม</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> หมู่บ้าน/อาคาร</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="village" name="village" placeholder="หมู่บ้าน/อาคาร" value=""  />
                     <div class="invalid-feedback">กรุณาระบุหมู่บ้าน/อาคาร</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ซอย</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ซอย</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="soi" name="soi" placeholder="ซอย" value="" required />
                     <div class="invalid-feedback">กรุณาระบุซอย</div>
@@ -2086,7 +2300,7 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ถนน</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ถนน</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="road" name="road" placeholder="ถนน" value="" required />
                     <div class="invalid-feedback">กรุณาระบุถนน</div>
@@ -2096,27 +2310,27 @@ $(document).ready(function() {
 
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> จังหวัด</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> จังหวัด</label>
                 <div class="col-lg-8">
-                    <select class="js-data-province_collateral_type_2-ajax w-100 select2-lg" id="province_collateral_type_2" name="province_collateral_type_2" required></select>
+                    <select class="js-data-province_collateral_type-ajax w-100 select2-lg" id="province_collateral_type" name="province_collateral_type" required></select>
                     <div class="invalid-feedback">กรุณาเลือกกจังหวัด</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> อำเภอ/เขต</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> อำเภอ/เขต</label>
                 <div class="col-lg-8">
-                    <select class="js-data-amphoe_collateral_type_2-ajax w-100 select2-lg" id="amphoe_collateral_type_2" name="amphoe_collateral_type_2" required></select>
+                    <select class="js-data-amphoe_collateral_type-ajax w-100 select2-lg" id="amphoe_collateral_type" name="amphoe_collateral_type" required></select>
                     <div class="invalid-feedback">กรุณาเลือกอำเภอ/เขต</div>
                 </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ตำบล/แขวง</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ตำบล/แขวง</label>
                 <div class="col-lg-8">
-                    <select class="js-data-tambon_collateral_type_2-ajax w-100 select2-lg" id="tambon_collateral_type_2" name="tambon_collateral_type_2" required></select>
+                    <select class="js-data-tambon_collateral_type-ajax w-100 select2-lg" id="tambon_collateral_type" name="tambon_collateral_type" required></select>
                     <div class="invalid-feedback">กรุณาเลือกตำบล/แขวง</div>
                 </div>
             </div>
@@ -2129,7 +2343,7 @@ $(document).ready(function() {
                     <input class="form-control" id="building_age_year" name="building_age_year" placeholder="อายุ" value=""  />
                     <div class="invalid-feedback">กรุณาระบุอายุสิ่งปลูกสร้าง ปี </div>
                 </div>
-                <label class="col-lg-2 col-form-label"><span class="text-danger">*</span>  เดือน </label>
+                <label class="col-lg-2 col-form-label font-weight-bold"><span class="text-danger">*</span>  เดือน </label>
                  <div class="col-lg-3">
                     <input class="form-control" id="building_age_month" name="building_age_month" placeholder="อายุ" value="" required />
                     <div class="invalid-feedback">กรุณาระบุอายุสิ่งปลูกสร้าง เดือน </div>
@@ -2138,9 +2352,9 @@ $(document).ready(function() {
         </div>
         <div class="col-lg-8">
             <div class="mb-3 row">
-                <label class="col-lg-2 col-form-label" style="width: 12.5%;"><span class="text-danger">*</span> ลักษณะที่อยู่อาศัย </label>
+                <label class="col-lg-2 col-form-label" style="width: 12.5%;"> ลักษณะที่อยู่อาศัย </label>
                 <div class="col-lg-10">
-                     <select class="js-data-residence_collateral_type_3-ajax w-100 select2-lg" id="residence" name="residence" required></select>
+                     <select class="js-data-residence_collateral_type_3-ajax w-100 select2-lg" id="residence" name="residence" ></select>
                     <div class="invalid-feedback">กรุณาเลือกลักษณะที่อยู่อาศัย</div>
                 </div>
             </div>
@@ -2149,10 +2363,10 @@ $(document).ready(function() {
         <div class="col-xl-12">
           <div class="mb-3 row">
             <label class="col-xl-1 col-form-label">
-              <span class="text-danger">* </span> สถานที่ใกล้เคียง
+               สถานที่ใกล้เคียง
             </label>
             <div class="col-xl-11" style="width: 89%;">
-              <select class="js-data-relate_collateral_type_3-ajax w-100 select2-lg" id="relate_collateral_type_3" name="relate_collateral_type_3" required></select>
+              <select class="js-data-relate_collateral_type_3-ajax w-100 select2-lg" id="relate_collateral_type_3" name="relate_collateral_type_3" ></select>
               <div class="invalid-feedback">กรุณาเลือกสถานที่ใกล้เคียง</div>
             </div>
           </div>
@@ -2160,7 +2374,7 @@ $(document).ready(function() {
 
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ไร่</label>
+                <label class="col-lg-3 col-form-label"> ไร่</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="rai" name="rai" placeholder="ไร่" value=""  />
                     <div class="invalid-feedback">กรุณาระบุไร่</div>
@@ -2169,7 +2383,7 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> งาน</label>
+                <label class="col-lg-3 col-form-label"> งาน</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="ngan" name="ngan" placeholder="งาน" value=""  />
                     <div class="invalid-feedback">กรุณาระบุงาน </div>
@@ -2178,7 +2392,7 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ตารางวา</label>
+                <label class="col-lg-3 col-form-label"> ตารางวา</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="square_wa" name="square_wa" placeholder="ตารางวา" value=""  />
                     <div class="invalid-feedback">กรุณาระบุตารางวา </div>
@@ -2188,7 +2402,7 @@ $(document).ready(function() {
 
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> พื้นที่ใช้สอย/ตรม.</label>
+                <label class="col-lg-3 col-form-label"> พื้นที่ใช้สอย/ตรม.</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="usable_area" name="usable_area" placeholder="พื้นที่ใช้สอย/ตรม." value=""  />
                     <div class="invalid-feedback">กรุณาระบุพื้นที่ใช้สอย/ตรม.</div>
@@ -2197,7 +2411,7 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> มูลค่าจำนอง</label>
+                <label class="col-lg-3 col-form-label"> มูลค่าจำนอง</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="mortgage_amount" name="mortgage_amount" placeholder="มูลค่าจำนอง" value=""  />
                     <div class="invalid-feedback">กรุณาระบุมูลค่าจำนอง </div>
@@ -2206,17 +2420,17 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> วันที่จำนอง</label>
+                <label class="col-lg-3 col-form-label"> วันที่จำนอง</label>
                 <div class="col-lg-8">
                     <input class="form-control" id="mortgage_date" name="mortgage_date" placeholder="วันที่จำนอง" value=""  />
-                    <div class="invalid-feedback">กรุณาระบุตารางวา </div>
+                    <div class="invalid-feedback">กรุณาระบุวันที่จำนอง </div>
                 </div>
             </div>
         </div>
 
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ประเภทการจำนอง</label>
+                <label class="col-lg-3 col-form-label"> ประเภทการจำนอง</label>
                 <div class="col-lg-8">
                   <select class="js-data-mortgage_type-ajax w-100 select2-lg" id="mortgage_type" name="mortgage_type" required></select>
                   <div class="invalid-feedback">กรุณาเลือกประเภทการจำนอง</div>
@@ -2225,19 +2439,75 @@ $(document).ready(function() {
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ราคาที่ดิน (ประเมินราชการ)</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาที่ดิน (ประเมินราชการ)</label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="land_appraisal_government" name="land_appraisal_government" placeholder="ราคาที่ดิน" value=""  />
+                    <input class="form-control" id="land_appraisal_government" name="land_appraisal_government" placeholder="ราคาที่ดิน" value="" required />
                     <div class="invalid-feedback">กรุณาระบุราคาที่ดิน (ประเมินราชการ) </div>
                 </div>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3 row">
-                <label class="col-lg-3 col-form-label"><span class="text-danger">*</span> ราคาสิ่งปลูกสร้าง (ประเมินราชการ)</label>
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาสิ่งปลูกสร้าง (ประเมินราชการ)</label>
                 <div class="col-lg-8">
-                    <input class="form-control" id="building_appraisal_government" name="building_appraisal_government" placeholder="ราคาสิ่งปลูกสร้าง" value=""  />
-                    <div class="invalid-feedback">กรุณาระบุตารางวา </div>
+                    <input class="form-control" id="building_appraisal_government" name="building_appraisal_government" placeholder="ราคาสิ่งปลูกสร้าง" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุราคาสิ่งปลูกสร้าง (ประเมินราชการ) </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> ราคาที่ดิน (ประเมินบริษัท)</label>
+                <div class="col-lg-8">
+                  <input class="form-control" id="land_appraisal_company" name="land_appraisal_company" placeholder="ราคาที่ดิน" value=""  />
+                  <div class="invalid-feedback">กรุณาระบุราคาที่ดิน (ประเมินบริษัท) </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> ราคาสิ่งปลูกสร้าง (ประเมินบริษัท)</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="building_appraisal_company" name="building_appraisal_company" placeholder="ราคาสิ่งปลูกสร้าง" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุราคาสิ่งปลูกสร้าง (ประเมินบริษัท) </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาประเมินที่ดิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="land_appraisal" name="land_appraisal" placeholder="ราคาประเมินที่ดิน" value=""  required/>
+                    <div class="invalid-feedback">กรุณาระบุราคาประเมินที่ดิน </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาประเมินสิ่งปลูกสร้าง</label>
+                <div class="col-lg-8">
+                  <input class="form-control" id="land_appraisal_government" name="land_appraisal_government" placeholder="ราคาประเมินสิ่งปลูกสร้าง" value="" required />
+                  <div class="invalid-feedback">กรุณาระบุราคาประเมินสิ่งปลูกสร้าง </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาประเมิน</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="price_estimate" name="price_estimate" placeholder="ราคาประเมิน" value="" required />
+                    <div class="invalid-feedback">กรุณาระบุราคาประเมิน </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="mb-3 row">
+                <label class="col-lg-3 col-form-label"> Rate Book</label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="rate_book" name="rate_book" placeholder="Rate Book" value=""  />
+                    <div class="invalid-feedback">กรุณาระบุ Rate Book </div>
                 </div>
             </div>
         </div>
@@ -2245,6 +2515,57 @@ $(document).ready(function() {
     </div>
 </template>
 
+<!-- Template อื่นๆ -->
+<template id="template_collateral_type_4">
+  <div class="row">
+    <div class="col-xl-4">
+        <div class="mb-3 row">
+            <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> กลุ่มหลักประกัน</label>
+            <div class="col-lg-8">
+                <select class="js-data-product_type-ajax w-100 select2-lg" id="product_type" name="product_type" required></select>
+                <div class="invalid-feedback">กรุณาเลือกกลุ่มหลักประกัน</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="mb-3 row">
+            <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> รหัสหลักทรัพย์</label>
+            <div class="col-lg-8">
+                <input class="form-control" id="chassis_no" name="chassis_no" placeholder="รหัสหลักทรัพย์" value="" required />
+                <div class="invalid-feedback">กรุณาระบุเลขตัวถัง</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="mb-3 row">
+            <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> เลขที่อ้างอิง </label>
+            <div class="col-lg-8">
+                <input class="form-control" id="engine_no" name="engine_no" placeholder="เลขที่อ้างอิง " value="" required />
+                <div class="invalid-feedback">กรุณาระบุเลขเครื่อง </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="mb-3 row">
+            <label class="col-lg-3 col-form-label font-weight-bold"><span class="text-danger">*</span> ราคาประเมิน</label>
+            <div class="col-lg-8">
+                <input class="form-control" id="price_estimate" name="price_estimate" placeholder="ราคาประเมิน" value="" required />
+                <div class="invalid-feedback">กรุณาระบุทะเบียนหมดอายุ</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="mb-3 row">
+            <label class="col-lg-3 col-form-label"> Rate Book </label>
+            <div class="col-lg-8">
+                <input class="form-control" id="rate_book" name="rate_book" placeholder="Rate Book " value=""  />
+                <div class="invalid-feedback">กรุณาระบุ Rate Book </div>
+            </div>
+        </div>
+    </div>
+  <div>
+</template>
 
 <script src="{% static 'js/form_common_script.js' %}?v=117"></script>
 <link rel="stylesheet" href="{% static 'css/form_common.css' %}"> 

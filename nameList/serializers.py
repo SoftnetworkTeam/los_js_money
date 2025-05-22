@@ -2,12 +2,11 @@ from abc import ABC
 
 from rest_framework import serializers
 
-from nameList.models import HireContract
+from nameList.models import HireContract,Mastercollateralappraiser,Masterproducttype
 from theme.models import MasterTambon, MasterAmphoe, MasterProvince, apmast, MasterBranchAP, MasterOfficer, \
     MasterContractDocument, MasterBank, \
     MasterLivingType, MasterLivingOwner, MasterResidence, MasterNCB, MasterOccupation, MasterNumberOfInstallment, \
     MasterBrand, MasterModel, MasterSubModel, MasterColor, MasterInterestRate, CustomerLoanDetail, IndexHireContract, MasterCustomerPrename,Masterbranch
-
 
 class CustomDateTimeField(serializers.ReadOnlyField, ABC):
     def to_representation(self, value):
@@ -29,27 +28,45 @@ class CustomerLoanDetailSerializer(serializers.ModelSerializer):
 
 
 class MasterBrandSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = MasterBrand
-        fields = ['id', 'brand_code', 'brand_name', 'status']
+        fields = ['id', 'brand_code', 'brand_name', 'status','full_name']
+
+    def get_full_name(self, obj):
+        return f"{obj.brand_code} - {obj.brand_name}"
+
 
 
 class MasterModelSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
     class Meta:
         model = MasterModel
-        fields = ['id', 'model_code', 'model_name', 'brand_id', 'status']
+        fields = ['id', 'model_code', 'model_name', 'brand_id', 'status','full_name']
+
+    def get_full_name(self, obj):
+        return f"{obj.model_code} - {obj.model_name}"
 
 
 class MasterSubModelSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
     class Meta:
         model = MasterSubModel
-        fields = ['id', 'sub_model_code', 'sub_model_name', 'model_id', 'status']
+        fields = ['id', 'sub_model_code', 'sub_model_name', 'model_id', 'status','full_name']
+
+    def get_full_name(self, obj):
+        return f"{obj.sub_model_code} - {obj.sub_model_name}"
 
 
 class MasterColorSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
     class Meta:
         model = MasterColor
-        fields = ['id', 'color_code', 'color_name', 'status']
+        fields = ['id', 'color_code', 'color_name', 'status','full_name']
+        
+    def get_full_name(self, obj):
+        return f"{obj.color_code} - {obj.color_name}"
 
 
 class interestSerializer(serializers.ModelSerializer):
@@ -125,9 +142,14 @@ class apmastSerializer(serializers.ModelSerializer):
 
 
 class MasterProvinceSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = MasterProvince
-        fields = ['id', 'province_name']
+        fields = ['id', 'province_code', 'province_name', 'full_name']
+
+    def get_full_name(self, obj):
+        return f"{obj.province_code} - {obj.province_name}"
 
 
 class MasterAmphoeSerializer(serializers.ModelSerializer):
@@ -150,3 +172,21 @@ class MasterbranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Masterbranch
         fields = '__all__'
+
+class MastercollateralappraiserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    class Meta:
+        model = Mastercollateralappraiser
+        fields = '__all__'
+
+    def get_full_name(self, obj):
+        return f"{obj.appr_code} - {obj.appr_name}"
+    
+class MasterproducttypeSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    class Meta:
+        model = Masterproducttype
+        fields = '__all__'
+        
+    def get_full_name(self, obj):
+        return f"{obj.product_type_code} - {obj.product_type_name}"

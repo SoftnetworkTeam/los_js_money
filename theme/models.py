@@ -452,6 +452,7 @@ class MasterBrand(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['brand_code', ]
         db_table = 'tb_masterbrand'
 
 
@@ -466,6 +467,7 @@ class MasterModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['brand_id','model_code', ]
         db_table = 'tb_mastermodel'
 
 
@@ -479,6 +481,7 @@ class MasterColor(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ['color_code', ]
         db_table = 'tb_mastercolor'
 
 

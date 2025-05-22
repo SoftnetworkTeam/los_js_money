@@ -12,9 +12,9 @@ Masterscoringinfo,Masterincomestable,Masterincomenotstable,Mastercustomerage,Mas
 from configurations.models import Masterscoringdetail
 from configurations.views import Mastercountry
 
-from .models import customerscore
+from .models import customerscore,Mastercollateralappraiser,Masterproducttype
 
-from .serializers import MasterBranchAPSerializer, apmastSerializer, MasterOfficer, MasterOfficerSerializer, MasterBrandSerializer, MasterModelSerializer, MasterSubModelSerializer, MasterColorSerializer, interestSerializer, MasterNumberOfInstallmentSerializer, MasterCustomerPrenameSerializer, MasterOccupationSerializer, MasterNCBSerializer , MasterProvinceSerializer, MasterAmphoeSerializer, MasterTambonSerializer, MasterResidenceSerializer, MasterLivingTypeSerializer, MasterLivingOwnerSerializer, MasterBankSerializer, MasterContractDocumentSerializer,HireContactSerializer ,HireContract,CustomerLoanDetailSerializer,MasterBrandSerializer,MasterbranchSerializer
+from .serializers import MasterBranchAPSerializer, apmastSerializer, MasterOfficer, MasterOfficerSerializer, MasterBrandSerializer, MasterModelSerializer, MasterSubModelSerializer, MasterColorSerializer, interestSerializer, MasterNumberOfInstallmentSerializer, MasterCustomerPrenameSerializer, MasterOccupationSerializer, MasterNCBSerializer , MasterProvinceSerializer, MasterAmphoeSerializer, MasterTambonSerializer, MasterResidenceSerializer, MasterLivingTypeSerializer, MasterLivingOwnerSerializer, MasterBankSerializer, MasterContractDocumentSerializer,HireContactSerializer ,HireContract,CustomerLoanDetailSerializer,MasterBrandSerializer,MasterbranchSerializer,MastercollateralappraiserSerializer,MasterproducttypeSerializer
 from theme.serializers import InstallmentFileSerializers
 
 from rest_framework.pagination import PageNumberPagination
@@ -445,6 +445,8 @@ class MasterBrandAPIView(BaseListAPIView):
             queryset = queryset.filter(id=brand_id)
         elif id:
             queryset = queryset.filter(id=id)
+        else :
+            queryset = queryset.filter(status='A')
         return queryset
     
 class MasterModelAPIView(BaseListAPIView):
@@ -460,6 +462,8 @@ class MasterModelAPIView(BaseListAPIView):
             queryset = queryset.filter(brand_id=brand_id) 
         elif id:
             queryset = queryset.filter(id=id)
+        else :
+            queryset = queryset.filter(status='A')
         return queryset
 
 
@@ -476,15 +480,49 @@ class MasterSubModelAPIView(BaseListAPIView):
         elif id:
             queryset = MasterSubModel.objects.filter(id=id)
         else:
-            queryset = MasterSubModel.objects.none()  # ถ้าไม่มี apmast_id ก็ไม่ให้ผลลัพธ์ใดๆ
+            queryset = MasterSubModel.objects.filter(status='A')  
         
         serializer = MasterSubModelSerializer(queryset, many=True)
         
         return JsonResponse({
             "results": serializer.data,
-            "count": queryset.count()  # นับจำนวนสาขาที่กรอง
+            "count": queryset.count()  
         })
+    
+class MastercollateralappraiserAPIView(BaseListAPIView):
+    pagination_class = NoLimitPagination
+    serializer_class = MastercollateralappraiserSerializer
 
+    def get(self, request, *args, **kwargs):
+        collateraltype = self.request.query_params.get('collateral_type', None)
+
+        filter = {'status': 'A'}
+        if collateraltype:
+            filter[collateraltype] = True
+            # print('filter_kwargs',filter)
+
+        queryset = Mastercollateralappraiser.objects.filter(**filter).order_by('appr_code')
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            "results": serializer.data,
+            "count": queryset.count() 
+        })  
+
+class MasterproducttypeAPIView(BaseListAPIView):
+    pagination_class = NoLimitPagination
+    serializer_class = MasterproducttypeSerializer
+
+    def get(self, request, *args, **kwargs):
+        collateraltype = self.request.query_params.get('collateral_type', None)
+
+        queryset = Masterproducttype.objects.filter(status='A',collateral_type=collateraltype).order_by('product_type_code')
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            "results": serializer.data,
+            "count": queryset.count() 
+        })  
         
 class MasterColorAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
@@ -496,6 +534,9 @@ class MasterColorAPIView(BaseListAPIView):
         
         if id:
             queryset = queryset.filter(id=id)
+        else :
+            queryset = queryset.filter(status='A')
+
         
         return queryset
 
@@ -552,7 +593,7 @@ class MasterProvinceAPIView(BaseListAPIView):
     serializer_class = MasterProvinceSerializer
 
     def get_queryset(self):
-        queryset = MasterProvince.objects.all()
+        queryset = MasterProvince.objects.filter(status='A')
         query_param = self.request.query_params.get('q', None)
         
         if query_param:
@@ -800,6 +841,8 @@ class CalScoring(BaseListAPIView):
 
         }
         return JsonResponse(response_data)
+
+
 
 
 def insertInstallment(request):

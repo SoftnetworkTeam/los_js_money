@@ -1,7 +1,7 @@
 from django.urls import path,re_path
 from django.conf.urls.static import static
 from nameList import views
-from .views import  MasterOfficerAPIView, MasterBrandAPIView, MasterModelAPIView, MasterSubModelAPIView,MasterColorAPIView,interestAPIView, MasterNumberOfInstallmentAPIView, MasterCustomerPrenameAPIView, MasterOccupationAPIView, MasterProvinceAPIView, MasterAmphoeAPIView, MasterTambonAPIView, MasterResidenceAPIView, MasterLivingOwnerAPIView, MasterLivingTypeAPIView, MasterBankAPIView, MasterContractDocumentAPIView, HireContractApiView,CustomerLoanDetailApiView,branchAPAPIView,CalScoring,updateStatus,CustomerLoanDetailApiView,check_card_no
+from .views import  MasterOfficerAPIView, MasterBrandAPIView, MasterModelAPIView, MasterSubModelAPIView,MasterColorAPIView,interestAPIView, MasterNumberOfInstallmentAPIView, MasterCustomerPrenameAPIView, MasterOccupationAPIView, MasterProvinceAPIView, MasterAmphoeAPIView, MasterTambonAPIView, MasterResidenceAPIView, MasterLivingOwnerAPIView, MasterLivingTypeAPIView, MasterBankAPIView, MasterContractDocumentAPIView, HireContractApiView,CustomerLoanDetailApiView,branchAPAPIView,CalScoring,updateStatus,CustomerLoanDetailApiView,check_card_no,MastercollateralappraiserAPIView,MasterproducttypeAPIView
 
 from configurations.views import MastercustomerageApiView,MasterminorchildrenApiView,MastereducationlevelApiView,businesstypeApiView,MastershoptypesApiView,MasterrentalageApiView,MastermonthlyprofitApiView,MasterbusinessageApiView,MastercontractreasonApiView,MastercountryApiView,MasterscoringinfoApiView,rangeAge
 app_name = 'nameList'
@@ -52,6 +52,11 @@ urlpatterns = [
     path('updateStatus/', updateStatus.as_view(), name='updateStatus'),
     path('rangeAge/', rangeAge.as_view(), name='rangeAge'),
     path('name-list/check-card-no/', views.check_card_no, name='card_no'),
+    path('appraiser/', MastercollateralappraiserAPIView.as_view(), name='appraiser'),
+    path('product_type/', MasterproducttypeAPIView.as_view(), name='product_type'),
+    path('MasterBrand/', MasterBrandAPIView.as_view(), name='MasterBrand'),
+
+
 ]
 
 urlpatterns += static('/nameList/js/', document_root='nameList/js/')

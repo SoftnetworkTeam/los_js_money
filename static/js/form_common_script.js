@@ -42,7 +42,6 @@ $(document).ready(function () {
   loadSelect2Data(urlMasterNumberOfInstallment, ".js-data-installment-ajax", "results", "id", "installment_amount");
   loadSelect2Data(urlMastercountry, ".js-data-nation-ajax", "results", "id", "nation_name_th");
 
-
   loadAmphoe(province_id);
   function loadAmphoe(province_id) {
     const params = province_id ? { province_id: province_id } : {};

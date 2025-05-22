@@ -125,3 +125,38 @@ class customerscore(models.Model):
     class Meta:
         ordering = ['id']
         db_table = 'tb_customerscore'
+
+class Mastercollateralappraiser(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    appr_code = models.CharField(unique=True, max_length=20)
+    appr_name = models.CharField(max_length=100, blank=True, null=True)
+    note = models.CharField(max_length=200, blank=True, null=True)
+    collateral_type1 = models.BooleanField()
+    collateral_type2 = models.BooleanField()
+    collateral_type3 = models.BooleanField()
+    collateral_type4 = models.BooleanField()
+    status = models.CharField(max_length=1)
+    slug = models.CharField(unique=True, max_length=200)
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+
+    class Meta:
+        ordering = ['appr_code', ]
+        db_table = 'tb_mastercollateralappraiser'
+
+    def __str__(self):
+        return '%s - %s' % (self.appr_code, self.appr_name)
+    
+class Masterproducttype(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    product_type_code = models.CharField(unique=True, max_length=20)
+    product_type_name = models.CharField(max_length=100, blank=True, null=True)
+    collateral_type = models.CharField(max_length=1)
+    status = models.CharField(max_length=1)
+    slug = models.CharField(unique=True, max_length=200)
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+
+    class Meta:
+        ordering = ['product_type_code', ]
+        db_table = 'tb_masterproducttype'
