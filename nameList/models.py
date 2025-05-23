@@ -1,8 +1,9 @@
 from django.db import models
 
 from theme.models import MasterBrand,MasterModel,MasterSubModel,MasterColor,MasterProvince,MasterAmphoe,MasterTambon,MasterResidence
+from userauth.models import AuthUser
 
-from models import AuthUser
+
 
 
 class HireContract(models.Model):
@@ -191,7 +192,7 @@ class Collateralinfo(models.Model):
     appraiser_type = models.CharField(max_length=1)
     ownership = models.CharField(max_length=200, blank=True, null=True)
     date_estimate = models.DateField(blank=True, null=True)
-    price_estimate = models.DecimalField(max_digits=18, decimal_places=2)
+    price_estimate = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     rate_book = models.DecimalField(max_digits=18, decimal_places=2)
     land_appraisal = models.DecimalField(max_digits=18, decimal_places=2)
     building_appraisal = models.DecimalField(max_digits=18, decimal_places=2)
@@ -202,10 +203,11 @@ class Collateralinfo(models.Model):
     mortgage_amount = models.DecimalField(max_digits=18, decimal_places=2)
     mortgage_date = models.DateField(blank=True, null=True)
     mortgage_type = models.ForeignKey(MasterMortgageType, models.DO_NOTHING, blank=True, null=True)
-    market_price = models.DecimalField(max_digits=18, decimal_places=2)
-    market_price2 = models.DecimalField(max_digits=18, decimal_places=2)
-    market_price3 = models.DecimalField(max_digits=18, decimal_places=2)
-    market_price_avg = models.DecimalField(max_digits=18, decimal_places=2)
+    # market_price = models.DecimalField(max_digits=18, decimal_places=2)
+    # market_price2 = models.DecimalField(max_digits=18, decimal_places=2)
+    # market_price3 = models.DecimalField(max_digits=18, decimal_places=2)
+    # market_price_avg = models.DecimalField(max_digits=18, decimal_places=2)
+    application_no = models.CharField(max_length=20, default='', null=True, blank=True, verbose_name='เลขที่อนุมัติสินเชื่อ')
     # market_source = models.ForeignKey('TbMastermarketpricesource', models.DO_NOTHING, blank=True, null=True)
     # market_source2 = models.ForeignKey('TbMastermarketpricesource', models.DO_NOTHING, blank=True, null=True)
     # market_source3 = models.ForeignKey('TbMastermarketpricesource', models.DO_NOTHING, blank=True, null=True)

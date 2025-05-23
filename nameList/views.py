@@ -901,6 +901,22 @@ def insertInstallment(request):
         else:
             mortgage_type = None
 
+        django_user = request.user  
+        try:
+            auth_user = AuthUser.objects.get(username=django_user.username)  # หรือฟิลด์อื่นที่เชื่อมกัน
+        except AuthUser.DoesNotExist:
+            auth_user = None  # กรณีไม่มี user ที่ตรงกัน
+
+        raw_price = post_data.get('price_estimate', '').strip()
+        price_estimate = None  # ตั้งค่าเริ่มต้นก่อน
+
+        if raw_price:
+            try:
+                price_estimate = Decimal(raw_price)
+            except InvalidOperation:
+                price_estimate = None  # หรือ raise ValidationError
+
+
         current_date = datetime.now()
         formatted_current_date = current_date.strftime("APP-%Y%m")
         if not id:
@@ -1392,14 +1408,14 @@ def insertInstallment(request):
                                 chassis_no=post_data.get('chassis_no', ''),
                                 engine_no=post_data.get('engine_no', ''),
                                 product_type=product_type,
-                                price_estimate=post_data.get('price_estimate', ''),
+                                price_estimate=price_estimate,
                                 rate_book=post_data.get('rate_book', ''),
                                 ownership=post_data.get('ownership', ''),
                                 appraiser_type=post_data.get('appraiser_type', ''),
                                 appraiser=appraiser,
                                 application_no=app_id,
                                 memo=data_memo,
-                                user=request.user,
+                                user=auth_user,
                                 status=data_status,
                                 land_appraisal=0,
                                 building_appraisal=0,
@@ -1447,13 +1463,13 @@ def insertInstallment(request):
                                 chassis_no=post_data.get('chassis_no', ''),
                                 engine_no=post_data.get('engine_no', ''),
                                 product_type=product_type,
-                                price_estimate=post_data.get('price_estimate', ''),
-                                rate_book=post_data.get('rate_book', ''),
+                                price_estimate=price_estimate,
+                                rate_book=post_data.get('rate_book', '0'),
                                 ownership=post_data.get('ownership', ''),
                                 appraiser_type=post_data.get('appraiser_type', ''),
                                 appraiser=appraiser,
                                 memo=data_memo,
-                                user=request.user,
+                                user=auth_user,
                                 status=data_status,
                                 land_appraisal=post_data.get('land_appraisal', ''),
                                 building_appraisal=0,
@@ -1490,13 +1506,13 @@ def insertInstallment(request):
                                 chassis_no=post_data.get('chassis_no', ''),
                                 engine_no=post_data.get('engine_no', ''),
                                 product_type=product_type,
-                                price_estimate=post_data.get('price_estimate', ''),
+                                price_estimate=price_estimate,
                                 rate_book=post_data.get('rate_book', ''),
                                 ownership=post_data.get('ownership', ''),
                                 appraiser_type=post_data.get('appraiser_type', ''),
                                 appraiser=appraiser,
                                 memo=data_memo,
-                                user=request.user,
+                                user=auth_user,
                                 status=data_status,
                                 land_appraisal=post_data.get('land_appraisal', ''),
                                 building_appraisal=post_data.get('building_appraisal', ''),
@@ -1541,13 +1557,13 @@ def insertInstallment(request):
                                 chassis_no=post_data.get('chassis_no', ''),
                                 engine_no=post_data.get('engine_no', ''),
                                 product_type=product_type,
-                                price_estimate=post_data.get('price_estimate', ''),
+                                price_estimate=price_estimate,
                                 rate_book=post_data.get('rate_book', ''),
                                 ownership=post_data.get('ownership', ''),
                                 appraiser_type=post_data.get('appraiser_type', ''),
                                 appraiser=appraiser,
                                 memo=data_memo,
-                                user=request.user,
+                                user=auth_user,
                                 status=data_status,
                                 land_appraisal=0,
                                 building_appraisal=0,
