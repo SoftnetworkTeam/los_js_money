@@ -1405,13 +1405,13 @@ def insertInstallment(request):
                     if data_collateral_type == '1':
                             collateral_info = Collateralinfo( 
                                 collateral_type=data_collateral_type,
-                                chassis_no=post_data.get('chassis_no', ''),
-                                engine_no=post_data.get('engine_no', ''),
+                                chassis_no=post_data.get('chassis_no', None),
+                                engine_no=post_data.get('engine_no', None),
                                 product_type=product_type,
                                 price_estimate=price_estimate,
-                                rate_book=post_data.get('rate_book', ''),
-                                ownership=post_data.get('ownership', ''),
-                                appraiser_type=post_data.get('appraiser_type', ''),
+                                rate_book=post_data.get('rate_book', None),
+                                ownership=post_data.get('ownership', None),
+                                appraiser_type=post_data.get('appraiser_type', None),
                                 appraiser=appraiser,
                                 application_no=app_id,
                                 memo=data_memo,
