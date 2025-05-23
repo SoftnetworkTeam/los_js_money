@@ -1,7 +1,7 @@
 from django.urls import path,re_path
 from django.conf.urls.static import static
 from nameList import views
-from .views import  MasterOfficerAPIView, MasterBrandAPIView, MasterModelAPIView, MasterSubModelAPIView,MasterColorAPIView,interestAPIView, MasterNumberOfInstallmentAPIView, MasterCustomerPrenameAPIView, MasterOccupationAPIView, MasterProvinceAPIView, MasterAmphoeAPIView, MasterTambonAPIView, MasterResidenceAPIView, MasterLivingOwnerAPIView, MasterLivingTypeAPIView, MasterBankAPIView, MasterContractDocumentAPIView, HireContractApiView,CustomerLoanDetailApiView,branchAPAPIView,CalScoring,updateStatus,CustomerLoanDetailApiView,check_card_no,MastercollateralappraiserAPIView,MasterproducttypeAPIView
+from .views import  MasterOfficerAPIView, MasterBrandAPIView, MasterModelAPIView, MasterSubModelAPIView,MasterColorAPIView,interestAPIView, MasterNumberOfInstallmentAPIView, MasterCustomerPrenameAPIView, MasterOccupationAPIView, MasterProvinceAPIView, MasterAmphoeAPIView, MasterTambonAPIView, MasterResidenceAPIView, MasterLivingOwnerAPIView, MasterLivingTypeAPIView, MasterBankAPIView, MasterContractDocumentAPIView, HireContractApiView,CustomerLoanDetailApiView,branchAPAPIView,CalScoring,updateStatus,CustomerLoanDetailApiView,check_card_no,MastercollateralappraiserAPIView,MasterproducttypeAPIView,MasterMortgageTypeAPIView
 
 from configurations.views import MastercustomerageApiView,MasterminorchildrenApiView,MastereducationlevelApiView,businesstypeApiView,MastershoptypesApiView,MasterrentalageApiView,MastermonthlyprofitApiView,MasterbusinessageApiView,MastercontractreasonApiView,MastercountryApiView,MasterscoringinfoApiView,rangeAge
 app_name = 'nameList'
@@ -55,6 +55,8 @@ urlpatterns = [
     path('appraiser/', MastercollateralappraiserAPIView.as_view(), name='appraiser'),
     path('product_type/', MasterproducttypeAPIView.as_view(), name='product_type'),
     path('MasterBrand/', MasterBrandAPIView.as_view(), name='MasterBrand'),
+    path('mortgage_type/', MasterMortgageTypeAPIView.as_view(), name='mortgage_type'),
+
 
 
 ]

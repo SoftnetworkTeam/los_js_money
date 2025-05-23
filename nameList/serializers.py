@@ -2,7 +2,8 @@ from abc import ABC
 
 from rest_framework import serializers
 
-from nameList.models import HireContract,Mastercollateralappraiser,Masterproducttype
+from nameList.models import HireContract,Mastercollateralappraiser,Masterproducttype,MasterMortgageType
+
 from theme.models import MasterTambon, MasterAmphoe, MasterProvince, apmast, MasterBranchAP, MasterOfficer, \
     MasterContractDocument, MasterBank, \
     MasterLivingType, MasterLivingOwner, MasterResidence, MasterNCB, MasterOccupation, MasterNumberOfInstallment, \
@@ -190,3 +191,12 @@ class MasterproducttypeSerializer(serializers.ModelSerializer):
         
     def get_full_name(self, obj):
         return f"{obj.product_type_code} - {obj.product_type_name}"
+
+class MasterMortgageTypeSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    class Meta:
+        model = MasterMortgageType
+        fields = '__all__'
+        
+    def get_full_name(self, obj):
+        return f"{obj.mortgage_code} - {obj.mortgage_name}"

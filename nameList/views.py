@@ -12,9 +12,9 @@ Masterscoringinfo,Masterincomestable,Masterincomenotstable,Mastercustomerage,Mas
 from configurations.models import Masterscoringdetail
 from configurations.views import Mastercountry
 
-from .models import customerscore,Mastercollateralappraiser,Masterproducttype
+from .models import customerscore,Mastercollateralappraiser,Masterproducttype,MasterMortgageType,Collateralinfo,Collateraldetail1,Collateraldetail2,Collateraldetail3
 
-from .serializers import MasterBranchAPSerializer, apmastSerializer, MasterOfficer, MasterOfficerSerializer, MasterBrandSerializer, MasterModelSerializer, MasterSubModelSerializer, MasterColorSerializer, interestSerializer, MasterNumberOfInstallmentSerializer, MasterCustomerPrenameSerializer, MasterOccupationSerializer, MasterNCBSerializer , MasterProvinceSerializer, MasterAmphoeSerializer, MasterTambonSerializer, MasterResidenceSerializer, MasterLivingTypeSerializer, MasterLivingOwnerSerializer, MasterBankSerializer, MasterContractDocumentSerializer,HireContactSerializer ,HireContract,CustomerLoanDetailSerializer,MasterBrandSerializer,MasterbranchSerializer,MastercollateralappraiserSerializer,MasterproducttypeSerializer
+from .serializers import MasterBranchAPSerializer, apmastSerializer, MasterOfficer, MasterOfficerSerializer, MasterBrandSerializer, MasterModelSerializer, MasterSubModelSerializer, MasterColorSerializer, interestSerializer, MasterNumberOfInstallmentSerializer, MasterCustomerPrenameSerializer, MasterOccupationSerializer, MasterNCBSerializer , MasterProvinceSerializer, MasterAmphoeSerializer, MasterTambonSerializer, MasterResidenceSerializer, MasterLivingTypeSerializer, MasterLivingOwnerSerializer, MasterBankSerializer, MasterContractDocumentSerializer,HireContactSerializer ,HireContract,CustomerLoanDetailSerializer,MasterBrandSerializer,MasterbranchSerializer,MastercollateralappraiserSerializer,MasterproducttypeSerializer,MasterMortgageTypeSerializer
 from theme.serializers import InstallmentFileSerializers
 
 from rest_framework.pagination import PageNumberPagination
@@ -436,51 +436,53 @@ class MasterBrandAPIView(BaseListAPIView):
     serializer_class = MasterBrandSerializer
 
     def get_queryset(self):
-        queryset = MasterBrand.objects.all()
+        queryset = MasterBrand.objects.filter(status='A')
         
         # ฟิลเตอร์ตาม brand_id ถ้ามีใน URL
         id = self.request.query_params.get('id',None)
         brand_id = self.request.query_params.get('brand_id',None)
         if brand_id:
-            queryset = queryset.filter(id=brand_id)
+            queryset = queryset.filter(id=brand_id,status='A')
         elif id:
-            queryset = queryset.filter(id=id)
-        else :
-            queryset = queryset.filter(status='A')
+            queryset = queryset.filter(id=id,status='A')
+
         return queryset
     
 class MasterModelAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
-    queryset = MasterModel.objects.all()
-    serializer_class = MasterModelSerializer
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
+    def get(self, request, *args, **kwargs):
         id = self.request.query_params.get('id',None)
         brand_id = self.request.GET.get('brand_id',None)
-        if brand_id:
-            queryset = queryset.filter(brand_id=brand_id) 
-        elif id:
-            queryset = queryset.filter(id=id)
+
+        if brand_id :
+            queryset = MasterModel.objects.filter(brand_id=brand_id,status='A') 
+        elif id :
+            queryset = MasterModel.objects.filter(id=id)
         else :
-            queryset = queryset.filter(status='A')
-        return queryset
+            queryset = MasterSubModel.objects.none()
+
+        serializer = MasterModelSerializer(queryset, many=True)
+        
+        return JsonResponse({
+            "results": serializer.data,
+            "count": queryset.count()  
+        })
 
 
 class MasterSubModelAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
 
     def get(self, request, *args, **kwargs):
-        # รับ id ของผู้จำหน่ายที่เลือก
         id = self.request.query_params.get('id',None)
         model_id = request.GET.get('model_id', None)
-        # กรองสาขาตามผู้จำหน่ายที่เลือก (ถ้ามี apmast_id)
         if model_id:
-            queryset = MasterSubModel.objects.filter(model_id=model_id)
+            queryset = MasterSubModel.objects.filter(model_id=model_id,status='A')
         elif id:
-            queryset = MasterSubModel.objects.filter(id=id)
-        else:
-            queryset = MasterSubModel.objects.filter(status='A')  
+            queryset = MasterSubModel.objects.filter(id=id,status='A')
+        else :
+            queryset = MasterSubModel.objects.none()
+        
         
         serializer = MasterSubModelSerializer(queryset, many=True)
         
@@ -523,6 +525,11 @@ class MasterproducttypeAPIView(BaseListAPIView):
             "results": serializer.data,
             "count": queryset.count() 
         })  
+
+class MasterMortgageTypeAPIView(BaseListAPIView):
+    pagination_class = NoLimitPagination
+    queryset = MasterMortgageType.objects.filter(status='A', ).order_by('mortgage_code')
+    serializer_class = MasterMortgageTypeSerializer
         
 class MasterColorAPIView(BaseListAPIView):
     pagination_class = NoLimitPagination
@@ -866,6 +873,33 @@ def insertInstallment(request):
             company_send_doc = 'Y'
         else:
             company_send_doc = 'N'
+        
+        data_collateral_type = post_data.get('collateral_type', '')
+        data_memo = post_data.get('memo', '')
+        data_status = post_data.get('status', '')
+        CollateralInfo_id = post_data.get('CollateralInfo_id', None)
+
+
+        # ตรวจสอบว่าเป็นตัวเลขก่อน
+        product_type_id = post_data.get('product_type', None)
+        if product_type_id and str(product_type_id).isdigit():
+            product_type = Masterproducttype.objects.filter(id=int(product_type_id)).first()
+        else:
+            product_type = None
+
+        # ดึง appraiser
+        appraiser_id = post_data.get('appraiser', None)
+        if appraiser_id and str(appraiser_id).isdigit():
+            appraiser = Mastercollateralappraiser.objects.filter(id=int(appraiser_id)).first()
+        else:
+            appraiser = None
+
+        # ดึง mortgage_type
+        mortgage_type_id = post_data.get('mortgage_type', None)
+        if mortgage_type_id and str(mortgage_type_id).isdigit():
+            mortgage_type = MasterMortgageType.objects.filter(id=int(mortgage_type_id)).first()
+        else:
+            mortgage_type = None
 
         current_date = datetime.now()
         formatted_current_date = current_date.strftime("APP-%Y%m")
@@ -1273,6 +1307,9 @@ def insertInstallment(request):
                     installment.create_to_province_id = post_data.get('province_save', '')
                     installment.company_id = post_data.get('company_id', '')
                     installment.lending_description = post_data.get('lending_description', '')
+                    installment.machine_no = post_data.get('engine_no', '')
+                    installment.chassis_no = post_data.get('chassis_no', '')
+                    installment.registration_no = post_data.get('reg_no', '')
                     installment.save()
                   
                 else:
@@ -1305,7 +1342,10 @@ def insertInstallment(request):
                         create_to_branch_id=post_data.get('branch', ''),
                         create_to_province_id=post_data.get('province_save', ''),
                         company_id=post_data.get('company_id', ''),
-                        lending_description=post_data.get('lending_description', '')
+                        lending_description=post_data.get('lending_description', ''),
+                        machine_no=post_data.get('engine_no', ''),
+                        chassis_no=post_data.get('chassis_no', ''),
+                        registration_no=post_data.get('reg_no', '')
                         
                     )
                     installment.save()
@@ -1332,7 +1372,192 @@ def insertInstallment(request):
                     )
                     customerIncome.save()
 
-                
+                try:
+
+                    if not CollateralInfo_id or not str(CollateralInfo_id).isdigit():  
+                        CollateralInfo = None
+                    else:
+                        CollateralInfo = Collateralinfo.objects.filter(id=int(CollateralInfo_id)).first()
+
+                except Collateralinfo.DoesNotExist:
+                    CollateralInfo = None   
+
+                if CollateralInfo:
+                    ''
+                else :
+                    # รถ/เล่มทะเบียน
+                    if data_collateral_type == '1':
+                            collateral_info = Collateralinfo( 
+                                collateral_type=data_collateral_type,
+                                chassis_no=post_data.get('chassis_no', ''),
+                                engine_no=post_data.get('engine_no', ''),
+                                product_type=product_type,
+                                price_estimate=post_data.get('price_estimate', ''),
+                                rate_book=post_data.get('rate_book', ''),
+                                ownership=post_data.get('ownership', ''),
+                                appraiser_type=post_data.get('appraiser_type', ''),
+                                appraiser=appraiser,
+                                application_no=app_id,
+                                memo=data_memo,
+                                user=request.user,
+                                status=data_status,
+                                land_appraisal=0,
+                                building_appraisal=0,
+                                land_appraisal_government=0,
+                                building_appraisal_government=0,
+                                land_appraisal_company=0,
+                                building_appraisal_company=0,
+                            )
+                            collateral_info.save()
+
+                            collateral_detail = Collateraldetail1(
+                                collateral_id=collateral_info.id,
+                                registration_condition=post_data.get('registration_condition', ''),
+                                license_plate_color=post_data.get('license_plate_color', ''),
+                                machine_condition=post_data.get('machine_condition', ''),
+                                car_condition=post_data.get('car_condition', ''),
+                                chassis_condition=post_data.get('chassis_condition', ''),
+                                last_reg_date=post_data.get('last_reg_date', ''),
+                                reg_no=post_data.get('reg_no', ''),
+                                province=post_data.get('province', ''),
+                                reg_date=post_data.get('reg_date', ''),
+                                reg_expire=post_data.get('reg_expire', ''),
+                                brand=post_data.get('brand', ''),
+                                model=post_data.get('model', ''),
+                                sub_model=post_data.get('sub_model', ''),
+                                color=post_data.get('color', ''),
+                                manu_year=post_data.get('manu_year', ''),
+                                mile=post_data.get('mile', ''),
+                                cc=post_data.get('cc', ''),
+                                car_age_year=post_data.get('car_age_year', ''),
+                                car_age_month=post_data.get('car_age_month', ''),
+                                vehicle_usage_type=post_data.get('vehicle_usage_type', ''),
+                                car_group=post_data.get('car_group', ''),
+                                car_weight=post_data.get('car_weight', ''),
+                                lost_date=post_data.get('lost_date', ''),
+                                car_tax=post_data.get('car_tax', ''),
+                                subcar_tax=post_data.get('subcar_tax', ''),
+                            )
+                            collateral_detail.save()
+                    # ที่ดินเปล่า
+                    elif data_collateral_type == '2':
+                            collateral_info = Collateralinfo(
+                                
+                                collateral_type=data_collateral_type ,
+                                chassis_no=post_data.get('chassis_no', ''),
+                                engine_no=post_data.get('engine_no', ''),
+                                product_type=product_type,
+                                price_estimate=post_data.get('price_estimate', ''),
+                                rate_book=post_data.get('rate_book', ''),
+                                ownership=post_data.get('ownership', ''),
+                                appraiser_type=post_data.get('appraiser_type', ''),
+                                appraiser=appraiser,
+                                memo=data_memo,
+                                user=request.user,
+                                status=data_status,
+                                land_appraisal=post_data.get('land_appraisal', ''),
+                                building_appraisal=0,
+                                land_appraisal_government=post_data.get('land_appraisal_government', ''),
+                                building_appraisal_government=0,
+                                land_appraisal_company=post_data.get('land_appraisal_company', ''),
+                                building_appraisal_company=0,
+                                mortgage_amount=post_data.get('mortgage_amount', ''),
+                                mortgage_date=post_data.get('mortgage_date', ''),
+                                mortgage_type=mortgage_type,
+                            ) 
+                            collateral_info.save()
+
+                            collateral_detail = Collateraldetail2(
+                                collateral_id=collateral_info.id,
+                                land_no=post_data.get('land_no', ''),
+                                survey_no=post_data.get('survey_no', ''),
+                                book_no=post_data.get('book_no', ''),
+                                page_no=post_data.get('page_no', ''),
+                                issue_date=post_data.get('issue_date_collateral', ''),
+                                tambon=post_data.get('tambon_collateral_type', ''),
+                                amphoe=post_data.get('amphoe_collateral_type', ''),
+                                province=post_data.get('province_collateral_type', ''),
+                                rai=post_data.get('rai', ''),
+                                ngan=post_data.get('ngan', ''),
+                                square_wa=post_data.get('square_wa', ''),
+                                land_status=post_data.get('land_status', ''),
+                            )
+                            collateral_detail.save()
+                    # ที่ดินพร้อมสิ่งปลูกสร้าง
+                    elif data_collateral_type == '3':
+                            collateral_info = Collateralinfo(
+                                collateral_type=data_collateral_type,
+                                chassis_no=post_data.get('chassis_no', ''),
+                                engine_no=post_data.get('engine_no', ''),
+                                product_type=product_type,
+                                price_estimate=post_data.get('price_estimate', ''),
+                                rate_book=post_data.get('rate_book', ''),
+                                ownership=post_data.get('ownership', ''),
+                                appraiser_type=post_data.get('appraiser_type', ''),
+                                appraiser=appraiser,
+                                memo=data_memo,
+                                user=request.user,
+                                status=data_status,
+                                land_appraisal=post_data.get('land_appraisal', ''),
+                                building_appraisal=post_data.get('building_appraisal', ''),
+                                land_appraisal_government=post_data.get('land_appraisal_government', ''),
+                                building_appraisal_government=post_data.get('building_appraisal_government', ''),
+                                land_appraisal_company=post_data.get('land_appraisal_company', ''),
+                                building_appraisal_company=post_data.get('building_appraisal_company', ''),
+                                mortgage_amount=post_data.get('mortgage_amount', ''),
+                                mortgage_date=post_data.get('mortgage_date', ''),
+                                mortgage_type=mortgage_type,
+                            )
+                            collateral_info.save()
+
+                            collateral_detail = Collateraldetail3(
+                                collateral_id=collateral_info.id,
+                                land_no=post_data.get('land_no', ''),
+                                survey_no=post_data.get('survey_no', ''),
+                                book_no=post_data.get('book_no', ''),
+                                page_no=post_data.get('page_no', ''),
+                                issue_date=post_data.get('issue_date', ''),
+                                house_no=post_data.get('house_no', ''),
+                                village=post_data.get('village_collateral', ''),
+                                soi=post_data.get('soi_collateral', ''),
+                                road=post_data.get('road_collateral', ''),
+                                tambon=post_data.get('tambon_collateral_type', ''),
+                                amphoe=post_data.get('amphoe_collateral_type', ''),
+                                province=post_data.get('province_collateral_type', ''),
+                                residence=post_data.get('residence_collateral', ''),
+                                relate=post_data.get('relate_collateral', ''),
+                                rai=post_data.get('rai', ''),
+                                ngan=post_data.get('ngan', ''),
+                                square_wa=post_data.get('square_wa', ''),
+                                usable_area=post_data.get('usable_area', ''),
+                                building_age_year=post_data.get('building_age_year', ''),
+                                building_age_month=post_data.get('building_age_month', ''),
+                            )
+                            collateral_detail.save()
+                    # อื่นๆ
+                    elif data_collateral_type == '4':
+                            collateral_info = Collateralinfo(
+                                collateral_type=data_collateral_type,
+                                chassis_no=post_data.get('chassis_no', ''),
+                                engine_no=post_data.get('engine_no', ''),
+                                product_type=product_type,
+                                price_estimate=post_data.get('price_estimate', ''),
+                                rate_book=post_data.get('rate_book', ''),
+                                ownership=post_data.get('ownership', ''),
+                                appraiser_type=post_data.get('appraiser_type', ''),
+                                appraiser=appraiser,
+                                memo=data_memo,
+                                user=request.user,
+                                status=data_status,
+                                land_appraisal=0,
+                                building_appraisal=0,
+                                land_appraisal_government=0,
+                                building_appraisal_government=0,
+                                land_appraisal_company=0,
+                                building_appraisal_company=0,
+                            )
+                            collateral_info.save()
+
                 file_index = 1  
 
                 for file_key in request.FILES.keys():
@@ -1370,7 +1595,7 @@ def insertInstallment(request):
                                         installmentFile.type = file_type
                                         installmentFile.doc_id = file_type
 
-                                    installmentFile.save()
+                                    # installmentFile.save()
                                 else:
                                     fs.save(new_filename, file)
                                     installmentFile = InstallmentFile.objects.create(
@@ -1379,7 +1604,7 @@ def insertInstallment(request):
                                         type=file_type,
                                         doc_id=file_type 
                                     )
-                                    installmentFile.save()
+                                    # installmentFile.save()
 
                             file_index += 1
                         else:

@@ -240,6 +240,7 @@ $(document).ready(function () {
   datepicker("#read_card", read_card);
   // datepicker("#start_work", start_work);
   datepicker("#salary_day", salary_day);
+  datepicker("#date_estimate", date_estimate);
 
   let isSameCardActive = false;
   let originalValues = {};
@@ -625,7 +626,6 @@ function calculateAgeFromBirthday(dateStr, outputSelector) {
 }
 
 function checkIDcard(input) {
-  console.log('<id>',installmentdetail_id);
   let feedback = input.nextElementSibling; 
     let card_no = input.value.trim();
 
@@ -636,7 +636,7 @@ function checkIDcard(input) {
           feedback.textContent = "";
 
           $.ajax({
-            url: "/name-list/check-card-no/"+installmentdetail_id, 
+            url: "/name-list/check-card-no/", 
             type: "GET",  
             dataType: "json",
             data: { card_no: card_no },
@@ -688,3 +688,223 @@ function validateEmail(input) {
       feedback.textContent = "กรุณากรอกอีเมลให้ถูกต้อง (เช่น example@email.com)";
   }
 }
+
+ var fileRowCount = '';
+
+  if (add_loan) {
+    fileRowCount = 1;
+  } else {
+    var countFile = $('#countFile').val();
+    if (countFile === '0' || countFile === '' || countFile === undefined) {
+      fileRowCount = 1;
+    } else {
+      fileRowCount = 0;
+    }
+  }
+
+  function addFileRow() {
+    fileRowCount++;
+
+    var newFileRow = `<div class="row">
+                        <div class="col-xl-6">
+                          <div class="mb-3 row">
+                            <label class="col-lg-2 col-form-label font-weight-bold">
+                              <span class="text-danger">* </span>อัพโหลดเอกสาร
+                            </label>
+                            <div class="col-lg-8">
+                              <select class="js-data-file_type-${fileRowCount}-ajax" id="file_type-dropdown-${fileRowCount}" name="file_type_${fileRowCount}">
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                
+                        <div class="col-xl-6">
+                          <div class="mb-3 row">
+                            <div class="col-lg-10">
+                              <div class="input-group">
+                                <input class="form-control" type="file" id="file_${fileRowCount}" multiple  name="file_${fileRowCount}" onchange="attachFile('file_${fileRowCount}')">
+                                <span class="input-group-text" id="view_file_${fileRowCount}" onclick="viewPDF('file_${fileRowCount}')" style="cursor:pointer;">
+                                  <i class="fa fa-search"></i>
+                                </span>
+                                <button onclick="deleteFile('file_${fileRowCount}')" type="button" id="delete_file_${fileRowCount}" class="btn btn-outline-danger" disabled>
+                                  <i class="fa fa-trash"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+  
+                        <input type="hidden" name="file_row_count" value="${fileRowCount}">
+                      </div>`;
+
+    $("#file-container").append(newFileRow);
+
+    loadSelect2Data(urlMasterContractDocument, `.js-data-file_type-${fileRowCount}-ajax`, "results", "id", "doc_name");
+  }
+
+    $(document).ready(function () {
+
+    $("#brand-dropdown").prop("disabled", ref_id ? true : false);
+    $("#model-dropdown").prop("disabled", ref_id ? true : false);
+    $("#sub_model-dropdown").prop("disabled", ref_id ? true : false);
+    $("#color-dropdown").prop("disabled", ref_id ? true : false);
+    $("#machine_no").prop("disabled", ref_id ? true : false);
+    $("#chassis_no").prop("disabled", ref_id ? true : false);
+    $("#contract_no_old").prop("disabled", ref_id ? true : false);
+
+    $("#machine_no")
+      .val(
+        ref_id
+          ? "{{ contract_into.engine_no }}"
+          : "{{ customer_loan_detail.machine_no }}"
+      )
+      .text(
+        ref_id
+          ? "{{ contract_into.engine_no }}"
+          : "{{ customer_loan_detail.machine_no }}"
+      );
+    $("#chassis_no")
+      .val(
+        ref_id
+          ? "{{ contract_into.chassis_no }}"
+          : "{{ customer_loan_detail.chassis_no }}"
+      )
+      .text(
+        ref_id
+          ? "{{ contract_into.chassis_no }}"
+          : "{{ customer_loan_detail.chassis_no }}"
+      );
+    $("#registration_no")
+      .val(
+        ref_id
+          ? "{{ contract_into.reg_no }}"
+          : "{{ customer_loan_detail.registration_no }}"
+      )
+      .text(
+        ref_id
+          ? "{{ contract_into.reg_no }}"
+          : "{{ customer_loan_detail.registration_no }}"
+      );
+    $("#contract_no_old")
+      .val(
+        ref_id
+          ? "{{ contract_into.cont_no }}"
+          : "{{ customer_loan_detail.contact_no_old }}"
+      )
+      .text(
+        ref_id
+          ? "{{ contract_into.cont_no }}"
+          : "{{ customer_loan_detail.contact_no_old }}"
+      );
+
+    $("#title,#titleHead").text(
+      ref_id || add_loan
+        ? "แบบฟอร์มขอสินเชื่อ"
+        : "แก้ไขแบบฟอร์มขอสินเชื่อ"
+    );
+
+    
+  });
+
+
+$(document).ready(function () {
+  function loadCollateralTemplate(type) {
+    let templateId = "";
+    let collateralTypeParam = "";
+
+    if (type === "1") {
+      templateId = "#template_collateral_type_1";
+      collateralTypeParam = "1";
+    } else if (type === "2") {
+      templateId = "#template_collateral_type_2";
+      collateralTypeParam = "2";
+    } else if (type === "3") {
+      templateId = "#template_collateral_type_3";
+      collateralTypeParam = "3";
+    } else if (type === "4") {
+      templateId = "#template_collateral_type_4";
+      collateralTypeParam = "4";
+    } else {
+      $("#section_collateral_type").empty();
+      return;
+    }
+
+    const content = document.getElementById(templateId.replace("#", "")).content.cloneNode(true);
+    $("#section_collateral_type").empty().append(content);
+
+    $("#section_collateral_type select.select2-lg").select2({ width: "100%" });
+
+    loadSelect2Data(urlappraiser,".js-data-appraiser-ajax","results","id","full_name",{ collateral_type: "collateral_type" + collateralTypeParam });
+    loadSelect2Data(urlproduct_type,".js-data-product_type-ajax","results","id","full_name",{ collateral_type: collateralTypeParam });
+
+    loadSelect2Data(urlMasterBrand, ".js-data-brand-ajax", "results", "id", "full_name",{});
+    loadSelect2Data(urlMasterModel, ".js-data-model-ajax", "results", "id", "full_name",{});
+    loadSelect2Data(urlMasterSubModel, ".js-data-sub_model-ajax", "results", "id", "full_name",{});
+    loadSelect2Data(urlMasterColor, ".js-data-color-ajax", "results", "id", "full_name");
+    loadSelect2Data(urlMasterProvince, ".js-data-province_reg-ajax", "results", "id", "province_name");
+    loadSelect2Data(urlMasterProvince, ".js-data-province_collateral_type-ajax", "results", "id", "province_name");
+    loadSelect2Data(urlMasterAmphoe, ".js-data-amphoe_collateral_type-ajax", "results", "id", "amphoe_name");
+    loadSelect2Data(urlMasterTambon, ".js-data-tambon_collateral_type-ajax", "results", "id", "amphoe_name");
+    loadSelect2Data(urlmortgage_type, ".js-data-mortgage_type-ajax", "results", "id", "full_name");
+    loadSelect2Data(urlMasterResidence, ".js-data-residence_collateral-ajax", "results", "id", "residence_name");
+
+    datepicker("#reg_date", reg_date);
+    datepicker("#reg_expire", reg_expire);
+    datepicker("#mortgage_date", mortgage_date);
+    datepicker("#issue_date_collateral", issue_date_collateral);
+
+    $(".js-data-brand-ajax").on("change", function () {
+      const brand_id = $(this).val();
+      $(".js-data-model-ajax").val(null).empty();
+      $(".js-data-sub_model-ajax").val(null).empty();
+      loadModel(brand_id);
+    });
+
+    function loadModel(brand_id) {
+      const params = brand_id ? { brand_id: brand_id } : {};
+      loadSelect2Data(urlMasterModel, ".js-data-model-ajax", "results", "id", "full_name", params);
+    }
+
+    $(".js-data-model-ajax").on("change", function () {
+      const model_id = $(this).val();
+      $(".js-data-sub_model-ajax").val(null).empty();
+      loadSubModel(model_id);
+    });
+
+    function loadSubModel(model_id) {
+      const params = model_id ? { model_id: model_id } : {};
+      loadSelect2Data(urlMasterSubModel, ".js-data-sub_model-ajax", "results", "id", "full_name", params);
+    }
+
+    $(".js-data-province_collateral_type-ajax").on("change", function () {
+      const province_id = $(this).val();
+      $(".js-data-amphoe_collateral_type-ajax").val(null).empty();
+      $(".js-data-tambon_collateral_type-ajax").val(null).empty();
+      loadAmphoe(province_id);
+    });
+
+    function loadAmphoe(province_id) {
+      const params = province_id ? { province_id: province_id } : {};
+      loadSelect2Data(urlMasterAmphoe, ".js-data-amphoe_collateral_type-ajax", "results", "id", "amphoe_name", params);
+    }
+
+    $(".js-data-amphoe_collateral_type-ajax").on("change", function () {
+      const amphoe_id = $(this).val();
+      $(".js-data-tambon_collateral_type-ajax").val(null).empty();
+      loadTambon(amphoe_id);
+    });
+
+    function loadTambon(amphoe_id) {
+      const params = amphoe_id ? { amphoe_id: amphoe_id } : {};
+      loadSelect2Data(urlMasterTambon, ".js-data-tambon_collateral_type-ajax", "results", "id", "tambon_name", params);
+    }
+
+  } 
+
+  const defaultType = $("#collateral_type").val() || "1";
+  loadCollateralTemplate(defaultType);
+
+  $("#collateral_type").on("change", function () {
+    loadCollateralTemplate($(this).val());
+  });
+});
